@@ -10,5 +10,8 @@ def home(request):
         print(i.product_image)
     return render(request,'index.html',{'pdata':product_data})
 
-def product_single(request):
-    return render(request, 'product-single.html',)
+def product_single(request, name):
+
+    pdata = Product.objects.get(product_name=name)
+    
+    return render(request, 'product-single.html',{'pdata':pdata})
