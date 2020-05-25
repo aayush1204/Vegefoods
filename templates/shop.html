@@ -1,3 +1,6 @@
+{% load static %}
+{% static "images" as BaseUrl%}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,24 +12,24 @@
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css'%}">
     
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css'%}">
 
-    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css'%}">
 
-    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css'%}">
 
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css'%}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css'%}">
 
     
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css'%}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
   </head>
   <body class="goto-here">
 		<div class="py-1 bg-primary">
@@ -59,11 +62,11 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
 	          <li class="nav-item active dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+              <a class="nav-link dropdown-toggle active" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Shop</a>
+              	<a class="dropdown-item " href="{% url 'shop' %}">Shop</a>
               	<a class="dropdown-item" href="wishlist.html">Wishlist</a>
                 <a class="dropdown-item" href="product-single.html">Single Product</a>
                 <a class="dropdown-item" href="cart.html">Cart</a>
@@ -73,7 +76,7 @@
 	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+	          <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 
 	        </ul>
 	      </div>
@@ -81,7 +84,7 @@
 	  </nav>
     <!-- END nav -->
 
-    <div class="hero-wrap hero-bread" style="background-image: url('images/bg_1.jpg');">
+    <div class="hero-wrap hero-bread" style="background-image: url({{BaseUrl}}/bg_1.jpg);">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
@@ -97,18 +100,18 @@
     		<div class="row justify-content-center">
     			<div class="col-md-10 mb-5 text-center">
     				<ul class="product-category">
-    					<li><a href="#" class="active">All</a></li>
+    					<li><a href="{% url 'shop' %}" class="nav-item {{all}}">All</a></li>
     					<li><a href="#">Vegetables</a></li>
-    					<li><a href="#">Fruits</a></li>
+    					<li><a href="{% url 'filter' name='Fruits' %}" class="nav-item {{fruit}}">Fruits</a></li>
     					<li><a href="#">Juice</a></li>
-    					<li><a href="#">Dried</a></li>
+						<li><a href="{% url 'filter' name='Dairy' %}" class="nav-item {{dairy}}">Dairy</a></li>
     				</ul>
     			</div>
     		</div>
     		<div class="row">
     			<div class="col-md-6 col-lg-3 ftco-animate">
     				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
+    					<a href="#" class="img-prod"><img class="img-fluid" src="{% static 'images/product-1.jpg'%}" alt="Colorlib Template">
     						<span class="status">30%</span>
     						<div class="overlay"></div>
     					</a>
@@ -137,7 +140,7 @@
     			</div>
     			<div class="col-md-6 col-lg-3 ftco-animate">
     				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template">
+    					<a href="#" class="img-prod"><img class="img-fluid" src="{% static 'images/product-2.jpg'%}" alt="Colorlib Template">
     						<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3 text-center">
@@ -447,19 +450,75 @@
     						</div>
     					</div>
     				</div>
-    			</div>
-    		</div>
+				</div>
+				{% for i in pdata %}
+				<div class="col-md-6 col-lg-3 ftco-animate">
+    				<div class="product">
+    					<a href="{% url 'product_single' name=i.product_name %}" class="img-prod"><img class="img-fluid" src="{{BaseUrl}}/{{i.product_image}}" alt="Colorlib Template">
+    						<div class="overlay"></div>
+    					</a>
+    					<div class="text py-3 pb-4 px-3 text-center">
+    						<h3><a href="#">{{i.product_name}}</a></h3>
+    						<div class="d-flex">
+    							<div class="pricing">
+		    						<p class="price"><span>Rs.{{i.product_price}}</span></p>
+		    					</div>
+	    					</div>
+    						<div class="bottom-area d-flex px-3">
+	    						<div class="m-auto d-flex">
+	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+	    								<span><i class="ion-ios-menu"></i></span>
+	    							</a>
+	    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+	    								<span><i class="ion-ios-cart"></i></span>
+	    							</a>
+	    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
+	    								<span><i class="ion-ios-heart"></i></span>
+	    							</a>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+				</div>
+				{% endfor%}
+			</div>
+	  
     		<div class="row mt-5">
           <div class="col text-center">
             <div class="block-27">
               <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
+				<li> <!--<a href="#">&lt;</a>-->
+					{% if pdata.has_previous %}
+						  <a href="?page={{ pdata.previous_page_number }}" class="prev">&lt;</a>
+					{% else %} 
+						  <a class="prev disabled">&lt;</a>  
+					{% endif %}</li>
+               <!-- <li class="active"><span>1</span></li>
                 <li><a href="#">2</a></li>
                 <li><a href="#">3</a></li>
                 <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
+				<li><a href="#">5</a></li>-->
+				{% for i in pdata.paginator.page_range %}
+					               
+					  {% if pdata.number == i %}
+					  	<li class="active">
+						  <a href="?page={{ i }}" >{{ i }}</a>
+						  </li>
+					   {% else %}   
+						<li>  
+						   <a href="?page={{ i }}">{{ i }}</a>
+						</li>
+					  {% endif %}
+					
+					{% endfor %}
+
+				<li>    <!--<a href="#">&gt;</a>-->
+					{% if pdata.has_next %}  
+						 
+						  <a href="?page={{ pdata.next_page_number }}" class="next">&gt;</a>
+						  {% else %}
+						  <a class="next disabled">&gt;</a>
+						  {% endif %}</li>
               </ul>
             </div>
           </div>
@@ -565,22 +624,44 @@
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/scrollax.min.js"></script>
+  <script src="{% static 'js/jquery.min.js'%}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js'%}"></script>
+  <script src="{% static 'js/popper.min.js'%}"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'js/jquery.easing.1.3.js'%}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js'%}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js'%}"></script>
+  <script src="{% static 'js/owl.carousel.min.js'%}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js'%}"></script>
+  <script src="{% static 'js/aos.js'%}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js'%}"></script>
+  <script src="{% static 'js/bootstrap-datepicker.js'%}"></script>
+  <script src="{% static 'js/scrollax.min.js'%}"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="js/google-map.js"></script>
-  <script src="js/main.js"></script>
+  <script src="{% static 'js/google-map.js'%}"></script>
+  <script src="{% static 'js/main.js'%}"></script>
+  <script>
+	$(document).ready(function(){ 
+
+		$('.nav-item').on("click", function(){
+		
+		$('.nav-item').removeClass('active');
+		
+		$(this).addClass('active');
+		});
+		});
+
+	function change(){	
+		$('.nav-item').on('click',function(){
+
+			//Remove any previous active classes
+			$('.nav-item').removeClass('active');
+		  
+			//Add active class to the clicked item
+			$(this).addClass('active');
+		  });	
+		}
+  </script>
     
   </body>
 </html>

@@ -66,11 +66,11 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
 	          <li class="nav-item active dropdown">
-              <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
+              	<a class="dropdown-item" href="shop.html">Shop</a>
               	<a class="dropdown-item" href="wishlist.html">Wishlist</a>
                 <a class="dropdown-item" href="product-single.html">Single Product</a>
                 <a class="dropdown-item" href="cart.html">Cart</a>
@@ -80,7 +80,7 @@
 	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 
 	        </ul>
 	      </div>
@@ -103,7 +103,7 @@
 			<div class="container">
 				<div class="row">
     			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">					
+    				<div class="cart-list">
 	    				<table class="table">
 						    <thead class="thead-primary">
 						      <tr class="text-center">
@@ -123,21 +123,21 @@
 						        <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{x.product_image}});"></div></td>
 
 						        <td class="product-name">
-						        	<h3>{{x.product.product_name}}</h3>
+						        	<h3>{{x.product_name}}</h3>
 						        	<p>Far far away, behind the word mountains, far from the countries</p>
 						        </td>
 
-						        <td class="price ">Rs{{x.product.product_price}}</td>
+						        <td class="price ">Rs{{x.product_price}}</td>
 
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
-					             	<input id="{{x.product.product_name}}" type="text" name="quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
+					             	<input id="{{x.product_name}}" type="text" name="quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
 					          	</div>
 					          </td>
 
 						        <td class="total ">
                                     <!-- Rs.{{x.total_price}} -->
-                                    <input type ="text"name="tprice" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.product_price}}"class="{{x.product.product_name}}">
+                                    <input type ="text"name="tprice" style="border:none ; margin-left:135px" value="Rs {{x.total_price}}"class="{{x.product_name}}">
                                 </td>
 						      </tr><!-- END TR-->
 							  {%endfor%}
@@ -152,13 +152,13 @@
 						        </td>
 
 						        <td class="price">$15.70</td>
-                    			<!-- <span id='{{cart_data.product_name}}'> -->
+                    <!-- <span id='{{cart_data.product_name}}'> -->
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
 					             	<input  type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
 					          	</div>
 					          </td>
-                  				<!-- </span> -->
+                  <!-- </span> -->
 						        <td class="total">$15.70</td>
 						      </tr><!-- END TR-->
 						    </tbody>
@@ -352,95 +352,50 @@
         var mangototal=0;
         var eggtotal=0;
         
-//        if (document.getElementById("Mango"))
+        {% for x in cdata %}
+        console.log({{x.product_name}})
+        if (document.getElementById("{{x.product_name}}"))
+        {
+            mangoquantity=document.getElementById("{{x.product_name}}").value;
+            {% for i in cdata %}
+
+            {% if i.product_name == x.product_name %}
+            mangototal=mangoquantity*{{i.product_price}};
+            subtotal=subtotal+mangototal;
+
+            var m = document.getElementsByClassName("{{x.product_name}}")[0];
+            m.value = "Rs " + mangototal;
+            {% endif %}
+            {% endfor %}
+        }
+        
+//        var eggquantity=0;
+//         if (document.getElementById("Egg"))
 //        {
-//            mangoquantity=document.getElementById("Mango").value;
+//            eggquantity=document.getElementById("Egg").value;
 //            {% for i in cdata %}
 
-//            {% if i.product_name == "Mango" %}
-//            mangototal=mangoquantity*{{i.product_price}};
-//            {% endif %}
- //           {% endfor %}
- //       }
-        
-   //     var eggquantity=0;
-    //    if (document.getElementById("Egg"))
-  //      {
- //           eggquantity=document.getElementById("Egg").value;
- //           {% for i in cdata %}
+//            {% if i.product_name == "Egg" %}
+//        
+//            eggtotal=eggquantity*{{i.product_price}};
+//        {% endif %} 
+//        {% endfor %}
 
- //           {% if i.product_name == "Egg" %}
-        
-  //          eggtotal=eggquantity*{{i.product_price}};
-  //      {% endif %}
-   //     {% endfor %}
+//        }
 
-  //      }
-
-
- //       console.log(eggtotal,mangototal)
-  //          subtotal=eggtotal+mangototal;
-  //          var m = document.getElementsByClassName("Mango")[0];
-  //          m.value = "Rs " + mangototal;
- //           var e = document.getElementsByClassName("Egg")[0];
- //           e.value = "Rs " +eggtotal;
-            //document.getElementById("Subtotal").innerHTML=subtotal;
- //           var abc = document.getElementById("Subtotal") ;
- //           abc.textContent= "Rs "+subtotal; 
-            //abc.value = "Rs "+subtotal
-		{% for x in cdata %}
-        console.log({{x.product.product_name}})
-        if (document.getElementById("{{x.product.product_name}}"))
-        {
-            mangoquantity=document.getElementById("{{x.product.product_name}}").value;
-            {% for i in cdata %}
-
-            {% if i.product.product_name == x.product.product_name %}
-            mangototal=mangoquantity*{{i.product.product_price}};
-            subtotal=subtotal+mangototal;
-
-            var m = document.getElementsByClassName("{{x.product.product_name}}")[0];
-            m.value = "Rs " + mangototal;
-            {% endif %}
-            {% endfor %}
-        }
-		
-
-		{% endfor %}
-		console.log(eggtotal,mangototal)
-		
-		var abc = document.getElementById("Subtotal") ;
-		abc.textContent= "Rs "+subtotal;
-
-		} // end handler function
-
-		$(document).ready(function(){
-
-		var mangoquantity=0;
-        var subtotal=0;
-        var mangototal=0;
-        var eggtotal=0;
-        
-        {% for x in cdata %}
-        console.log({{x.product.product_name}})
-        if (document.getElementById("{{x.product.product_name}}"))
-        {
-            mangoquantity=document.getElementById("{{x.product.product_name}}").value;
-            {% for i in cdata %}
-
-            {% if i.product.product_name == x.product.product_name %}
-            mangototal=mangoquantity*{{i.product.product_price}};
-            subtotal=subtotal+mangototal;
-
-            var m = document.getElementsByClassName("{{x.product.product_name}}")[0];
-            m.value = "Rs " + mangototal;
-            {% endif %}
-            {% endfor %}
-        }
-        
         {% endfor %}
+        console.log(eggtotal,mangototal)
+//            subtotal=eggtotal+mangototal;
+//            var m = document.getElementsByClassName("Mango")[0];
+//            m.value = "Rs " + mangototal;
+//            var e = document.getElementsByClassName("Egg")[0];
+//            e.value = "Rs " +eggtotal;
+            //document.getElementById("Subtotal").innerHTML=subtotal;
+            var abc = document.getElementById("Subtotal") ;
+            abc.textContent= "Rs "+subtotal;
+            //abc.value = "Rs "+subtotal
 
-		})
+        }
   
 	</script>
   </body>
