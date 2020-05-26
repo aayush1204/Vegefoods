@@ -82,7 +82,18 @@
 	    </div>
 	  </nav>
     <!-- END nav -->
-
+	{% if messages %}
+	<!-- <ul class='messages'> -->
+		{%for message in messages %}
+		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+		{% if message.tags %}<div class="alert alert-warning alert-dismissible fade show">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>Already present in Cart!</strong>
+		  </div>{%endif%}
+		{%endfor%}
+	<!-- </ul> -->
+	{%endif%}
 	<div class="hero-wrap hero-bread" style="background-image: url({{BaseUrl}}/bg_1.jpg);">
 	
       <div class="container">
@@ -168,7 +179,7 @@
 						{%for message in messages %}
 						<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
 						<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
-						{% if message.tags %}<div class="alert alert-primary alert-dismissible fade show">
+						{% if message.tags %}<div class="alert alert-warning alert-dismissible fade show">
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
 							<strong>Already present in Cart!</strong>
 						  </div>{%endif%}

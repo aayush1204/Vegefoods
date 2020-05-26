@@ -98,7 +98,8 @@
         </div>
       </div>
     </div>
-
+	<form action="{% url 'checkout' %}">
+	
     <section class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
@@ -131,17 +132,17 @@
 
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
-					             	<input id="{{x.product.product_name}}" type="text" name="quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
+					             	<input id="{{x.product.product_name}}" type="text" name="{{x.product.product_name}}quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
 					          	</div>
 					          </td>
 
 						        <td class="total ">
                                     <!-- Rs.{{x.total_price}} -->
-                                    <input type ="text"name="tprice" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.product_price}}"class="{{x.product.product_name}}">
+                                    <input type ="text"name="{{x.product.product_name}}price" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.product_price}}"class="{{x.product.product_name}}">
                                 </td>
 						      </tr><!-- END TR-->
 							  {%endfor%}
-						      <tr class="text-center">
+						      <!-- <tr class="text-center">
 						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
 
 						        <td class="image-prod"><div class="img" style="background-image:url(images/product-4.jpg);"></div></td>
@@ -153,14 +154,14 @@
 
 						        <td class="price">$15.70</td>
                     			<!-- <span id='{{cart_data.product_name}}'> -->
-						        <td class="quantity">
+						       <!-- <td class="quantity">
 						        	<div class="input-group mb-3">
 					             	<input  type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
 					          	</div>
 					          </td>
-                  				<!-- </span> -->
+                  				<!-- </span> 
 						        <td class="total">$15.70</td>
-						      </tr><!-- END TR-->
+						      </tr>END TR -->
 						    </tbody>
 						  </table>
 					  </div>
@@ -206,25 +207,28 @@
     					<h3>Cart Totals</h3>
     					<p class="d-flex">
     						<span>Subtotal</span>
-                <span id="Subtotal">{{tbill}} </span>
-                <!-- <input type ="text"name="totalbill" style="border:none; margin-left: 100px" value="Rs {{tbill}}"id="Subtotal"> -->
+                <!-- <span id="Subtotal">{{stbill}} </span> -->
+                <input type ="text"name="totalbill" style="border:none; margin-left: 92px" value="Rs {{stbill}}" id="Subtotal">
     						<!-- <span>Rs.{{tbill}}</span> -->
     					</p>
     					<p class="d-flex">
     						<span>Delivery</span>
-    						<span>$0.00</span>
+    						<span>Rs 0.00</span>
     					</p>
     					<p class="d-flex">
     						<span>Discount</span>
-    						<span>$3.00</span>
+    						<span>Rs 0.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
     						<span>Total</span>
-    						<span>$17.60</span>
+    						<span id="TotalPrice">{{stbill}} </span>
     					</p>
-    				</div>
-    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+					</div>
+					<p><input type='submit'class="btn btn-primary py-3 px-4" value="Proceed to Checkout" >
+					<!-- <a href="{% url 'checkout' %}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a> -->
+					</p>
+				</form>
     			</div>
     		</div>
 			</div>
@@ -409,7 +413,10 @@
 		{% endfor %}
 		console.log(eggtotal,mangototal)
 		
-		var abc = document.getElementById("Subtotal") ;
+		var abc = document.getElementById("Subtotal").value;
+		abc.value= "Rs "+subtotal;
+		$('#Subtotal').val("Rs " + subtotal);
+		var abc = document.getElementById("TotalPrice") ;
 		abc.textContent= "Rs "+subtotal;
 
 		} // end handler function

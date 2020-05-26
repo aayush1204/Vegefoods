@@ -46,7 +46,7 @@ def add_cart(request, name):
             for j in cart_data:
                 total_bill += j.quantity*int(j.product.product_price) 
         # return render(request, 'index.html',{'pdata':product_data})
-            return render(request, 'cart.html',{'cdata':cart_data,'tbill':total_bill})
+            return render(request, 'cart.html',{'cdata':cart_data,'stbill':total_bill})
         
            
 def cart_view(request):
@@ -56,7 +56,7 @@ def cart_view(request):
     for j in cart_data:
         total_bill += j.quantity*int(j.product.product_price) 
 
-    return render(request,'cart.html',{'cdata':cart_data,'tbill':total_bill})
+    return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 
 def shop_view(request):
 
@@ -112,5 +112,22 @@ def filter(request, name):
         dairy='active'    
     return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,'dairy':dairy})
 
-
+def checkout_view(request):
+    
+    subtotal = request.GET['totalbill'] 
+    cdata = Cart.objects.all() 
+    quantities=[]
+    prices=[]
+    str1=""
+    for i in cdata:
+        str1=str(i.product.product_name) + 'quantity'
+        quantities.append(request.GET[str1])
+        str1=str(i.product.product_name) + 'price'
+        prices.append(request.GET[str1][3:])
+    count=0
+    for i in cdata:
+        Cart.objects.filter(product=i.product).update(quantity=quantities[count])   
+        count=count+1
+    print(prices)    
+    return render(request, 'checkout.html',{"stbill":subtotal}) 
 
