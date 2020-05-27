@@ -38,3 +38,16 @@ class Cart(models.Model):
     product_image = models.CharField(max_length=100)
     is_ordered = models.BooleanField(default=False)
     # product_price = models.IntegerField(default=0)
+
+class Address(models.Model):
+    state = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    apartmentno = models.CharField(max_length=10)
+    city = models.CharField(max_length=20)
+    zipcode = models.CharField(max_length=6)
+    ch = (
+        ('1', 'Category1'),
+        ('2', 'Category2'),
+    )
+    category= models.CharField(max_length=1,choices=ch)
+    

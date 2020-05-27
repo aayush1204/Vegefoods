@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import Product ,Cart
+from .models import Product ,Cart, Address
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import requests
 # Create your views here.
 
 def home(request):
@@ -51,7 +52,7 @@ def add_cart(request, name):
            
 def cart_view(request):
 
-    cart_data = Cart.objects.all()
+    cart_data = Cart.objects.filter(is_ordered=False)
     total_bill = int(0)
     for j in cart_data:
         total_bill += j.quantity*int(j.product.product_price) 
@@ -115,6 +116,8 @@ def filter(request, name):
 def checkout_view(request):
     
     subtotal = request.GET['totalbill'] 
+    ab = subtotal[3:]
+    subtotal=ab
     cdata = Cart.objects.all() 
     quantities=[]
     prices=[]
@@ -131,3 +134,22 @@ def checkout_view(request):
     print(prices)    
     return render(request, 'checkout.html',{"stbill":subtotal}) 
 
+def address(request):
+
+    if request.method=="POST":
+        fname = request.POST['firstname']
+        lname = request.POST['lastname']
+
+        state = request.POST['state']
+        address =  request.POST['streetaddress']
+        apartmentno =  request.POST['apartmentno']
+        city =  request.POST['towncity']
+        zipcode = request.POST['postcodezip']
+
+        Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
+                                category="1")
+        print(fname)
+        print(state)
+
+    product_data=Product.objects.all()
+    return render(request,'index.html',{'pdata':product_data})

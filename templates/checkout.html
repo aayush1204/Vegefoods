@@ -93,35 +93,36 @@
         </div>
       </div>
     </div>
-
+	<form action="{%url 'address' %}" method="post" class="billing-form">
+		{% csrf_token %}
     <section class="ftco-section">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
-						<form action="#" class="billing-form">
-							<h3 class="mb-4 billing-heading">Billing Details</h3>
+						
+				<h3 class="mb-4 billing-heading">Billing Details</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6">
 	                <div class="form-group">
-	                	<label for="firstname">Firt Name</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                	<label>First Name</label>
+	                  <input type="text" name="firstname" class="form-control" placeholder="">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">Last Name</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" name="lastname" class="form-control" placeholder="">
 	                </div>
                 </div>
                 <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group">
-		            		<label for="country">State / Country</label>
+		            		<label for="state">State / Country</label>
 		            		<div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                  <select name="" id="" class="form-control">
-		                  	<option value="">France</option>
-		                    <option value="">Italy</option>
+		                  <select name="state" id="state" class="form-control">
+		                  	<option value="France">France</option>
+		                    <option value="Italy">Italy</option>
 		                    <option value="">Philippines</option>
 		                    <option value="">South Korea</option>
 		                    <option value="">Hongkong</option>
@@ -134,25 +135,25 @@
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="streetaddress">Street Address</label>
-	                  <input type="text" class="form-control" placeholder="House number and street name">
+	                  <input type="text" name="streetaddress"class="form-control" placeholder="House number and street name">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
-	                  <input type="text" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+	                  <input type="text" name="apartmentno" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="towncity">Town / City</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" name="towncity" class="form-control" placeholder="">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 		            		<label for="postcodezip">Postcode / ZIP *</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" name="postcodezip" class="form-control" placeholder="">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
@@ -178,7 +179,7 @@
 									</div>
                 </div>
 	            </div>
-	          </form><!-- END -->
+	          <!-- END -->
 					</div>
 					<div class="col-xl-5">
 	          <div class="row mt-5 pt-3">
@@ -198,9 +199,9 @@
 		    						<span>Rs 0.00</span>
 		    					</p>
 		    					<hr>
-		    					<p class="d-flex total-price">
+		    					<p class="d-flex ">
 		    						<span>Total</span>
-		    						<span>Rs {{stbill}}</span>
+		    						<strong>Rs {{stbill}}</strong>
 		    					</p>
 								</div>
 	          	</div>
@@ -235,8 +236,11 @@
 											</div>
 										</div>
 									</div>
-									<p><a href="#"class="btn btn-primary py-3 px-4">Place an order</a></p>
+									<p><input type='submit'class="btn btn-primary py-3 px-4" value="Place an Order" >
+										<!-- <a href="#"class="btn btn-primary py-3 px-4">Place an order</a> -->
+									</p>
 								</div>
+							</form>
 	          	</div>
 	          </div>
           </div> <!-- .col-md-8 -->
