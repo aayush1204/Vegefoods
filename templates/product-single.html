@@ -89,7 +89,7 @@
 		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
 		{% if message.tags %}<div class="alert alert-warning alert-dismissible fade show">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<strong>Already present in Cart!</strong>
+			<strong>Already present in Cart! Please go to cart to make changes</strong>
 		  </div>{%endif%}
 		{%endfor%}
 	<!-- </ul> -->
@@ -168,7 +168,7 @@
 	          		<div class="w-100"></div>
 	          		<div class="col-md-12">
 						  <p style="color: #000;">600 kg available</p>
-						  <p style="color: #000;">Supplier Name - {{pdata.supplier_name.supplier_name}}</p>
+						  <p style="color: #000;">Supplier Name - {{pdata.supplier.supplier_name}}</p>
 	          		</div>
 					  <p>
 						  <!-- <a href="#" class="btn btn-black py-3 px-5">Add to Cart</a> -->

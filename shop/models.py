@@ -24,7 +24,7 @@ class Supplier(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
-    supplier_name = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=150)
     product_price = models.IntegerField(default=0)
     out_of_stock = models.BooleanField(default=False)
@@ -50,4 +50,5 @@ class Address(models.Model):
         ('2', 'Category2'),
     )
     category= models.CharField(max_length=1,choices=ch)
+
     

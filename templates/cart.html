@@ -119,7 +119,7 @@
 						    <tbody>
 							{%for x in cdata %}
 						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+						        <td class="product-remove"><a href="{%url 'delete_cart_item' p=x.id %}"><span class="ion-ios-close"></span></a></td>
 
 						        <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{x.product_image}});"></div></td>
 

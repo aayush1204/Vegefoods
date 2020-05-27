@@ -16,7 +16,7 @@ def home(request):
 def product_single(request, name):
 
     pdata = Product.objects.get(product_name=name)
-    print(pdata.supplier_name.supplier_name)
+    print(pdata.supplier.supplier_name)
     return render(request, 'product-single.html',{'pdata':pdata})
 
 def add_cart(request, name):
@@ -31,7 +31,7 @@ def add_cart(request, name):
         try:
             p = Cart.objects.get(product=pddata)
             pdata = Product.objects.get(product_name=name)
-            print(pdata.supplier_name.supplier_name)
+            print(pdata.supplier.supplier_name)
             messages.info(request, 'Already added in cart!')
             return render(request, 'product-single.html',{'pdata':pdata})
 
@@ -49,12 +49,23 @@ def add_cart(request, name):
         # return render(request, 'index.html',{'pdata':product_data})
             return render(request, 'cart.html',{'cdata':cart_data,'stbill':total_bill})
         
-           
+def delete_cart(request,p):
+    Cart.objects.get(id=p).delete()
+    cart_data = Cart.objects.filter(is_ordered=False)
+
+    total_bill = int(0)
+    for j in cart_data:
+
+        total_bill += j.quantity*int(j.product.product_price) 
+
+    return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})           
 def cart_view(request):
 
     cart_data = Cart.objects.filter(is_ordered=False)
+
     total_bill = int(0)
     for j in cart_data:
+
         total_bill += j.quantity*int(j.product.product_price) 
 
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
