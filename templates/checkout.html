@@ -93,7 +93,7 @@
         </div>
       </div>
     </div>
-	<form action="{%url 'address' %}" method="post" class="billing-form">
+	<form action="{%url 'order_place' %}" method="post" class="billing-form">
 		{% csrf_token %}
     <section class="ftco-section">
       <div class="container">
@@ -201,7 +201,8 @@
 		    					<hr>
 		    					<p class="d-flex ">
 		    						<span>Total</span>
-		    						<strong>Rs {{stbill}}</strong>
+									<!-- <strong>Rs {{stbill}}</strong> -->
+									<input type ="text"name="totalbill" style="border:none; margin-left: 92px" value="Rs {{stbill}}" id="Subtotal">
 		    					</p>
 								</div>
 	          	</div>

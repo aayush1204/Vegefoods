@@ -82,7 +82,18 @@
 	    </div>
 	  </nav>
     <!-- END nav -->
-
+	{% if messages %}
+	<!-- <ul class='messages'> -->
+		{%for message in messages %}
+		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+		{% if message.tags %}<div class="alert alert-success alert-dismissible fade show">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>Order Placed!</strong>
+		  </div>{%endif%}
+		{%endfor%}
+	<!-- </ul> -->
+	{%endif%}
     <section id="home-section" class="hero">
 		  <div class="home-slider owl-carousel">
 	      <div class="slider-item" style="background-image: url(static/images/bg_1.jpg);">

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product ,Cart, Address
+from .models import Product ,Cart, Address , Order, Supplier
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
@@ -7,7 +7,7 @@ import requests
 
 def home(request):
 
-    product_data = Product.objects.all()
+    product_data = Product.objects.filter(out_of_stock=False)
     for i in product_data:
 
         print(i.product_image)
@@ -42,7 +42,7 @@ def add_cart(request, name):
             cdata.save()
         
             product_data = Product.objects.all()
-            cart_data = Cart.objects.all()
+            cart_data = Cart.objects.filter(out_of_stock=False)
             total_bill = int(0)
             for j in cart_data:
                 total_bill += j.quantity*int(j.product.product_price) 
@@ -72,7 +72,7 @@ def cart_view(request):
 
 def shop_view(request):
 
-    product_list = Product.objects.all()
+    product_list = Product.objects.filter(out_of_stock=False)
     # for i in product_data:
 
         # print(i.product_image)
@@ -80,7 +80,7 @@ def shop_view(request):
     # company_list= Companies.objects.all()
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(product_list, 2)
+    paginator = Paginator(product_list, 8)
 
     try:
         product_data = paginator.page(page)
@@ -93,7 +93,10 @@ def shop_view(request):
     all1='active'
     fruit=""
     dairy=""
-    return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,'dairy':dairy})    
+    vegetables=""
+    juices=""
+    return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,
+                                        'dairy':dairy,'vegetable':vegetables,'juice':juices})    
 
 def filter(request, name):
     product_list = Product.objects.filter(category__icontains=name)
@@ -104,7 +107,7 @@ def filter(request, name):
     # company_list= Companies.objects.all()
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(product_list, 1)
+    paginator = Paginator(product_list, 8)
 
     try:
         product_data = paginator.page(page)
@@ -115,21 +118,27 @@ def filter(request, name):
 
     # return render(request, 'job-listings.html', {'company_data': company_data}) 
     all1=""
-     
+    vegetables=""
+    juices="" 
     fruit=""
     dairy=""
     if name=="Fruits":
         fruit='active'
     elif name=='Dairy':
-        dairy='active'    
-    return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,'dairy':dairy})
+        dairy='active' 
+    elif name=='Vegetables':
+        vegetables='active' 
+    elif name=='Juices':
+        juices='active'            
+    return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,'dairy':dairy,
+                                            'vegetable':vegetables,'juice':juices})
 
 def checkout_view(request):
     
     subtotal = request.GET['totalbill'] 
     ab = subtotal[3:]
     subtotal=ab
-    cdata = Cart.objects.all() 
+    cdata = Cart.objects.filter(is_ordered=False) 
     quantities=[]
     prices=[]
     str1=""
@@ -145,7 +154,7 @@ def checkout_view(request):
     print(prices)    
     return render(request, 'checkout.html',{"stbill":subtotal}) 
 
-def address(request):
+def order_place(request):
 
     if request.method=="POST":
         fname = request.POST['firstname']
@@ -161,6 +170,22 @@ def address(request):
                                 category="1")
         print(fname)
         print(state)
+        total = request.POST['totalbill'] 
+        total=int(total[3:])
 
-    product_data=Product.objects.all()
+        order = Order.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
+                                     total_amount = total)
+        order.save()
+        cdata =  Cart.objects.filter(is_ordered=False)
+        for i in cdata:
+
+            order.supplier.add(i.product.supplier)
+            order.items.add(i) 
+            
+        order.save()
+        Cart.objects.filter(is_ordered=False).update(is_ordered=True)                                
+    product_data=Product.objects.filter(out_of_stock=False)
+    messages.info(request, 'Alre!')
     return render(request,'index.html',{'pdata':product_data})
+
+

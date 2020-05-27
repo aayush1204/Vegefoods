@@ -101,9 +101,9 @@
     			<div class="col-md-10 mb-5 text-center">
     				<ul class="product-category">
     					<li><a href="{% url 'shop' %}" class="nav-item {{all}}">All</a></li>
-    					<li><a href="#">Vegetables</a></li>
+    					<li><a href="{% url 'filter' name='Vegetables' %}" class="nav-item {{vegeatable}}">Vegetables</a></li>
     					<li><a href="{% url 'filter' name='Fruits' %}" class="nav-item {{fruit}}">Fruits</a></li>
-    					<li><a href="#">Juice</a></li>
+    					<li><a href="{% url 'filter' name='Juices' %}" class="nav-item {{juice}}">Juice</a></li>
 						<li><a href="{% url 'filter' name='Dairy' %}" class="nav-item {{dairy}}">Dairy</a></li>
     				</ul>
     			</div>

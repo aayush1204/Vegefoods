@@ -51,4 +51,16 @@ class Address(models.Model):
     )
     category= models.CharField(max_length=1,choices=ch)
 
-    
+class Order(models.Model):
+    referral_id = models.AutoField(primary_key=True)
+    supplier = models.ManyToManyField(Supplier)
+    order_date = models.DateTimeField(auto_now=True)
+    state = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    apartmentno = models.CharField(max_length=10)
+    city = models.CharField(max_length=20)
+    zipcode = models.CharField(max_length=6) 
+    is_completed = models.BooleanField(default=False)
+    total_amount = models.IntegerField(default=0)
+    items = models.ManyToManyField(Cart)
+    is_refunded = models.BooleanField(default=False)   
