@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier
+from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
@@ -200,5 +200,16 @@ def myorders(request):
     return render(request, 'myorders.html', {'orders':orders})
 
 def contact(request):
+
+    if request.method=="POST":
+        name= request.POST['name']
+        email = request.POST['email']
+        subject=request.POST['subject']
+        message = request.POST['message']
+        complaint = ContactUs.objects.create(name=name,email=email,subject=subject,message=message)
+        complaint.save()
+        messages.info(request, 'Message Sent! We will contact you shortly')
+        return render(request, 'contact.html')
+
     return render(request, 'contact.html')
 
