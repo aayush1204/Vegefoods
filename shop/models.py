@@ -77,3 +77,12 @@ class Order(models.Model):
     total_amount = models.IntegerField(default=0)
     items = models.ManyToManyField(Cart)
     is_refunded = models.BooleanField(default=False)   
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=30)
+    email = models.EmailField(max_length=254)
+    subject = models.CharField(max_length=20)
+    message = models.CharField(max_length=200)
+    is_addressed = models.BooleanField(default=False)
+    
+
