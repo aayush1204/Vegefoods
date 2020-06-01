@@ -1226,7 +1226,7 @@ h1, h2, h3, h4, h5,
 		}
 		&.total-price{
 			span{
-				text-transform: uppercase;
+				// text-transform: uppercase;
 				&:last-child{
 					color: $black;
 					font-weight: 600;

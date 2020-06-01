@@ -8979,7 +8979,8 @@ h1, h2, h3, h4, h5,
       display: block;
       width: 50%; }
     .cart-total p.total-price span {
-      text-transform: uppercase; }
+      /* text-transform: uppercase;  */
+    }
       .cart-total p.total-price span:last-child {
         color: #000000;
         font-weight: 600; }
@@ -9022,23 +9023,23 @@ h1, h2, h3, h4, h5,
   padding-left: 15px;
   padding-right: 15px;
   background: transparent !important;
-  color: rgba(0, 0, 0, 0.4) !important;
+  color: rgba(0, 0, 0, 0.8) !important;
   font-size: 14px;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important; }
   .billing-form .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: rgba(0, 0, 0, 0.4); }
+    color: rgba(0, 0, 0, 0.8); }
   .billing-form .form-control::-moz-placeholder {
     /* Firefox 19+ */
-    color: rgba(0, 0, 0, 0.4); }
+    color: rgba(0, 0, 0, 0.8); }
   .billing-form .form-control:-ms-input-placeholder {
     /* IE 10+ */
-    color: rgba(0, 0, 0, 0.4); }
+    color: rgba(0, 0, 0, 0.8); }
   .billing-form .form-control:-moz-placeholder {
     /* Firefox 18- */
-    color: rgba(0, 0, 0, 0.4); }
+    color: rgba(0, 0, 0, 0.8); }
   .billing-form .form-control:focus, .billing-form .form-control:active {
     border-color: #82ae46 !important; }
 

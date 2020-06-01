@@ -52,9 +52,9 @@
 		    </div>
 		  </div>
     </div>
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="index.html">Vegefoods</a>
+	      <a class="navbar-brand" href="{% url 'home' %}">Vegefoods</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
@@ -63,7 +63,7 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
 	          <li class="nav-item active dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+              <a class="nav-link dropdown-toggle active" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
               	<a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
               	<a class="dropdown-item" href="wishlist.html">Wishlist</a>
@@ -80,6 +80,58 @@
 	        </ul>
 	      </div>
 	    </div>
+	  </nav> -->
+	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<div class="container">
+		  <a class="navbar-brand" href="index.html">Vegefoods</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="oi oi-menu"></span> Menu
+		  </button>
+	 
+		  <div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav ml-auto">
+			  <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+			  <li class="nav-item dropdown">
+				   <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+				   <div class="dropdown-menu" aria-labelledby="dropdown04">
+				   <a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
+				   <a class="dropdown-item" href="wishlist.html">Wishlist</a>
+					 <a class="dropdown-item" href="product-single.html">Single Product</a>
+					 <a class="dropdown-item" href="{% url 'cart' %}">Cart</a>
+					 <a class="dropdown-item" href="checkout.html">Checkout</a>
+				   </div>
+				 </li>
+			  <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+		   <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
+				 {% if user.is_authenticated %}
+				 <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
+				 <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+                 
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                    </div>
+                  </li>
+				 {% else %}
+				 <li class="nav-item dropdown">
+				   <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Account</a>
+				   <div class="dropdown-menu" aria-labelledby="dropdown04">
+				   <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+				   <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+	 
+				   </div>
+				 </li>
+				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
+				 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
+				 <li class="nav-item"><a href="about.html" class="nav-link">Sell With Us!</a></li>
+			  <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+			  <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+				 {% endif %}
+			</ul>
+		  </div>
+		</div>
 	  </nav>
     <!-- END nav -->
 
@@ -105,28 +157,28 @@
 	          		<div class="col-md-6">
 	                <div class="form-group">
 	                	<label>First Name</label>
-	                  <input type="text" name="firstname" class="form-control" placeholder="">
+	                  <input type="text" name="firstname" value="{{user.first_name}}" class="form-control" placeholder="">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">Last Name</label>
-	                  <input type="text" name="lastname" class="form-control" placeholder="">
+	                  <input type="text" name="lastname" value="{{user.last_name}}" class="form-control" placeholder="">
 	                </div>
                 </div>
                 <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group">
-		            		<label for="state">State / Country</label>
+		            		<label for="state">State</label>
 		            		<div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
 		                  <select name="state" id="state" class="form-control">
-		                  	<option value="France">France</option>
-		                    <option value="Italy">Italy</option>
-		                    <option value="">Philippines</option>
+		                  	<option value="Maharashtra">Maharahstra</option>
+		                    <!-- <option value="Italy">Italy</option> -->
+		                    <!-- <option value="">Philippines</option>
 		                    <option value="">South Korea</option>
 		                    <option value="">Hongkong</option>
-		                    <option value="">Japan</option>
+		                    <option value="">Japan</option> -->
 		                  </select>
 		                </div>
 		            	</div>
@@ -135,46 +187,48 @@
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="streetaddress">Street Address</label>
-	                  <input type="text" name="streetaddress"class="form-control" placeholder="House number and street name">
+	                  <input type="text" name="streetaddress"class="form-control" value="{{adata.address}}"placeholder="House number and street name">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
-	                  <input type="text" name="apartmentno" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+							<label for="apartmentno">Apartment No.</label>
+	                  <input type="text" name="apartmentno"  value="{{adata.apartmentno}}"class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
-	                	<label for="towncity">Town / City</label>
-	                  <input type="text" name="towncity" class="form-control" placeholder="">
+	                	<label for="towncity">City</label>
+	                  <input type="text" name="towncity" value="{{adata.city}}"  class="form-control" placeholder="">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 		            		<label for="postcodezip">Postcode / ZIP *</label>
-	                  <input type="text" name="postcodezip" class="form-control" placeholder="">
+	                  <input type="text" name="postcodezip" value="{{adata.zipcode}}"class="form-control" placeholder="">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="phone">Phone</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" name="phone" class="form-control" placeholder="">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="emailaddress">Email Address</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" name="email"class="form-control" value="{{user.email}}" placeholder="">
 	                </div>
                 </div>
                 <div class="w-100"></div>
                 <div class="col-md-12">
                 	<div class="form-group mt-4">
 										<div class="radio">
-										  <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
-										  <label><input type="radio" name="optradio"> Ship to different address</label>
+										  <!-- <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label> -->
+										  <label><input type="radio" value="" name="optradio" > Ship to different address</label>
+										  <label><input type="radio" value="1" name="optradio" > Your House</label>
 										</div>
 									</div>
                 </div>
@@ -202,7 +256,7 @@
 		    					<p class="d-flex ">
 		    						<span>Total</span>
 									<!-- <strong>Rs {{stbill}}</strong> -->
-									<input type ="text"name="totalbill" style="border:none; margin-left: 92px" value="Rs {{stbill}}" id="Subtotal">
+									<input type ="text"name="totalbill" style="border:none; margin-left: 0px" value="Rs {{stbill}}" id="Subtotal">
 		    					</p>
 								</div>
 	          	</div>
@@ -295,7 +349,7 @@
                 <li><a href="#" class="py-2 d-block">Shop</a></li>
                 <li><a href="#" class="py-2 d-block">About</a></li>
                 <li><a href="#" class="py-2 d-block">Journal</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+                <li><a href="{% url 'contact' %}" class="py-2 d-block">Contact Us</a></li>
               </ul>
             </div>
           </div>
@@ -311,7 +365,7 @@
 	              </ul>
 	              <ul class="list-unstyled">
 	                <li><a href="#" class="py-2 d-block">FAQs</a></li>
-	                <li><a href="#" class="py-2 d-block">Contact</a></li>
+	                <li><a href="{% url 'contact' %}" class="py-2 d-block">Contact</a></li>
 	              </ul>
 	            </div>
             </div>
@@ -365,6 +419,28 @@
   <script src="{% static 'js/main.js'%}"></script>
 
   <script>
+
+		$('input[name="optradio"]').on('click', function() {
+			if ($(this).val() == '') {
+				console.log('2')
+				document.getElementsByName("towncity")[0].value = "";
+				document.getElementsByName("postcodezip")[0].value = "";
+				document.getElementsByName("streetaddress")[0].value = "";
+				document.getElementsByName("apartmentno")[0].value = "";
+				
+			}
+			if ($(this).val() == '1') {
+				console.log('2')
+				document.getElementsByName("towncity")[0].value = "{{adata.city}}";
+				document.getElementsByName("postcodezip")[0].value = "{{adata.zipcode}}";
+				document.getElementsByName("streetaddress")[0].value = "{{adata.address}}";
+				document.getElementsByName("apartmentno")[0].value = "{{adata.apartmentno}}";
+			
+			}
+
+
+		})
+
 		$(document).ready(function(){
 
 		var quantitiy=0;

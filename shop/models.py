@@ -1,5 +1,6 @@
 from django.db import models
-
+from accounts.models import Signup
+from django.contrib.auth.models import User
 # Create your models here.
 # class Product(models.Model):
 #     product_name = models.CharField(max_length=100)
@@ -22,6 +23,9 @@ class Supplier(models.Model):
     supplier_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10) 
 
+    def __str__(self):
+        return self.supplier_name
+
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
@@ -31,7 +35,11 @@ class Product(models.Model):
     category = models.CharField(max_length=100)
     product_image = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.product_name
+
 class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     # total_price = models.IntegerField(default=0)
     quantity = models.IntegerField(default=0)
@@ -39,7 +47,11 @@ class Cart(models.Model):
     is_ordered = models.BooleanField(default=False)
     # product_price = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.product.product_name
+
 class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     state = models.CharField(max_length=30)
     address = models.CharField(max_length=50)
     apartmentno = models.CharField(max_length=10)
@@ -52,6 +64,7 @@ class Address(models.Model):
     category= models.CharField(max_length=1,choices=ch)
 
 class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     referral_id = models.AutoField(primary_key=True)
     supplier = models.ManyToManyField(Supplier)
     order_date = models.DateTimeField(auto_now=True)
