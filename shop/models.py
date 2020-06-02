@@ -35,9 +35,22 @@ class Supplier(models.Model):
     
     supplier_details = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=10) 
+    
+    address = models.TextField(default="")
+    number = models.CharField(max_length=15)
+    #address = models.TextField()
+    pincode=models.PositiveIntegerField(default=0)
+    GST_number=models.PositiveIntegerField(default=0)
+    Bank_Account_Details=models.TextField(default="")
+    store_name = models.CharField(max_length=50)
+    store_description = models.CharField(max_length=200)
+    store_address=models.TextField(default="")
+#   product = ForeignKey
+    is_approved = models.BooleanField(default=False)
+    #signature-will be an image
 
     def __str__(self):
-        return self.supplier_name
+        return self.store_name
 
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
@@ -47,6 +60,8 @@ class Product(models.Model):
     out_of_stock = models.BooleanField(default=False)
     category = models.CharField(max_length=100)
     product_image = models.CharField(max_length=100)
+    product_sku=models.IntegerField(default=1)
+    
 
     def __str__(self):
         return self.product_name

@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs
+from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User, auth
 # Create your views here.
 
 def home(request):
@@ -212,4 +214,89 @@ def contact(request):
         return render(request, 'contact.html')
 
     return render(request, 'contact.html')
+
+
+
+
+def sellwithus(request):
+    if (request.method == "POST"):
+
+        supplier=Supplier()
+        
+        first_name=request.POST['first_name']
+        last_name=request.POST['last_name']
+        email=request.POST['email']
+        supplier.address=request.POST['address']
+        supplier.pincode=request.POST['pincode']
+        supplier.GST_number=request.POST['GST_number']
+        supplier.store_name=request.POST['store_name']
+        supplier.store_description=request.POST['store_description']
+        supplier.store_address=request.POST['store_address']
+
+        username=request.POST['username']
+        password=request.POST['password']
+        confirm_password=request.POST['confirm_password']
+
+        if(password==confirm_password):
+
+            if User.objects.filter(username=username).exists():
+                messages.info(request, "This username is already taken!")
+                return render(request, 'supplier_register.html')
+
+
+            else:
+                user = User.objects.create_user(first_name=first_name, last_name=last_name,email=email,username=username,password=password)
+
+                user.save()
+                Profile.objects.create(user=user,pr='S')
+                supplier.supplier_details=user
+                
+                supplier.save()
+                print("user is hereeeeeeeeeeeeeeee")
+                return render(request, 'supplier_login.html')
+        else:
+            messages.info(request, "The two passwords don't match! Please enter correct password.")
+            return render(request, 'supplier_register.html' )
+
+
+    else:
+
+        return render(request, 'supplier_register.html')
+
+
+def supplier_login(request):
+    if(request.method=="POST"):
+
+        supplier= Supplier()
+
+        username=request.POST['username']
+        password=request.POST['password']
+
+        try:
+                supplier_in = User.objects.get(username=username)
+                print(password)
+                print(supplier_in.password)
+
+                user =  auth.authenticate(username=username,password=password)
+                print(user.profile.pr)
+
+                if (user.profile.pr=='S'):
+                    auth.login(request, user)
+                    return redirect('/')
+                else:
+                    messages.info(request, "Incorrect Credentials. Please enter the correct ones!")
+                    return render(request, 'supplier_login.html')
+
+                # if (supplier_in.password ==  password):
+                #     supplier_info = Supplier.objects.filter(supplier_details=supplier_in)
+                #     return render(request, 'index.html', {'supplier_info':supplier_info})
+                # else:
+                #     messages.info(request, "Incorrect Password!")
+                #     return render(request, 'supplier_login.html')
+
+        except User.DoesNotExist:
+                messages.info(request, "User doesnt exist!")
+                return render(request, 'supplier_login.html')
+
+    return render(request, 'supplier_login.html')            
 
