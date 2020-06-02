@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
+from shop.models import Profile
 from django.contrib import messages
 # Create your views here.
 
@@ -28,7 +29,9 @@ def register(request):
 
             else:
                 user = User.objects.create_user(first_name=first_name, last_name=last_name,email=email,username=username,password=password)
+
                 user.save()
+                Profile.objects.create(user=user,pr='C')
                 print("user is hereeeeeeeeeeeeeeee")
                 return render(request, 'login.html')
         else:

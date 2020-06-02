@@ -1,6 +1,8 @@
 from django.db import models
 from accounts.models import Signup
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
 # Create your models here.
 # class Product(models.Model):
 #     product_name = models.CharField(max_length=100)
@@ -19,8 +21,19 @@ from django.contrib.auth.models import User
 
 # New MOdels    
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    PR = (
+        ('S', 'Supplier'),
+        ('C', 'Customer'),
+        ('A','Admin'),
+    )
+    pr= models.CharField(max_length=1,choices=PR)
+
+
 class Supplier(models.Model):
-    supplier_name = models.CharField(max_length=100)
+    
+    supplier_details = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=10) 
 
     def __str__(self):
@@ -80,7 +93,7 @@ class Order(models.Model):
     
     def __str__(self):
         return self.referral_id
-        
+
 class ContactUs(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField(max_length=254)
