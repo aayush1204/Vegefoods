@@ -19,7 +19,7 @@ from django.contrib.auth.models import AbstractUser
 #     product_price = models.IntegerField(default=0)
 
 
-# New MOdels    
+# New MOdels
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -32,12 +32,12 @@ class Profile(models.Model):
 
 
 class Supplier(models.Model):
-    
+
     supplier_details = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    phone = models.CharField(max_length=10) 
-    
+    phone = models.CharField(max_length=10)
+
     address = models.TextField(default="")
-    number = models.CharField(max_length=15)
+    # number = models.CharField(max_length=15)
     #address = models.TextField()
     pincode=models.PositiveIntegerField(default=0)
     GST_number=models.PositiveIntegerField(default=0)
@@ -61,7 +61,7 @@ class Product(models.Model):
     category = models.CharField(max_length=100)
     product_image = models.CharField(max_length=100)
     product_sku=models.IntegerField(default=1)
-    
+
 
     def __str__(self):
         return self.product_name
@@ -100,12 +100,12 @@ class Order(models.Model):
     address = models.CharField(max_length=50)
     apartmentno = models.CharField(max_length=10)
     city = models.CharField(max_length=20)
-    zipcode = models.CharField(max_length=6) 
+    zipcode = models.CharField(max_length=6)
     is_completed = models.BooleanField(default=False)
     total_amount = models.IntegerField(default=0)
     items = models.ManyToManyField(Cart)
-    is_refunded = models.BooleanField(default=False)   
-    
+    is_refunded = models.BooleanField(default=False)
+
     def __str__(self):
         return self.referral_id
 
