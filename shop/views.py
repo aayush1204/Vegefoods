@@ -256,6 +256,31 @@ def refund(request, x):
     orders = Order.objects.filter(user=request.user).filter(referral_id=x)
     return render(request, 'refund.html', {'orders':orders})
 
+def track(request, x):
+    orders = Order.objects.filter(referral_id=x)
+    approved='active'
+    shipped=''
+    delivered=''   
+    text="Placed" 
+    if orders[0].is_completed==True:
+        approved='visited'
+        shipped='visited'
+        delivered='visited next'
+        text="Delivered"        
+    if orders[0].is_shipped==True:
+        approved='visited'
+        shipped='visited'
+        delivered='active'
+        text="Shipped"
+    if orders[0].is_approved==True:
+        approved='visited'
+        shipped='active'
+        delivered=''
+        text="Order Approved"        
+
+    return render(request, 'ordertrack.html', {'orders':orders,'approved':approved,'shipped':shipped,
+                                                               'delivered':delivered,'text':text })
+
 def contact(request):
 
     if request.method=="POST":
