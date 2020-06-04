@@ -13,6 +13,9 @@
 
     <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css'%}">
     <link rel="stylesheet" href="{% static 'css/animate.css'%}">
+
+    
+    <link rel="stylesheet" href="{% static 'css/EJgwb.css'%}">
     
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
@@ -150,7 +153,7 @@
                                             <p>Rs. {{i.total_amount}}</p>
                                         </th>
                                         <th><p>
-                                             <a href="#" class="btn btn-light py-2 px-3 ">Track my order</a>
+                                             <a href="{% url 'track' x=i.referral_id %}" class="btn btn-light py-2 px-3 ">Track my order</a>
                                             </p></th>
                                         <!-- <th>Total</th> -->
                                       </tr>
@@ -196,7 +199,7 @@
 					  </div>
     			</div>
     		</div>
-			</div>
+      </div>
 		</section>
 
 		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">

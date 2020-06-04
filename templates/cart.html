@@ -184,9 +184,11 @@
 						        <td class="price ">Rs.{{x.product.product_price}}</td>
 
 						        <td class="quantity">
+								
 						        	<div class="input-group mb-3">
 					             	<input id="{{x.product.id}}" type="text" name="{{x.product.product_name}}quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
-					          	</div>
+										
+								</div>
 					          </td>
 
 						        <td class="total ">
@@ -501,7 +503,10 @@
             {% endfor %}
         }
         
-        {% endfor %}
+		{% endfor %}
+		
+
+		
 
 		})
   

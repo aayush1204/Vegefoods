@@ -8,6 +8,7 @@ urlpatterns = [
     path('home/<int:q>',views.add_cart,name='add_to_cart'),
     path('home/myorders', views.myorders,name='myorders'),
     path('home/myorders/refunds/<int:x>', views.refund,name='refund'),
+    path('home/myorders/ordertrack/<int:x>', views.track,name='track'),
     path('home/sell-with-us', views.sellwithus, name='sell_with_us'),
     path('home-supplier', views.supplier_login, name='supplier_login'),
     path('home/contact', views.contact,name='contact'),

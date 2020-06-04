@@ -116,7 +116,8 @@ class Order(models.Model):
     total_amount = models.IntegerField(default=0)
     items = models.ManyToManyField(Cart)
     is_refunded = models.BooleanField(default=False)
-
+    is_approved =models.BooleanField(default=False)
+    is_shipped = models.BooleanField(default=False)
     # def __str__(self):
     #     return self.referral_id
 
