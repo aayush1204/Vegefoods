@@ -15,11 +15,16 @@ urlpatterns = [
     path('newproduct/',views.newproduct,name='newproduct'),
     path('societies/',views.societieslist,name='societies'),
     path('vouchers/',views.vouchers,name='vouchers'),
-    path('viewvoucher/',views.viewvoucher,name='viewvoucher'),
 
+    path('viewvoucher/',views.viewvoucher,name='viewvoucher'),
     path('createvoucher/',views.createvoucher,name='createvoucher'),
     path('updatevoucher/',views.updatevoucher,name='updatevoucher'),
     path('deletevoucher/',views.deletevoucher,name='deletevoucher'),
+
+    path('viewsocieties/',views.viewsocieties,name='viewsocieties'),
+    path('createsocieties/',views.createsocieties,name='createsocieties'),
+    path('updatesocieties/',views.updatesocieties,name='updatesocieties'),
+    path('deletesocieties/',views.deletesocieties,name='deletesocieties'),
 
     # path('/supplierslist',views.supplierslist,name='supplierslist'),
     path('logout/',views.logout,name='logout'),

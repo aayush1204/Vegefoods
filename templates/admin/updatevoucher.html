@@ -4,6 +4,13 @@
 <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript">
+  $(document).on('scroll', function() {
+      $("#slide").css("top", Math.max(180 - 0.2*window.scrollY, 0) + "px");
+      $("#static").css("opacity", Math.max(1 - 0.004*window.scrollY, 0));
+  })
+
+</script>
 
 <head>
 
@@ -367,6 +374,7 @@
           <!-- <div class="row"> -->
 
             <!-- Earnings (Monthly) Card Example -->
+
             <div class="codercontent">
               <h4>  Update Vouchers </h4> <br>
               <div class="content">
@@ -375,21 +383,31 @@
                 <button type="submit" name='deletevoucher' onclick=location.href='{% url "updatevoucher" %}' class="save btn btn-default">Update Voucher</button>
                 <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
               </div>
+              <div class="alert-success alert-link">
+                  {{message}}
+                  </div>
+            
 <br> <br>
               <table style="width:100%" border="1">
             <tr>
                 <th> Voucher Code </th>
                 <th> Voucher Value </th>
                 <th> Society Name </th>
+                <th>  </th>
             </tr>
               {% for i in voucherdata %}
-              {% for j in i.society.all %}
+
               <tr>
                 <td> {{i.voucher_code}} </td>
                 <td> {{i.voucher_value}}</td>
-                <td> {{j.society_name}}</td>
+                <td>{% for j in i.society.all %} {{j.society_name}},{% endfor %}</td>
+                <td><form action="" method="post">
+                  {% csrf_token %}
+
+                  <button type="submit" name="clicked" value="{{i.id}}">Change</button></form>
+           </td>
             </tr>
-                {% endfor %}
+
                 {% endfor %}
 
               </table>

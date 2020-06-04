@@ -369,8 +369,13 @@
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
               <h4>  Societies List</h4> <br>
-
-              <table style="width:100%" border="1">
+              <div class="content">
+                <button type="submit" name='viewsocieties' onclick=location.href='{% url "viewsocieties" %}'  class="save btn btn-default">View Societies</button>
+                <button type="submit" name='createsocieties' onclick=location.href='{% url "createsocieties" %}' class="save btn btn-default">Create Societies</button>
+                <button type="submit" name='updatesocieties' onclick=location.href='{% url "updatesocieties" %}' class="save btn btn-default">Update Societies</button>
+                <button type="submit" name='deletesocieties' onclick=location.href='{% url "deletesocieties" %}' class="save btn btn-default">Delete Societies</button>
+              </div>
+              <!-- <table style="width:100%" border="1">
             <tr>
                 <th> Society Name </th>
                 <th> Society Address </th>
@@ -384,7 +389,7 @@
             </tr>
                 {% endfor %}
 
-              </table>
+              </table> -->
 
             </div>
 

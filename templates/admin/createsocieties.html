@@ -4,7 +4,13 @@
 <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript">
+  $(document).on('scroll', function() {
+      $("#slide").css("top", Math.max(180 - 0.2*window.scrollY, 0) + "px");
+      $("#static").css("opacity", Math.max(1 - 0.004*window.scrollY, 0));
+  })
 
+</script>
 <head>
 
   <meta charset="utf-8">
@@ -368,37 +374,61 @@
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
-              <h4>  Delete Vouchers</h4> <br>
+              <h4>  Create Voucher</h4> <br>
               <div class="content">
-                <button type="submit" name='viewvoucher' onclick=location.href='{% url "viewvoucher" %}'  class="save btn btn-default">View Vouchers</button>
-                <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button>
-                <button type="submit" name='deletevoucher' onclick=location.href='{% url "updatevoucher" %}' class="save btn btn-default">Update Voucher</button>
-                <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
-              </div>
+                <button type="submit" name='viewsocieties' onclick=location.href='{% url "viewsocieties" %}'  class="save btn btn-default">View Societies</button>
+                <button type="submit" name='createsocieties' onclick=location.href='{% url "createsocieties" %}' class="save btn btn-default">Create Societies</button>
+                <button type="submit" name='updatesocieties' onclick=location.href='{% url "updatesocieties" %}' class="save btn btn-default">Update Societies</button>
+                <button type="submit" name='deletesocieties' onclick=location.href='{% url "deletesocieties" %}' class="save btn btn-default">Delete Societies</button>
+        </div>
+              <!-- {% if messages %}
+            	<!-- <ul class='messages'> -->
+            		<!-- {%for message in messages %} -->
+            		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+            		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+            		<!-- {% if message.tags %} -->
+                <div class="alert-success alert-link">
+                    {{message}}
+                    </div>
+            			<!-- <strong>successfully created voucher</strong>
+            		  </div>{%endif%}
+            		{%endfor%} -->
+            	<!-- </ul> -->
+            	<!-- {%endif%} -->
+
+
+<form method='post' enctype="multipart/form-data">
+{% csrf_token %}
 <br> <br>
-              <table style="width:100%" border="1">
+{{societyform.society_name.label}}
+{{societyform.society_name}}
+<br><br>
+{{societyform.society_address.label}}
+{{societyform.society_address}}
+<br><br>
+{{societyform.society_locality.label}}
+{{societyform.society_locality}}
+    <br><br>
+    <!-- <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button> -->
+    <button type="submit" name="createsocieties" class="save btn btn-default"> Create </button>
+</form>
+              <!-- <table style="width:100%" border="1">
             <tr>
                 <th> Voucher Code </th>
                 <th> Voucher Value </th>
                 <th> Society Name </th>
-                <th>  </th>
             </tr>
               {% for i in voucherdata %}
-
+              {% for j in i.society.all %}
               <tr>
                 <td> {{i.voucher_code}} </td>
                 <td> {{i.voucher_value}}</td>
-                <td>{% for j in i.society.all %} {{j.society_name}}{% endfor %}</td>
-                <td><form action="" method="post">
-                  {% csrf_token %}
-
-                  <button type="submit" name="clicked" value="{{i.id}}">Delete</button></form>
-           </td>
+                <td> {{j.society_name}}</td>
             </tr>
-
+                {% endfor %}
                 {% endfor %}
 
-              </table>
+              </table> -->
 
             </div>
 
