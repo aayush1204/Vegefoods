@@ -116,7 +116,18 @@
         </div>
       </div>
     </div>
-
+    {% if messages %}
+					<!-- <ul class='messages'> -->
+						{%for message in messages %}
+						<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+						<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+						{% if message.tags %}<div class="alert alert-warning alert-dismissible fade show">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							<strong>Refund applied</strong>
+						  </div>{%endif%}
+						{%endfor%}
+					<!-- </ul> -->
+					{%endif%}
     <section class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
@@ -135,7 +146,8 @@
 						    </thead>
 						    <tbody> -->
                                 {% for i in orders %}
-                                
+                                <form method="post" action =" {% url 'refund' x=i.referral_id %}">
+                                    {% csrf_token %}
                                 <table class="table">
                                     <thead class="thead-primary">
                                       <tr class="text-center">
@@ -178,8 +190,8 @@
                                     
                                     <td class="quantity ">
                                     
-                                        <a href="{% url 'refund' x=i.referral_id %}" class="btn btn-primary ">Return</a>
-                                        
+                                        <!-- <a href="#" class="btn btn-primary ">Return</a> -->
+                                        <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes">
                                         <!-- {{j.quantity}} -->
                                         <!-- <div class="input-group mb-3"> -->
                                          <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
@@ -191,6 +203,8 @@
                                   {% endfor %}
                                 </tbody> 
                                  </table>
+                                 <input type="submit" value="Submit" class="btn btn-black py-3 px-5">
+                                </form>
                                   {% endfor %}
 						      
 					  </div>

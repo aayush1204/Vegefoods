@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile
+from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile, Refunds
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
+from django.utils.datastructures import MultiValueDictKeyError
+
 # Create your views here.
 
 def home(request):
@@ -18,7 +20,7 @@ def home(request):
 def product_single(request, q):
 
     pdata = Product.objects.get(id=q)
-    print(pdata.supplier.supplier_name)
+    # print(pdata.supplier.supplier_name)
     return render(request, 'product-single.html',{'pdata':pdata})
 
 def add_cart(request, q):
@@ -38,7 +40,7 @@ def add_cart(request, q):
         try:
             p = Cart.objects.filter(is_ordered=False).filter(user=request.user).get(product=pddata)
             pdata = Product.objects.get(id=q)
-            print(pdata.supplier.supplier_name)
+            # print(pdata.supplier.supplier_name)
             messages.info(request, 'Already added in cart!')
             return render(request, 'product-single.html',{'pdata':pdata})
 
@@ -201,6 +203,57 @@ def myorders(request):
     orders = Order.objects.filter(user=request.user)
     return render(request, 'myorders.html', {'orders':orders})
 
+def refund(request, x):
+
+    if request.method=="POST":
+        orders = Order.objects.filter(user=request.user).filter(referral_id=x)
+        dic={}
+        for i in orders:
+            for j in i.items.all():
+                print(j.product.id)
+                b=str(j.product.id)
+                try:
+                    a = request.POST[b]
+                except MultiValueDictKeyError:
+                    a = 'No'
+                # a=request.POST.get(b, False)
+                dic[b]=a
+        print(dic)
+        o = Order.objects.get(referral_id=x)
+        r = Refunds.objects.create(order=o, refund_amount=0)
+        for key,val in dic.items():
+            
+            money=0
+            o = Order.objects.get(referral_id=x)
+            for j in o.items.all():
+                # print(key)
+                # print(int(j.product.id)==int(key))
+                if int(j.product.id)==int(key):
+                    # print("hello")
+                    # print(val)
+                    if val=="Yes":
+                        messages.info(request, 'Alre!')
+                        # print(o)
+                        r.items.add(j)
+                        r.save()
+                        # print(money)
+                        money=money+int(j.product.product_price)*int(j.quantity)
+                        # print("yes")
+                        # print(int(j.product.product_price)*int(j.quantity))
+                        # print(money)
+                        # q=Order.objects.filter(user=request.user).filter(referral_id=x).filter(items=cf)#.update(refunded=True)
+                        # o.save()  
+                        
+            Refunds.objects.filter(order=o).update(refund_amount=money)
+
+
+        return render(request, 'refund.html',{'orders':orders})        
+
+
+
+    orders = Order.objects.filter(user=request.user).filter(referral_id=x)
+    return render(request, 'refund.html', {'orders':orders})
+
 def contact(request):
 
     if request.method=="POST":
@@ -214,7 +267,6 @@ def contact(request):
         return render(request, 'contact.html')
 
     return render(request, 'contact.html')
-
 
 
 

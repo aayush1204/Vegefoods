@@ -13,6 +13,13 @@ urlpatterns = [
     path('approval/',views.approvallist,name='approval'),
     path('deleteproduct/',views.deleteproduct,name='deleteproduct'),
     path('newproduct/',views.newproduct,name='newproduct'),
+    path('societies/',views.societieslist,name='societies'),
+    path('vouchers/',views.vouchers,name='vouchers'),
+    path('viewvoucher/',views.viewvoucher,name='viewvoucher'),
+
+    path('createvoucher/',views.createvoucher,name='createvoucher'),
+    path('updatevoucher/',views.updatevoucher,name='updatevoucher'),
+    path('deletevoucher/',views.deletevoucher,name='deletevoucher'),
 
     # path('/supplierslist',views.supplierslist,name='supplierslist'),
     path('logout/',views.logout,name='logout'),
