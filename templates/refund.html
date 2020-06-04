@@ -172,7 +172,15 @@
                               
                                   <tr class="text-center">
                                     <!-- <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td> -->
+                                    <td class="quantity ">
                                     
+                                      <!-- <a href="#" class="btn btn-primary ">Return</a> -->
+                                      <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes">
+                                      <!-- {{j.quantity}} -->
+                                      <!-- <div class="input-group mb-3"> -->
+                                       <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
+                                  
+                                </td>
                                     <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{j.product_image}});"></div></td>
                                     
                                     <td class="product-name">
@@ -188,22 +196,16 @@
                                     </p>
                                     </td>
                                     
-                                    <td class="quantity ">
                                     
-                                        <!-- <a href="#" class="btn btn-primary ">Return</a> -->
-                                        <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes">
-                                        <!-- {{j.quantity}} -->
-                                        <!-- <div class="input-group mb-3"> -->
-                                         <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
-                                    
-                                  </td>
                                     
                                     <!-- <td class="total">{{j.quantity}}*{{j.product.product_price}}</td> -->
                                   </tr>  
                                   {% endfor %}
                                 </tbody> 
                                  </table>
+                                 <div style="text-align: center">
                                  <input type="submit" value="Submit" class="btn btn-black py-3 px-5">
+                                 </div>
                                 </form>
                                   {% endfor %}
 						      

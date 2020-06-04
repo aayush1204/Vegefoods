@@ -221,30 +221,32 @@ def refund(request, x):
         print(dic)
         o = Order.objects.get(referral_id=x)
         r = Refunds.objects.create(order=o, refund_amount=0)
+        money=0
         for key,val in dic.items():
-            
-            money=0
+                 
             o = Order.objects.get(referral_id=x)
             for j in o.items.all():
-                # print(key)
-                # print(int(j.product.id)==int(key))
+                print(key)
+                print(int(j.product.id)==int(key))
                 if int(j.product.id)==int(key):
                     # print("hello")
                     # print(val)
                     if val=="Yes":
-                        messages.info(request, 'Alre!')
+                        
                         # print(o)
                         r.items.add(j)
                         r.save()
-                        # print(money)
+                        print(money)
                         money=money+int(j.product.product_price)*int(j.quantity)
                         # print("yes")
-                        # print(int(j.product.product_price)*int(j.quantity))
-                        # print(money)
+                        print(int(j.product.product_price)*int(j.quantity))
+                        print(money)
                         # q=Order.objects.filter(user=request.user).filter(referral_id=x).filter(items=cf)#.update(refunded=True)
                         # o.save()  
-                        
-            Refunds.objects.filter(order=o).update(refund_amount=money)
+        print(money)  
+        if money:
+            messages.info(request, 'Alre!')          
+        Refunds.objects.filter(order=o).update(refund_amount=money)
 
 
         return render(request, 'refund.html',{'orders':orders})        
