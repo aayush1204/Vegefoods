@@ -21,6 +21,15 @@ from django.contrib.auth.models import AbstractUser
 
 # New MOdels
 
+class Society(models.Model):
+    society_name=models.CharField(max_length=30)
+    society_locality=models.CharField(max_length=30)
+    society_address=models.CharField(max_length=30)
+class Voucher(models.Model):
+    voucher_code=models.CharField(max_length=10)
+    voucher_value=models.IntegerField(default=1)
+    society=models.ManyToManyField(Society)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     PR = (
@@ -29,6 +38,7 @@ class Profile(models.Model):
         ('A','Admin'),
     )
     pr= models.CharField(max_length=1,choices=PR)
+    society=models.OneToOneField(Society,on_delete=models.CASCADE,null=True)
 
 
 class Supplier(models.Model):
@@ -73,6 +83,7 @@ class Cart(models.Model):
     quantity = models.IntegerField(default=0)
     product_image = models.CharField(max_length=100)
     is_ordered = models.BooleanField(default=False)
+    refunded = models.BooleanField(default=False)
     # product_price = models.IntegerField(default=0)
 
     def __str__(self):
@@ -106,8 +117,8 @@ class Order(models.Model):
     items = models.ManyToManyField(Cart)
     is_refunded = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.referral_id
+    # def __str__(self):
+    #     return self.referral_id
 
 class ContactUs(models.Model):
     name = models.CharField(max_length=30)
@@ -118,3 +129,8 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.subject
+
+class Refunds(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Cart)
+    refund_amount = models.IntegerField(default=0) 

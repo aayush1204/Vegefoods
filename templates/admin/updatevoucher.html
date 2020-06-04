@@ -368,36 +368,28 @@
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
-              <h4>  Suppliers List</h4> <br>
-
+              <h4>  Update Vouchers </h4> <br>
+              <div class="content">
+                <button type="submit" name='viewvoucher' onclick=location.href='{% url "viewvoucher" %}'  class="save btn btn-default">View Vouchers</button>
+                <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button>
+                <button type="submit" name='deletevoucher' onclick=location.href='{% url "updatevoucher" %}' class="save btn btn-default">Update Voucher</button>
+                <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
+              </div>
+<br> <br>
               <table style="width:100%" border="1">
             <tr>
-                <th> Username </th>
-                <th> First Name </th>
-                <th> Last Name </th>
-                <th> Email ID </th>
-                <th> Phone Number </th>
-                <th> Pincode </th>
-                <th> GST Number </th>
-                <th> Bank Account Details </th>
-                <th> Store Name </th>
-                <th> Store Description </th>
-                <th> Store Address </th>
-              </tr>
-              {% for i in suppdata %}
-              <tr>
-                <td> {{i.supplier_details.username}} </td>
-                <td> {{i.supplier_details.first_name}}</td>
-                <td> {{i.supplier_details.last_name}}</td>
-                <td> {{i.supplier_details.email}}</td>
-                <td> {{i.phone}}</td>
-                <td> {{i.pincode}}</td>
-                <td> {{i.GST_number}}</td>
-                <td> {{i.Bank_Account_Details}}</td>
-                <td> {{i.store_name}}</td>
-                <td> {{i.store_description}}</td>
-                <td> {{i.store_address}}</td>
+                <th> Voucher Code </th>
+                <th> Voucher Value </th>
+                <th> Society Name </th>
             </tr>
+              {% for i in voucherdata %}
+              {% for j in i.society.all %}
+              <tr>
+                <td> {{i.voucher_code}} </td>
+                <td> {{i.voucher_value}}</td>
+                <td> {{j.society_name}}</td>
+            </tr>
+                {% endfor %}
                 {% endfor %}
 
               </table>

@@ -368,35 +368,19 @@
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
-              <h4>  Suppliers List</h4> <br>
+              <h4>  Societies List</h4> <br>
 
               <table style="width:100%" border="1">
             <tr>
-                <th> Username </th>
-                <th> First Name </th>
-                <th> Last Name </th>
-                <th> Email ID </th>
-                <th> Phone Number </th>
-                <th> Pincode </th>
-                <th> GST Number </th>
-                <th> Bank Account Details </th>
-                <th> Store Name </th>
-                <th> Store Description </th>
-                <th> Store Address </th>
-              </tr>
-              {% for i in suppdata %}
+                <th> Society Name </th>
+                <th> Society Address </th>
+                <th> Society Locality </th>
+            </tr>
+              {% for i in societiesdata %}
               <tr>
-                <td> {{i.supplier_details.username}} </td>
-                <td> {{i.supplier_details.first_name}}</td>
-                <td> {{i.supplier_details.last_name}}</td>
-                <td> {{i.supplier_details.email}}</td>
-                <td> {{i.phone}}</td>
-                <td> {{i.pincode}}</td>
-                <td> {{i.GST_number}}</td>
-                <td> {{i.Bank_Account_Details}}</td>
-                <td> {{i.store_name}}</td>
-                <td> {{i.store_description}}</td>
-                <td> {{i.store_address}}</td>
+                <td> {{i.society_name}} </td>
+                <td> {{i.society_address}}</td>
+                <td> {{i.society_locality}}</td>
             </tr>
                 {% endfor %}
 

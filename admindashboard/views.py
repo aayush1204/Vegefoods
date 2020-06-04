@@ -2,11 +2,12 @@ from django.shortcuts import render,redirect
 import requests
 from .forms import loginform
 from supplier.models import Product
-from shop.models import Supplier
+from shop.models import Supplier,Voucher,Society
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from shop.models import Order
 from .models import adminmodel,addproductlist
+
 # Create your views here.
 
 def homepage(request):
@@ -58,6 +59,33 @@ def homepage(request):
 #         response.set_cookie('username',username)
 #         return response
         # return render(request,name,{'forminput':forminput,'message':message,'currentuser':currentuser})
+def societieslist(request):
+    print('societieslist')
+    societiesdata=Society.objects.all()
+    return render(request,'admin/societieslist.html',{'societiesdata':societiesdata})
+def vouchers(request):
+    print('vouchers')
+    return render(request,'admin/vouchers.html')
+
+def createvoucher(request):
+    print('createvoucher')
+    return render(request,'admin/createvoucher.html')
+
+def viewvoucher(request):
+    print('viewvoucher')
+    voucherdata=Voucher.objects.all()
+    return render(request,'admin/viewvoucher.html',{'voucherdata':voucherdata})
+
+def deletevoucher(request):
+    print('deletevoucher')
+    voucherdata=Voucher.objects.all()
+    return render(request,'admin/deletevoucher.html',{'voucherdata':voucherdata})
+
+def updatevoucher(request):
+    print('updatevoucher')
+    voucherdata=Voucher.objects.all()
+    return render(request,'admin/updatevoucher.html',{'voucherdata':voucherdata})
+
 def supplierslist(request):
     print('supplierslist')
     # currentuser = request.COOKIES['username']
