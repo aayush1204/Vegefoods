@@ -368,7 +368,7 @@
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
-              <h4>  Delete Vouchers</h4> <br>
+              <h4>  Update Vouchers </h4> <br>
               <div class="content">
                 <button type="submit" name='viewvoucher' onclick=location.href='{% url "viewvoucher" %}'  class="save btn btn-default">View Vouchers</button>
                 <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button>
@@ -376,29 +376,18 @@
                 <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
               </div>
 <br> <br>
-              <table style="width:100%" border="1">
-            <tr>
-                <th> Voucher Code </th>
-                <th> Voucher Value </th>
-                <th> Society Name </th>
-                <th>  </th>
-            </tr>
-              {% for i in voucherdata %}
-
-              <tr>
-                <td> {{i.voucher_code}} </td>
-                <td> {{i.voucher_value}}</td>
-                <td>{% for j in i.society.all %} {{j.society_name}}{% endfor %}</td>
-                <td><form action="" method="post">
-                  {% csrf_token %}
-
-                  <button type="submit" name="clicked" value="{{i.id}}">Delete</button></form>
-           </td>
-            </tr>
-
-                {% endfor %}
-
-              </table>
+<h5>Original Details:</h5><br>
+Voucher Code: {{orgdata.voucher_code}} <br>
+Voucher Value: {{orgdata.voucher_value}}<br>
+{% for i in orgdata.society.all %}
+Societies: {{i.society_name}}
+{% endfor %}
+<br><br>
+<h5>New Details:</h5>
+<form action="" method="post">
+  {% csrf_token %}
+  {{voucherform.as_p}}
+  <button type="submit" name="update" value="{{orgdata.id}}">Update Voucher</button></form>
 
             </div>
 

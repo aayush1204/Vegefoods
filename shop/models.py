@@ -25,6 +25,9 @@ class Society(models.Model):
     society_name=models.CharField(max_length=30)
     society_locality=models.CharField(max_length=30)
     society_address=models.CharField(max_length=30)
+    def __str__(self):
+        return self.society_name+', '+self.society_address+', '+self.society_locality
+
 class Voucher(models.Model):
     voucher_code=models.CharField(max_length=10)
     voucher_value=models.IntegerField(default=1)
@@ -134,4 +137,4 @@ class ContactUs(models.Model):
 class Refunds(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     items = models.ManyToManyField(Cart)
-    refund_amount = models.IntegerField(default=0) 
+    refund_amount = models.IntegerField(default=0)

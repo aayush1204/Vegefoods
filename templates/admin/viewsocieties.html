@@ -368,34 +368,25 @@
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
-              <h4>  Delete Vouchers</h4> <br>
+              <h4>  Societies List</h4> <br>
               <div class="content">
-                <button type="submit" name='viewvoucher' onclick=location.href='{% url "viewvoucher" %}'  class="save btn btn-default">View Vouchers</button>
-                <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button>
-                <button type="submit" name='deletevoucher' onclick=location.href='{% url "updatevoucher" %}' class="save btn btn-default">Update Voucher</button>
-                <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
-              </div>
-<br> <br>
+                <button type="submit" name='viewsocieties' onclick=location.href='{% url "viewsocieties" %}'  class="save btn btn-default">View Societies</button>
+                <button type="submit" name='createsocieties' onclick=location.href='{% url "createsocieties" %}' class="save btn btn-default">Create Societies</button>
+                <button type="submit" name='updatesocieties' onclick=location.href='{% url "updatesocieties" %}' class="save btn btn-default">Update Societies</button>
+                <button type="submit" name='deletesocieties' onclick=location.href='{% url "deletesocieties" %}' class="save btn btn-default">Delete Societies</button>
+          </div>
               <table style="width:100%" border="1">
             <tr>
-                <th> Voucher Code </th>
-                <th> Voucher Value </th>
                 <th> Society Name </th>
-                <th>  </th>
+                <th> Society Address </th>
+                <th> Society Locality </th>
             </tr>
-              {% for i in voucherdata %}
-
+              {% for i in socdata %}
               <tr>
-                <td> {{i.voucher_code}} </td>
-                <td> {{i.voucher_value}}</td>
-                <td>{% for j in i.society.all %} {{j.society_name}}{% endfor %}</td>
-                <td><form action="" method="post">
-                  {% csrf_token %}
-
-                  <button type="submit" name="clicked" value="{{i.id}}">Delete</button></form>
-           </td>
+                <td> {{i.society_name}} </td>
+                <td> {{i.society_address}}</td>
+                <td> {{i.society_locality}}</td>
             </tr>
-
                 {% endfor %}
 
               </table>
