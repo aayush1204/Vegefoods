@@ -110,7 +110,8 @@
                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
-                    <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+					<a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+					<a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -145,7 +146,7 @@
         </div>
       </div>
     </div>
-	<form action="{%url 'order_place' %}" method="post" class="billing-form">
+	<form action="{% url 'order_place' %}" method="post" class="billing-form">
 		{% csrf_token %}
     <section class="ftco-section">
       <div class="container">
@@ -250,13 +251,13 @@
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Discount</span>
-		    						<span>Rs 0.00</span>
+		    						<span id="Discount">Rs {{discount}}</span>
 		    					</p>
 		    					<hr>
 		    					<p class="d-flex ">
 		    						<span>Total</span>
 									<!-- <strong>Rs {{stbill}}</strong> -->
-									<input type ="text"name="totalbill" style="border:none; margin-left: 0px" value="Rs {{stbill}}" id="Subtotal">
+									<input type ="text"name="totalbill" style="border:none; margin-left: 0px" value="Rs {{total}}" id="Subtotal">
 		    					</p>
 								</div>
 	          	</div>
@@ -291,7 +292,7 @@
 											</div>
 										</div>
 									</div>
-									<p><input type='submit'class="btn btn-primary py-3 px-4" value="Place an Order" >
+									<p><input type='submit' class="btn btn-primary py-3 px-4" value="Place an Order" >
 										<!-- <a href="#"class="btn btn-primary py-3 px-4">Place an order</a> -->
 									</p>
 								</div>
@@ -443,6 +444,10 @@
 
 		$(document).ready(function(){
 
+
+			
+			
+			
 		var quantitiy=0;
 		   $('.quantity-right-plus').click(function(e){
 		        

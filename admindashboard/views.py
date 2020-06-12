@@ -1,13 +1,15 @@
+from django.core.mail import send_mail
 from django.shortcuts import render,redirect
 import requests
-from .forms import VoucherCreation,SocietyCreation
-from supplier.models import Product
-from shop.models import Supplier,Voucher,Society
+from .forms import VoucherCreation,SocietyCreation,mailback
+from shop.models import ContactUs,Supplier,Voucher,Society,Product,Order
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from shop.models import Order
 from django.contrib import messages
-from .models import adminmodel,addproductlist
+from email.message import EmailMessage
+import smtplib
+from .models import adminmodel,addproductlist,delete_product_list
+from django.conf import settings
 
 # Create your views here.
 
@@ -60,7 +62,6 @@ def homepage(request):
 #         response.set_cookie('username',username)
 #         return response
         # return render(request,name,{'forminput':forminput,'message':message,'currentuser':currentuser})
-
 
 def societieslist(request):
     print('societieslist')
@@ -244,50 +245,98 @@ def updatevoucher(request):
         return render(request,'admin/updatevoucher.html',{'voucherdata':voucherdata,'message':message})
 
 
-
 def supplierslist(request):
     print('supplierslist')
     # currentuser = request.COOKIES['username']
     suppdata=Supplier.objects.all()
     # print(type(suppdata))
     return render(request,'admin/supplierslist.html',{'suppdata':suppdata})
+
 def requestslist(request):
-    currentuser = request.COOKIES['username']
 
     print('requestslist')
-    return render(request,'admin/requestslist.html',{'currentuser':currentuser})
+    return render(request,'admin/requestslist.html',{})
+
 
 def complaintslist(request):
-    currentuser = request.COOKIES['username']
+    # currentuser = request.COOKIES['username']
+    if request.method=='GET':
+        complaintdata=ContactUs.objects.filter(is_addressed=False)
 
-    print('complaintslist')
-    return render(request,'complaintslist.html',{'currentuser':currentuser})
+        print('complaintslist')
+        return render(request,'admin/complaintslist.html',{'complaintdata':complaintdata})
+    elif request.method=='POST' and 'clicked' in request.POST:
+        orgdata=ContactUs.objects.get(id=int(request.POST['clicked']))
+        mailform=mailback()
+        return render(request,'admin/sendmail.html',{'mailform':mailform,'orgdata':orgdata})
+
+    elif request.method=='POST' and 'send' in request.POST:
+        orgdata=ContactUs.objects.get(id=int(request.POST['send']))
+        mailform=mailback(request.POST)
+        msg=""
+        if mailform.is_valid():
+            msg=mailform.cleaned_data['message']
+
+            DEFAULT_FROM_EMAIL='raoashish1008@gmail.com'
+            password='vegefoods1234'
+
+            subject='Re: '+str(orgdata.subject)
+            body=orgdata.message
+            msg= f'Subject: {subject}\n\n{body}'
+            server = smtplib.SMTP('smtp.gmail.com:587')
+            server.starttls()
+            server.login(DEFAULT_FROM_EMAIL,password)
+            server.sendmail(DEFAULT_FROM_EMAIL,orgdata.email,msg)
+            server.quit()
+
+        complaintdata=ContactUs.objects.filter(is_addressed=False)
+        orgdata.is_addressed=True
+        orgdata.save()
+        return render(request,'admin/complaintslist.html',{'complaintdata':complaintdata})
+
 def refundslist(request):
-    currentuser = request.COOKIES['username']
+    # currentuser = request.COOKIES['username']
 
     print('refundslist')
-    return render(request,'admin/refundslist.html',{'currentuser':currentuser})
+    return render(request,'admin/refundslist.html',)
+
 def orderslist(request):
     print('orderslist')
-    currentuser = request.COOKIES['username']
+    # currentuser = request.COOKIES['username']
 
     orderdata=Order.objects.filter(is_completed=False)
     print(type(orderdata))
-    return render(request,'orderslist.html',{'orderdata':orderdata,'currentuser':currentuser})
+    return render(request,'admin/orderslist.html',{'orderdata':orderdata})
 
 def approvallist(request):
-    print('approvallist')
-    # currentuser = request.COOKIES['username']
+    if request.method=='GET':
+        print('approvallist')
+        # currentuser = request.COOKIES['username']
 
-    approvaldata=Supplier.objects.filter(is_approved=False)
-    print(approvaldata)
-    return render(request,'admin/approvallist.html',{'approvaldata':approvaldata})
+        approvaldata=Supplier.objects.filter(is_approved=False)
+        print(approvaldata)
+        return render(request,'admin/approvallist.html',{'approvaldata':approvaldata})
+    else:
+        orgdata=Supplier.objects.get(id=int(request.POST['clicked']))
+        orgdata.is_approved=True
+        orgdata.save()
+        approvaldata=Supplier.objects.filter(is_approved=False)
+        message='Supplier Approved Successfully'
+        return render(request,'admin/approvallist.html',{'approvaldata':approvaldata,'message':message})
 
 def deleteproduct(request):
-    print('deleteproduct')
-    currentuser = request.COOKIES['username']
-
-    return render(request,'deleteproduct.html',{'currentuser':currentuser})
+    if request.method=='GET':
+        print('deleteproduct')
+        # currentuser = request.COOKIES['username']
+        deleteproddata=delete_product_list.objects.filter(is_approved=False)
+        return render(request,'admin/deleteproduct.html',{'deleteproddata':deleteproddata})
+    else:
+        orgdata=delete_product_list.objects.get(id=int(request.POST['clicked']))
+        orgdata.is_approved=True
+        orgdata.save()
+        approvaldata=Supplier.objects.filter(is_approved=False)
+        message='Delete Product request Approved Successfully'
+        return render(request,'admin/deleteproduct.html',{'approvaldata':approvaldata,'message':message})
 
 def newproduct(request):
     if request.method=='GET':

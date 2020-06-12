@@ -84,6 +84,7 @@
                     <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                     <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+                    <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -113,7 +114,7 @@
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
           	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>My Account</span></p>
-            <h1 class="mb-0 bread">My Orders</h1>
+            <h1 class="mb-0 bread">Order Tracking</h1>
           </div>
         </div>
       </div>
@@ -145,7 +146,7 @@
                           Order Placed
                         </li>
                         
-                        <li class="{{approved}}">Order Confirmed</li>
+                        <li class="{{approved}}">Order Approved</li>
                         
                         <li class="{{shipped}}">Shipped</li>
                         
@@ -176,72 +177,72 @@
 						      </tr>
 						    </thead>
 						    <tbody> -->
-                                {% for i in orders %}
-                                <form method="post" action =" {% url 'refund' x=i.referral_id %}">
-                                    {% csrf_token %}
-                                <table class="table">
-                                    <thead class="thead-primary">
-                                      <tr class="text-center">
-                                        <!-- <th>&nbsp;</th> -->
-                                        <th>Order Date
-                                            <p>{{i.order_date}}</p>
-                                        </th>
-                                        <th>Order Id
-                                            <p>{{i.referral_id}}</p>
-                                        </th>
-                                        <th>Total Amount
-                                            <p>Rs. {{i.total_amount}}</p>
-                                        </th>
-                                        <th><p>
-                                             <!-- <a href="#" class="btn btn-light py-2 px-3 ">Track my order</a> -->
-                                             Shipping Address- <span>{{i.apartmentno}}, {{i.address}}<br>{{i.city}}
-                                                 -{{i.zipcode}} ,{{i.state}}
-                                             </span>
-                                            </p></th>
-                                        <!-- <th>Total</th> -->
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                {%for j in i.items.all %}
+                      {% for i in orders %}
+                      <form method="post" action =" {% url 'refund' x=i.referral_id %}">
+                          {% csrf_token %}
+                      <table class="table">
+                          <thead class="thead-primary">
+                            <tr class="text-center">
+                              <!-- <th>&nbsp;</th> -->
+                              <th>Order Date
+                                  <p>{{i.order_date}}</p>
+                              </th>
+                              <th>Order Id
+                                  <p>{{i.referral_id}}</p>
+                              </th>
+                              <th>Total Amount
+                                  <p>Rs. {{i.total_amount}}</p>
+                              </th>
+                              <th><p>
+                                    <!-- <a href="#" class="btn btn-light py-2 px-3 ">Track my order</a> -->
+                                    Shipping Address- <span>{{i.apartmentno}}, {{i.address}}<br>{{i.city}}
+                                        -{{i.zipcode}} ,{{i.state}}
+                                    </span>
+                                  </p></th>
+                              <!-- <th>Total</th> -->
+                            </tr>
+                          </thead>
+                          <tbody>
+                      {%for j in i.items.all %}
+                    
+                        <tr class="text-center">
+                          <!-- <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td> -->
+                          <td class="quantity ">
+                          
+                            <!-- <a href="#" class="btn btn-primary ">Return</a> -->
+                            <!-- <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes"> -->
+                            <!-- {{j.quantity}} -->
+                            <!-- <div class="input-group mb-3"> -->
+                              <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
+                        
+                      </td>
+                          <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{j.product_image}});"></div></td>
+                          
+                          <td class="product-name">
+                              <h3>{{j.product.product_name}}</h3>
+                              <p>Sold by-{{j.product.supplier.store_name}}   
+    
+                              </p>
                               
-                                  <tr class="text-center">
-                                    <!-- <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td> -->
-                                    <td class="quantity ">
-                                    
-                                      <!-- <a href="#" class="btn btn-primary ">Return</a> -->
-                                      <!-- <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes"> -->
-                                      <!-- {{j.quantity}} -->
-                                      <!-- <div class="input-group mb-3"> -->
-                                       <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
-                                  
-                                </td>
-                                    <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{j.product_image}});"></div></td>
-                                    
-                                    <td class="product-name">
-                                        <h3>{{j.product.product_name}}</h3>
-                                        <p>Sold by-{{j.product.supplier.store_name}}   
-              
-                                        </p>
-                                        
-                                    </td>
-                                    
-                                    <td class="price"><p>Rs. {{j.product.product_price}} per SKU
-                                        <br>Units -{{j.quantity}}    
-                                    </p>
-                                    </td>
-                                    
-                                    
-                                    
-                                    <!-- <td class="total">{{j.quantity}}*{{j.product.product_price}}</td> -->
-                                  </tr>  
-                                  {% endfor %}
-                                </tbody> 
-                                 </table>
-                                 <!-- <div style="text-align: center"> -->
-                                 <!-- <input type="submit" value="Submit" class="btn btn-black py-3 px-5"> -->
-                                 <!-- </div> -->
-                                </form>
-                                  {% endfor %}
+                          </td>
+                          
+                          <td class="price"><p>Rs. {{j.product.product_price}} per SKU
+                              <br>Units -{{j.quantity}}    
+                          </p>
+                          </td>
+                          
+                          
+                          
+                          <!-- <td class="total">{{j.quantity}}*{{j.product.product_price}}</td> -->
+                        </tr>  
+                        {% endfor %}
+                      </tbody> 
+                        </table>
+                        <!-- <div style="text-align: center"> -->
+                        <!-- <input type="submit" value="Submit" class="btn btn-black py-3 px-5"> -->
+                        <!-- </div> -->
+                      </form>
+                        {% endfor %}
 						      
 					  </div>
     			</div>

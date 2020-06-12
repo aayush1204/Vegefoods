@@ -13,3 +13,12 @@ class addproductlist(models.Model):
     product_sku=models.CharField(max_length=100)
     product_price=models.FloatField()
     supplier_username=models.CharField(max_length=100)
+
+class delete_product_list(models.Model):
+    product_name=models.CharField(max_length=100)
+    product_description=models.CharField(max_length=100)
+    product_sku=models.CharField(max_length=100)
+    product_price=models.FloatField()
+    reason_for_removal=models.TextField(default="")
+    supplier_username=models.CharField(max_length=100)
+    is_approved=models.BooleanField(default=False)

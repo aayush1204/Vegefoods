@@ -381,21 +381,15 @@
                 <th> Voucher Code </th>
                 <th> Voucher Value </th>
                 <th> Society Name </th>
-                <th>  </th>
             </tr>
               {% for i in voucherdata %}
-
+              {% for j in i.society.all %}
               <tr>
                 <td> {{i.voucher_code}} </td>
                 <td> {{i.voucher_value}}</td>
-                <td>{% for j in i.society.all %} {{j.society_name}}{% endfor %}</td>
-                <td><form action="" method="post">
-                  {% csrf_token %}
-
-                  <button type="submit" name="clicked" value="{{i.id}}">Delete</button></form>
-           </td>
+                <td> {{j.society_name}}</td>
             </tr>
-
+                {% endfor %}
                 {% endfor %}
 
               </table>
