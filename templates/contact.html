@@ -97,7 +97,7 @@
            <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
            <li class="nav-item"><a href="about.html" class="nav-link">Sell With Us!</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
           <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
            {% endif %}
         </ul>
@@ -212,7 +212,7 @@
                 <li><a href="#" class="py-2 d-block">Shop</a></li>
                 <li><a href="#" class="py-2 d-block">About</a></li>
                 <li><a href="#" class="py-2 d-block">Journal</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+                <li><a href="{% url 'contact' %}" class="py-2 d-block">Contact Us</a></li>
               </ul>
             </div>
           </div>
@@ -228,7 +228,7 @@
 	              </ul>
 	              <ul class="list-unstyled">
 	                <li><a href="#" class="py-2 d-block">FAQs</a></li>
-	                <li><a href="#" class="py-2 d-block">Contact</a></li>
+	                <li><a href="{% url 'contact' %}" class="py-2 d-block">Contact</a></li>
 	              </ul>
 	            </div>
             </div>

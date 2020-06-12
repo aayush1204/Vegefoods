@@ -52,7 +52,7 @@ def login(request):
 
             user =  auth.authenticate(username=username,password=password)
 
-            if(user.profile.pr=='C' and user is not None):
+            if(user.profile.pr=='C'):
                 auth.login(request, user)
                 return redirect('/')
             else:

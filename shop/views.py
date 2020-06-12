@@ -1,15 +1,19 @@
 from django.shortcuts import render
-from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile, Refunds
+from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile ,Refunds, Voucher
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.utils.datastructures import MultiValueDictKeyError
+from django.core.mail import send_mail
+import smtplib
+from django.conf import settings
 
 # Create your views here.
 
 def home(request):
+
 
     product_data = Product.objects.filter(out_of_stock=False)
     for i in product_data:
@@ -25,18 +29,18 @@ def product_single(request, q):
 
 def add_cart(request, q):
     if request.method == "POST":
-        
+
         quantity = request.POST['quantity']
         pddata = Product.objects.get(id=q)
         price = int(pddata.product_price)
         tp=int(quantity)*price
         print(request.user)
-        
+
         userdata = User.objects.all()
         # for i in userdata:
             # if request.user == i:
         print(userdata)
-            
+
         try:
             p = Cart.objects.filter(is_ordered=False).filter(user=request.user).get(product=pddata)
             pdata = Product.objects.get(id=q)
@@ -49,15 +53,15 @@ def add_cart(request, q):
             cdata = Cart.objects.create(product=pddata, quantity=quantity,
                                     product_image=pddata.product_image,user=request.user)
             cdata.save()
-        
+
             product_data = Product.objects.all()
             cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
             total_bill = int(0)
             for j in cart_data:
-                total_bill += j.quantity*int(j.product.product_price) 
+                total_bill += j.quantity*int(j.product.product_price)
         # return render(request, 'index.html',{'pdata':product_data})
             return render(request, 'cart.html',{'cdata':cart_data,'stbill':total_bill})
-        
+
 def delete_cart(request,p):
     Cart.objects.get(id=p).delete()
     cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
@@ -65,17 +69,26 @@ def delete_cart(request,p):
     total_bill = int(0)
     for j in cart_data:
 
-        total_bill += j.quantity*int(j.product.product_price) 
+        total_bill += j.quantity*int(j.product.product_price)
 
-    return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})           
+    return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 def cart_view(request):
+    # if 'coupon' in request.POST:
+    #     cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
+    #     print("yes")
+    #     total_bill = int(0)
+    #     for j in cart_data:
 
+    #         total_bill += j.quantity*int(j.product.product_price)
+
+    #     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})  
+    
     cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
 
     total_bill = int(0)
     for j in cart_data:
 
-        total_bill += j.quantity*int(j.product.product_price) 
+        total_bill += j.quantity*int(j.product.product_price)
 
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 
@@ -98,14 +111,14 @@ def shop_view(request):
     except EmptyPage:
         product_data = paginator.page(paginator.num_pages)
 
-    # return render(request, 'job-listings.html', {'company_data': company_data}) 
+    # return render(request, 'job-listings.html', {'company_data': company_data})
     all1='active'
     fruit=""
     dairy=""
     vegetables=""
     juices=""
     return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,
-                                        'dairy':dairy,'vegetable':vegetables,'juice':juices})    
+                                        'dairy':dairy,'vegetable':vegetables,'juice':juices})
 
 def filter(request, name):
     product_list = Product.objects.filter(category__icontains=name).filter(out_of_stock=False)
@@ -125,29 +138,35 @@ def filter(request, name):
     except EmptyPage:
         product_data = paginator.page(paginator.num_pages)
 
-    # return render(request, 'job-listings.html', {'company_data': company_data}) 
+    # return render(request, 'job-listings.html', {'company_data': company_data})
     all1=""
     vegetables=""
-    juices="" 
+    juices=""
     fruit=""
     dairy=""
     if name=="Fruits":
         fruit='active'
     elif name=='Dairy':
-        dairy='active' 
+        dairy='active'
     elif name=='Vegetables':
-        vegetables='active' 
+        vegetables='active'
     elif name=='Juices':
-        juices='active'            
+        juices='active'
     return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,'dairy':dairy,
                                             'vegetable':vegetables,'juice':juices})
 
 def checkout_view(request):
+
+    subtotal = request.GET['totalbill']
+    vname = request.COOKIES['vouchername']
+    vdata = Voucher.objects.get(voucher_code=vname)
     
-    subtotal = request.GET['totalbill'] 
+    print(vname)
     ab = subtotal[3:]
-    subtotal=ab
-    cdata = Cart.objects.filter(is_ordered=False).filter(user=request.user) 
+    subtotal=int(ab)
+
+    discount = int(vdata.voucher_value)*int(subtotal)/100
+    cdata = Cart.objects.filter(is_ordered=False).filter(user=request.user)
     quantities=[]
     prices=[]
     str1=""
@@ -158,12 +177,14 @@ def checkout_view(request):
         prices.append(request.GET[str1][3:])
     count=0
     for i in cdata:
-        Cart.objects.filter(product=i.product).update(quantity=quantities[count])   
+        Cart.objects.filter(product=i.product).update(quantity=quantities[count])
         count=count+1
-    print(prices)    
+    print(prices)
 
     address_data = Address.objects.filter(user=request.user).last()
-    return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data}) 
+    total = int(subtotal-discount)
+    
+    return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data,'discount':discount,'total':total})
 
 def order_place(request):
 
@@ -181,31 +202,56 @@ def order_place(request):
                                 category="1", user = request.user)
         print(fname)
         print(state)
-        total = request.POST['totalbill'] 
+        total = request.POST['totalbill']
         total=int(total[3:])
-
+        print(total )
+        vname = request.COOKIES['vouchername']
+        vdata = Voucher.objects.get(voucher_code=vname)
         order = Order.objects.create(user=request.user ,state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-                                     total_amount = total)
+                                     total_amount = total, voucher=vdata)
+
         order.save()
+
+        DEFAULT_FROM_EMAIL='raoashish1008@gmail.com'
+
+        password='vegefoods1234'
+
+        # send_mail('Order Number: '+str(order.referral_id),'Order placed successfully\nOrder id: {}\nReciepient name: {} {}\nTotal: {}'.format(order.referral_id,fname,lname,total),
+        #             settings.DEFAULT_FROM_EMAIL,
+        #             recipient_list= [request.user.email],
+        #             fail_silently=False,
+        #             # html_message=msg
+        #             )
+        subject='Order Number: '+str(order.referral_id)
+        body='Order placed successfully\nOrder id: {}\nReciepient name: {} {}\nTotal: {}'.format(order.referral_id,fname,lname,total)
+        msg= f'Subject: {subject}\n\n{body}'
+        
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        server.login(DEFAULT_FROM_EMAIL,password)
+        server.sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg)
+        server.quit()
         cdata =  Cart.objects.filter(is_ordered=False)
         for i in cdata:
 
             order.supplier.add(i.product.supplier)
-            order.items.add(i) 
-            
+            order.items.add(i)
+
         order.save()
-        Cart.objects.filter(is_ordered=False).update(is_ordered=True)                                
+        Cart.objects.filter(is_ordered=False).update(is_ordered=True)
     product_data=Product.objects.filter(out_of_stock=False)
     messages.info(request, 'Alre!')
     return render(request,'index.html',)
 
 def myorders(request):
+
     orders = Order.objects.filter(user=request.user)
     return render(request, 'myorders.html', {'orders':orders})
 
 def refund(request, x):
 
     if request.method=="POST":
+
         orders = Order.objects.filter(user=request.user).filter(referral_id=x)
         dic={}
         for i in orders:
@@ -220,36 +266,51 @@ def refund(request, x):
                 dic[b]=a
         print(dic)
         o = Order.objects.get(referral_id=x)
-        r = Refunds.objects.create(order=o, refund_amount=0)
+
+
         money=0
         for key,val in dic.items():
-                 
-            o = Order.objects.get(referral_id=x)
+
+
+            # o = Order.objects.get(referral_id=x)
             for j in o.items.all():
-                print(key)
-                print(int(j.product.id)==int(key))
+                # print(key)
+                # print(int(j.product.id)==int(key))
                 if int(j.product.id)==int(key):
                     # print("hello")
                     # print(val)
                     if val=="Yes":
-                        
-                        # print(o)
-                        r.items.add(j)
-                        r.save()
-                        print(money)
-                        money=money+int(j.product.product_price)*int(j.quantity)
-                        # print("yes")
-                        print(int(j.product.product_price)*int(j.quantity))
-                        print(money)
-                        # q=Order.objects.filter(user=request.user).filter(referral_id=x).filter(items=cf)#.update(refunded=True)
-                        # o.save()  
-        print(money)  
+
+                        a = Refunds.objects.filter(order=o).filter(supplier=j.product.supplier)
+                        print(a)
+                        if a:
+                            print("yes")
+                            x = int(j.product.product_price)*int(j.quantity)
+                            y=int(a[0].refund_amount)
+                            a.update(refund_amount=x+y)
+                            a[0].items.add(j)
+                            a[0].save()
+                        else:
+
+
+                            money=int(j.product.product_price)*int(j.quantity)
+                            r = Refunds.objects.create(order=o, refund_amount=money , supplier=j.product.supplier)
+                            print("no")
+                            # messages.info(request, 'Alre!')
+                            # print(o)
+                            r.items.add(j)
+                            # r.supplier.add(j.product.supplier)
+                            r.save()
+
+
+            print(Refunds.objects.all())
+
         if money:
-            messages.info(request, 'Alre!')          
-        Refunds.objects.filter(order=o).update(refund_amount=money)
+            messages.info(request, 'Alre!')
+            Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
 
 
-        return render(request, 'refund.html',{'orders':orders})        
+        return render(request, 'refund.html',{'orders':orders})
 
 
 
@@ -260,23 +321,25 @@ def track(request, x):
     orders = Order.objects.filter(referral_id=x)
     approved='active'
     shipped=''
-    delivered=''   
-    text="Placed" 
-    if orders[0].is_completed==True:
+    delivered=''
+    text="Placed"
+
+    if (orders[0].is_approved == True):
         approved='visited'
-        shipped='visited'
-        delivered='visited next'
-        text="Delivered"        
-    if orders[0].is_shipped==True:
+        shipped='active'
+        delivered=''
+        text="Order Approved"
+    if (orders[0].is_shipped):
         approved='visited'
         shipped='visited'
         delivered='active'
         text="Shipped"
-    if orders[0].is_approved==True:
+    if (orders[0].is_completed):
         approved='visited'
-        shipped='active'
-        delivered=''
-        text="Order Approved"        
+        shipped='visited'
+        delivered='visited next'
+        text="Delivered"
+
 
     return render(request, 'ordertrack.html', {'orders':orders,'approved':approved,'shipped':shipped,
                                                                'delivered':delivered,'text':text })
@@ -295,87 +358,41 @@ def contact(request):
 
     return render(request, 'contact.html')
 
+def myrefunds(request):
+    # x = Order.objects.filter(user=request.user)
+    z = User.objects.get(username=request.user.username)
+    w = Refunds.objects.filter(order__user = z)
+    print(w)
+    # ls=[]
+    # for i in x:
+    #     try:
+    #         if Refunds.objects.get(order=i):
+    #             print(i.referral_id)
+    #             ls.append(Refunds.objects.get(order=i))
+    #     except Refunds.DoesNotExist:
+    #         continue
+    # print(ls)
 
+    return render(request, 'myrefunds.html',{'rdata':w})
 
-def sellwithus(request):
-    if (request.method == "POST"):
+def voucher_apply(request):
+    
+    vname = request.GET['coupon']
+    print(vname)
+    voucher_data = Voucher.objects.filter(voucher_code=vname)
+    print(voucher_data)
+    
+    cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
+    print("yes")
+    total_bill = int(0)
+    for j in cart_data:
 
-        supplier=Supplier()
-        
-        first_name=request.POST['first_name']
-        last_name=request.POST['last_name']
-        email=request.POST['email']
-        supplier.address=request.POST['address']
-        supplier.pincode=request.POST['pincode']
-        supplier.GST_number=request.POST['GST_number']
-        supplier.store_name=request.POST['store_name']
-        supplier.store_description=request.POST['store_description']
-        supplier.store_address=request.POST['store_address']
-
-        username=request.POST['username']
-        password=request.POST['password']
-        confirm_password=request.POST['confirm_password']
-
-        if(password==confirm_password):
-
-            if User.objects.filter(username=username).exists():
-                messages.info(request, "This username is already taken!")
-                return render(request, 'supplier_register.html')
-
-
-            else:
-                user = User.objects.create_user(first_name=first_name, last_name=last_name,email=email,username=username,password=password)
-
-                user.save()
-                Profile.objects.create(user=user,pr='S')
-                supplier.supplier_details=user
-                
-                supplier.save()
-                print("user is hereeeeeeeeeeeeeeee")
-                return render(request, 'supplier_login.html')
-        else:
-            messages.info(request, "The two passwords don't match! Please enter correct password.")
-            return render(request, 'supplier_register.html' )
-
-
+        total_bill += j.quantity*int(j.product.product_price)
+    if voucher_data:
+        response = render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill,'vdata':voucher_data}) 
+        response.set_cookie('vouchername',vname)
+        return response 
     else:
-
-        return render(request, 'supplier_register.html')
-
-
-def supplier_login(request):
-    if(request.method=="POST"):
-
-        supplier= Supplier()
-
-        username=request.POST['username']
-        password=request.POST['password']
-
-        try:
-                supplier_in = User.objects.get(username=username)
-                print(password)
-                print(supplier_in.password)
-
-                user =  auth.authenticate(username=username,password=password)
-                print(user.profile.pr)
-
-                if (user.profile.pr=='S'):
-                    auth.login(request, user)
-                    return redirect('/')
-                else:
-                    messages.info(request, "Incorrect Credentials. Please enter the correct ones!")
-                    return render(request, 'supplier_login.html')
-
-                # if (supplier_in.password ==  password):
-                #     supplier_info = Supplier.objects.filter(supplier_details=supplier_in)
-                #     return render(request, 'index.html', {'supplier_info':supplier_info})
-                # else:
-                #     messages.info(request, "Incorrect Password!")
-                #     return render(request, 'supplier_login.html')
-
-        except User.DoesNotExist:
-                messages.info(request, "User doesnt exist!")
-                return render(request, 'supplier_login.html')
-
-    return render(request, 'supplier_login.html')            
-
+        messages.info(request, 'Alre!')
+        return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})   
+    # return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill,'vdata':voucher_data})         

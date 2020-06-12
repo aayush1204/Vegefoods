@@ -376,24 +376,22 @@
                 <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
               </div>
 <br> <br>
-
               <table style="width:100%" border="1">
             <tr>
                 <th> Voucher Code </th>
                 <th> Voucher Value </th>
                 <th> Society Name </th>
             </tr>
-<span>              {% for i in voucherdata %}
-
+              {% for i in voucherdata %}
+              {% for j in i.society.all %}
               <tr>
                 <td> {{i.voucher_code}} </td>
                 <td> {{i.voucher_value}}</td>
-
-                <td>{% for j in i.society.all %} {{j.society_name}},{% endfor %}</td>
+                <td> {{j.society_name}}</td>
             </tr>
-
                 {% endfor %}
-</span>
+                {% endfor %}
+
               </table>
 
             </div>

@@ -6,14 +6,14 @@
     <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    
+
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css '%}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css'%}">
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css'%}">
     <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css'%}">
 
-    
+
     <link rel="stylesheet" href="{% static 'css/flaticon.css'%}">
     <link rel="stylesheet" href="{% static 'css/icomoon.css'%}">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
@@ -87,7 +87,7 @@
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="oi oi-menu"></span> Menu
 		  </button>
-	 
+
 		  <div class="collapse navbar-collapse" id="ftco-nav">
 			<ul class="navbar-nav ml-auto">
 			  <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
@@ -105,16 +105,20 @@
 		   <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 				 {% if user.is_authenticated %}
 				 <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
+         {% if user.profile.pr == 'C'%}
 				 <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-                 
+          {% endif %}
                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
-                    <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
-					<a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
-					{% if user.profile.pr == 'S'%}
-					<a href="#" class="dropdown-item">Dashboard</a>
-					{% endif %}
+                    {% if user.profile.pr == 'C'%}
+					<a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+					<a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+                    {% endif %}
+                    {% if user.profile.pr == 'S'%}
+          					<a href="{% url 'supplier_index' %}" class="dropdown-item">Dashboard</a>
+          					{% endif %}
+                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
 				 {% else %}
@@ -123,7 +127,7 @@
 				   <div class="dropdown-menu" aria-labelledby="dropdown04">
 				   <a class="dropdown-item" href="{% url 'login' %}">Login</a>
 				   <a class="dropdown-item" href="{% url 'register' %}">Register</a>
-	 
+
 				   </div>
 				 </li>
 				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
@@ -195,7 +199,7 @@
                 <h3 class="heading">Free Shipping</h3>
                 <span>On order over $100</span>
               </div>
-            </div>      
+            </div>
           </div>
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
@@ -206,7 +210,7 @@
                 <h3 class="heading">Always Fresh</h3>
                 <span>Product well package</span>
               </div>
-            </div>    
+            </div>
           </div>
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
@@ -217,7 +221,7 @@
                 <h3 class="heading">Superior Quality</h3>
                 <span>Quality Products</span>
               </div>
-            </div>      
+            </div>
           </div>
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
@@ -228,7 +232,7 @@
                 <h3 class="heading">Support</h3>
                 <span>24/7 Support</span>
               </div>
-            </div>      
+            </div>
           </div>
         </div>
 			</div>
@@ -267,7 +271,7 @@
 						<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url({{BaseUrl}}/category-3.jpg);">
 							<div class="text px-3 py-1">
 								<h2 class="mb-0"><a href="#">Juices</a></h2>
-							</div>		
+							</div>
 						</div>
 						<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url({{BaseUrl}}/category-4.jpg);">
 							<div class="text px-3 py-1">
@@ -287,7 +291,7 @@
             <h2 class="mb-4">Our Products</h2>
             <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
           </div>
-        </div>   		
+        </div>
     	</div>
     	<div class="container">
     		<div class="row">
@@ -519,7 +523,7 @@
     					</div>
     				</div>
 				</div>
-				
+
     		</div>
     	</div>
     </section>
@@ -540,7 +544,7 @@
 						  <div class="time pl-3" id="seconds"></div>
 						</div>
           </div>
-        </div>   		
+        </div>
     	</div>
     </section>
 
@@ -747,8 +751,8 @@
         </div>
       </div>
     </footer>
-    
-  
+
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -770,6 +774,6 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{% static 'js/google-map.js'%}"></script>
   <script src="{% static 'js/main.js'%}"></script>
-    
+
   </body>
 </html>

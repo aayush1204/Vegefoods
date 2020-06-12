@@ -1,7 +1,9 @@
 from django.db import models
 from accounts.models import Signup
+#from .models import Supplier
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+#from shop.models import Supplier
 
 # Create your models here.
 # class Product(models.Model):
@@ -20,14 +22,32 @@ from django.contrib.auth.models import AbstractUser
 
 
 # New MOdels
+class Supplier(models.Model):
+
+    supplier_details = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    phone = models.CharField(max_length=10)
+
+    address = models.TextField(default="")
+
+    pincode=models.PositiveIntegerField(default=0)
+    GST_number=models.PositiveIntegerField(default=0)
+    Bank_Account_Details=models.TextField(default="")
+    store_name = models.CharField(max_length=50)
+    store_description = models.CharField(max_length=200)
+    store_address=models.TextField(default="")
+#   product = ForeignKey
+    is_approved = models.BooleanField(default=False)
+    #signature-will be an image
+
+    def __str__(self):
+        return self.store_name
+
+
 
 class Society(models.Model):
     society_name=models.CharField(max_length=30)
     society_locality=models.CharField(max_length=30)
     society_address=models.CharField(max_length=30)
-    def __str__(self):
-        return self.society_name+', '+self.society_address+', '+self.society_locality
-
 class Voucher(models.Model):
     voucher_code=models.CharField(max_length=10)
     voucher_value=models.IntegerField(default=1)
@@ -41,29 +61,10 @@ class Profile(models.Model):
         ('A','Admin'),
     )
     pr= models.CharField(max_length=1,choices=PR)
-    society=models.OneToOneField(Society,on_delete=models.CASCADE,null=True)
+    society=models.OneToOneField(Society,on_delete=models.CASCADE,null=True,blank=True)
 
 
-class Supplier(models.Model):
 
-    supplier_details = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    phone = models.CharField(max_length=10)
-
-    address = models.TextField(default="")
-    # number = models.CharField(max_length=15)
-    #address = models.TextField()
-    pincode=models.PositiveIntegerField(default=0)
-    GST_number=models.PositiveIntegerField(default=0)
-    Bank_Account_Details=models.TextField(default="")
-    store_name = models.CharField(max_length=50)
-    store_description = models.CharField(max_length=200)
-    store_address=models.TextField(default="")
-#   product = ForeignKey
-    is_approved = models.BooleanField(default=False)
-    #signature-will be an image
-
-    def __str__(self):
-        return self.store_name
 
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
@@ -82,11 +83,12 @@ class Product(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    # total_price = models.IntegerField(default=0)
+
     quantity = models.IntegerField(default=0)
     product_image = models.CharField(max_length=100)
     is_ordered = models.BooleanField(default=False)
     refunded = models.BooleanField(default=False)
+    voucher = models.ForeignKey(Voucher, on_delete = models.CASCADE, null=True)
     # product_price = models.IntegerField(default=0)
 
     def __str__(self):
@@ -106,7 +108,7 @@ class Address(models.Model):
     category= models.CharField(max_length=1,choices=ch)
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE, null=True)
     referral_id = models.AutoField(primary_key=True)
     supplier = models.ManyToManyField(Supplier)
     order_date = models.DateTimeField(auto_now=True)
@@ -119,10 +121,11 @@ class Order(models.Model):
     total_amount = models.IntegerField(default=0)
     items = models.ManyToManyField(Cart)
     is_refunded = models.BooleanField(default=False)
-    is_approved =models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
     is_shipped = models.BooleanField(default=False)
-    # def __str__(self):
-    #     return self.referral_id
+    voucher = models.ForeignKey(Voucher, on_delete = models.CASCADE, null=True)
+    #def __str__(self):
+     #  return self.referral_id
 
 class ContactUs(models.Model):
     name = models.CharField(max_length=30)
@@ -135,6 +138,7 @@ class ContactUs(models.Model):
         return self.subject
 
 class Refunds(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     items = models.ManyToManyField(Cart)
     refund_amount = models.IntegerField(default=0)
+    supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE)

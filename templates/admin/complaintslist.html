@@ -334,9 +334,6 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-<div class="codercontent">
-<h4>Complaints List</h4>
-</div>
         <!-- <div class="container-fluid"> -->
 
           <!-- Page Heading -->
@@ -353,7 +350,40 @@
           <!-- <div class="row"> -->
 
             <!-- Earnings (Monthly) Card Example -->
-            <!-- <div class="col-xl-3 col-md-6 mb-4">
+            <div class="codercontent">
+
+            <h4>Complaints List</h4>
+
+                          <table style="width:100%" border="1">
+                        <tr>
+                            <th> Username </th>
+                            <th> Email ID </th>
+                            <th> Subject </th>
+                            <th> Message </th>
+                            <th>  </th>
+                        </tr>
+                          {% for i in complaintdata %}
+
+                          <tr>
+                            <td> {{i.name}} </td>
+                            <td> {{i.email}}</td>
+                            <td> {{i.subject}}</td>
+                            <td> {{i.message}}</td>
+                            <td> <form action="" method="post">
+                              {% csrf_token %}
+
+                              <button type="submit" name="clicked" value="{{i.id}}">Write Back</button></form></td>
+                        </tr>
+
+                            {% endfor %}
+
+                          </table>
+
+                        </div>
+
+            </div>
+
+              <!-- <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
