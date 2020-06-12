@@ -58,9 +58,9 @@ def homepage(request):
 #         # print(name)
 #         # return HttpResponse(message)
 #         # return render(request,'adminlogin.html',{'forminput':forminput,'message':message})
-#         response=render(request,name,{'forminput':forminput,'message':message,'currentuser':currentuser})
-#         response.set_cookie('username',username)
-#         return response
+        # response=render(request,name,{'forminput':forminput,'message':message,'currentuser':currentuser})
+        # response.set_cookie('username',username)
+        # return response
         # return render(request,name,{'forminput':forminput,'message':message,'currentuser':currentuser})
 
 def societieslist(request):
@@ -342,18 +342,19 @@ def newproduct(request):
     if request.method=='GET':
         print('newproduct')
         # currentuser = request.COOKIES['username']
-        addproddata=addproductlist.objects.all()
+        addproddata=addproductlist.objects.filter(is_approved=False)
         return render(request,'admin/newproduct.html',{'addproddata':addproddata})
     elif request.method=='POST':
 
         data=addproductlist.objects.get(id=int(request.POST['clicked']))
-        x=User.objects.get(username=data.username)
-        y=Supplier.objects.get(supplier_details=x)
-        addproductlist.objects.get(id=request.POST['clicked']).delete()
-        addproductdata=Product.objects.create(product_name=data.product_name,product_description=data.product_description,product_sku=data.product_sku,product_price=data.product_price,
-                                                category="Not Added!",supplier=x)
-
-        addproddata=addproductlist.objects.all()
+        # x=User.objects.get(username=data.username)
+        # y=Supplier.objects.get(supplier_details=x)
+        # addproductlist.objects.get(id=request.POST['clicked']).delete()
+        # addproductdata=Product.objects.create(product_name=data.product_name,product_description=data.product_description,product_sku=data.product_sku,product_price=data.product_price,
+        #                                         category="Not Added!",supplier=x)
+        data.is_approved=True
+        data.save()
+        addproddata=addproductlist.objects.filter(is_approved=False)
         return render(request,'admin/newproduct.html',{'addproddata':addproddata})
 def logout(request):
 

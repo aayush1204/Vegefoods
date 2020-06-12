@@ -9,13 +9,11 @@ urlpatterns = [
     path('home/myorders', views.myorders,name='myorders'),
     path('home/myorders/refunds/<int:x>', views.refund,name='refund'),
     path('home/myorders/ordertrack/<int:x>', views.track,name='track'),
-    path('cart/voucher', views.voucher_apply,name='voucher'),
+
     path('home/myrefunds', views.myrefunds,name='myrefunds'),
     path('home/contact', views.contact,name='contact'),
     path('cart/', views.cart_view,name='cart'),
     path('cart/<int:p>', views.delete_cart,name='delete_cart_item'),
-    
-    
     path('shop/', views.shop_view,name='shop'),
     path('shop/<slug:name>',views.filter,name='filter'),
     path('cart/checkout', views.checkout_view,name='checkout'),

@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 # from django.generic.views import TemplateView
 urlpatterns = [
-    path('',views.homepage,name='homepage'),
+
+    path('homepage/',views.homepage,name='office'),
 
     path('supplierslist/',views.supplierslist,name='supplierslist'),
     path('requestslist/',views.requestslist,name='requestslist'),
@@ -27,8 +28,6 @@ urlpatterns = [
 
     # path('/supplierslist',views.supplierslist,name='supplierslist'),
     path('logout/',views.logout,name='logout'),
-
-    # path('home/',views.homepage,name='homepage'),
 
 
 ]

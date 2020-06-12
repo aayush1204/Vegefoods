@@ -118,6 +118,10 @@
                     {% if user.profile.pr == 'S'%}
           					<a href="{% url 'supplier_index' %}" class="dropdown-item">Dashboard</a>
           					{% endif %}
+
+                    {% if user.profile.pr == 'A'%}
+          					<a href="{% url 'office' %}" class="dropdown-item">Dashboard</a>
+          					{% endif %}
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>

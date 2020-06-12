@@ -45,7 +45,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'homepage' %}">
+        <a class="nav-link" href="{% url 'office' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Admin Dashboard</span></a>
       </li>
@@ -328,17 +328,16 @@
               Admin Dashboard
             </h1> -->
              <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-           </div>
+           <!-- </div> -->
         <!-- </div>  -->
 
           <!-- Content Row -->
           <!-- <div class="row"> -->
 
-
+</div>
             <!-- Earnings (Monthly) Card Example -->
             <div class="codercontent">
               <h4> Pending Approvals List</h4> <br>
-<div class="scrollbar">
               <table style="width:100%" border="1">
             <tr>
                 <th> Username </th>
@@ -352,13 +351,19 @@
                 <th> Store Name </th>
                 <th> Store Description </th>
                 <th> Store Address </th>
+                <th>  </th>
+
               </tr>
               {% for i in approvaldata %}
-              <script>
-                console.log({{i.user.username}})
 
-              </script>
               <tr>
+                <td>
+                <form action="" method="post">
+                  {% csrf_token %}
+
+                  <button type="submit" name="clicked" value="{{i.id}}">Approve</button></form>
+                </td>
+
                 <td> {{i.supplier_details.username}} </td>
                 <td> {{i.supplier_details.first_name}}</td>
                 <td> {{i.supplier_details.last_name}}</td>
@@ -374,9 +379,9 @@
                 {% endfor %}
 
               </table>
+<!-- </div> -->
+            <!-- </div> -->
 </div>
-            </div>
-
             <!-- <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">

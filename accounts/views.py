@@ -51,13 +51,20 @@ def login(request):
             password=request.POST['password']
 
             user =  auth.authenticate(username=username,password=password)
-
-            if(user.profile.pr=='C'):
-                auth.login(request, user)
-                return redirect('/')
-            else:
-                messages.info(request, "Incorrect Credentials. Please enter the correct ones!")
-                return render(request, 'login.html')
+            try:
+                if(user.profile.pr=='C'):
+                    auth.login(request, user)
+                    return redirect('/')
+            except:
+                pass
+            try:
+                if (user.profile.pr=='A'):
+                    print('A')
+                    auth.login(request, user)
+                    return redirect('/')
+            except:
+                    messages.info(request, "Incorrect Credentials. Please enter the correct ones!")
+                    return render(request, 'login.html')
 
 
         else:
