@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 
 urlpatterns = [
@@ -18,8 +18,11 @@ urlpatterns = [
         path('order_summary/<str:pk>', views.order_summary, name='order_summary'),
         path('refunds', views.refunds, name='refunds'),
         path('refunds_summary/<str:pk>', views.refunds_summary, name='refunds_summary'),
-
         path('order_status/<str:pk>', views.order_status, name='order_status'),
         path('ship_status/<str:pk>', views.ship_status, name='ship_status'),
+        path('approved/', views.approved, name='approved'),
+
+        # path('',include('admindashboard.urls')),
+
         #path('home/<str:pk>', views.home, name='home'),
 ]

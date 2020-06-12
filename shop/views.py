@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile ,Refunds, Voucher
+from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile ,Refunds
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
@@ -73,16 +73,7 @@ def delete_cart(request,p):
 
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 def cart_view(request):
-    # if 'coupon' in request.POST:
-    #     cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
-    #     print("yes")
-    #     total_bill = int(0)
-    #     for j in cart_data:
 
-    #         total_bill += j.quantity*int(j.product.product_price)
-
-    #     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})  
-    
     cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
 
     total_bill = int(0)
@@ -158,14 +149,8 @@ def filter(request, name):
 def checkout_view(request):
 
     subtotal = request.GET['totalbill']
-    vname = request.COOKIES['vouchername']
-    vdata = Voucher.objects.get(voucher_code=vname)
-    
-    print(vname)
     ab = subtotal[3:]
-    subtotal=int(ab)
-
-    discount = int(vdata.voucher_value)*int(subtotal)/100
+    subtotal=ab
     cdata = Cart.objects.filter(is_ordered=False).filter(user=request.user)
     quantities=[]
     prices=[]
@@ -182,9 +167,7 @@ def checkout_view(request):
     print(prices)
 
     address_data = Address.objects.filter(user=request.user).last()
-    total = int(subtotal-discount)
-    
-    return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data,'discount':discount,'total':total})
+    return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data})
 
 def order_place(request):
 
@@ -204,11 +187,9 @@ def order_place(request):
         print(state)
         total = request.POST['totalbill']
         total=int(total[3:])
-        print(total )
-        vname = request.COOKIES['vouchername']
-        vdata = Voucher.objects.get(voucher_code=vname)
+
         order = Order.objects.create(user=request.user ,state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-                                     total_amount = total, voucher=vdata)
+                                     total_amount = total)
 
         order.save()
 
@@ -251,6 +232,49 @@ def myorders(request):
 def refund(request, x):
 
     if request.method=="POST":
+        # orders = Order.objects.filter(user=request.user).filter(referral_id=x)
+        # dic={}
+        # for i in orders:
+        #     for j in i.items.all():
+        #         print(j.product.id)
+        #         b=str(j.product.id)
+        #         try:
+        #             a = request.POST[b]
+        #         except MultiValueDictKeyError:
+        #             a = 'No'
+        #         # a=request.POST.get(b, False)
+        #         dic[b]=a
+        # print(dic)
+        # o = Order.objects.get(referral_id=x)
+        # r = Refunds.objects.create(order=o, refund_amount=0)
+        # for key,val in dic.items():
+
+        #     money=0
+        #     o = Order.objects.get(referral_id=x)
+        #     for j in o.items.all():
+        #         # print(key)
+        #         # print(int(j.product.id)==int(key))
+        #         if int(j.product.id)==int(key):
+        #             # print("hello")
+        #             # print(val)
+        #             if val=="Yes":
+        #                 # messages.info(request, 'Alre!')
+        #                 # print(o)
+        #                 r.items.add(j)
+        #                 r.save()
+        #                 # print(money)
+        #                 money=money+int(j.product.product_price)*int(j.quantity)
+        #                 # print("yes")
+        #                 # print(int(j.product.product_price)*int(j.quantity))
+        #                 # print(money)
+        #                 # q=Order.objects.filter(user=request.user).filter(referral_id=x).filter(items=cf)#.update(refunded=True)
+        #                 # o.save()
+        #     for i in o.items.all():
+        #         r.supplier.add(i.product.supplier)
+        #         r.save()
+        #     Refunds.objects.filter(order=o).update(refund_amount=money)
+        #     if money:
+        #         messages.info(request, 'Alre!')
 
         orders = Order.objects.filter(user=request.user).filter(referral_id=x)
         dic={}
@@ -305,9 +329,9 @@ def refund(request, x):
 
             print(Refunds.objects.all())
 
-        if money:
-            messages.info(request, 'Alre!')
-            Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
+            if money:
+                messages.info(request, 'Alre!')
+                Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
 
 
         return render(request, 'refund.html',{'orders':orders})
@@ -374,25 +398,3 @@ def myrefunds(request):
     # print(ls)
 
     return render(request, 'myrefunds.html',{'rdata':w})
-
-def voucher_apply(request):
-    
-    vname = request.GET['coupon']
-    print(vname)
-    voucher_data = Voucher.objects.filter(voucher_code=vname)
-    print(voucher_data)
-    
-    cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
-    print("yes")
-    total_bill = int(0)
-    for j in cart_data:
-
-        total_bill += j.quantity*int(j.product.product_price)
-    if voucher_data:
-        response = render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill,'vdata':voucher_data}) 
-        response.set_cookie('vouchername',vname)
-        return response 
-    else:
-        messages.info(request, 'Alre!')
-        return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})   
-    # return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill,'vdata':voucher_data})         

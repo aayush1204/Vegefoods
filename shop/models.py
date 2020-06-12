@@ -48,6 +48,8 @@ class Society(models.Model):
     society_name=models.CharField(max_length=30)
     society_locality=models.CharField(max_length=30)
     society_address=models.CharField(max_length=30)
+    def __str__(self):
+        return self.society_name+self.society_address+self.society_locality
 class Voucher(models.Model):
     voucher_code=models.CharField(max_length=10)
     voucher_value=models.IntegerField(default=1)
@@ -72,8 +74,8 @@ class Product(models.Model):
     description = models.CharField(max_length=150)
     product_price = models.IntegerField(default=0)
     out_of_stock = models.BooleanField(default=False)
-    category = models.CharField(max_length=100)
-    product_image = models.CharField(max_length=100)
+    category = models.CharField(max_length=100,null=True)
+    product_image = models.CharField(max_length=100,null=True)
     product_sku=models.IntegerField(default=1)
 
 
@@ -88,7 +90,6 @@ class Cart(models.Model):
     product_image = models.CharField(max_length=100)
     is_ordered = models.BooleanField(default=False)
     refunded = models.BooleanField(default=False)
-    voucher = models.ForeignKey(Voucher, on_delete = models.CASCADE, null=True)
     # product_price = models.IntegerField(default=0)
 
     def __str__(self):
@@ -123,7 +124,7 @@ class Order(models.Model):
     is_refunded = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     is_shipped = models.BooleanField(default=False)
-    voucher = models.ForeignKey(Voucher, on_delete = models.CASCADE, null=True)
+
     #def __str__(self):
      #  return self.referral_id
 

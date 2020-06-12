@@ -88,6 +88,9 @@ def supplier_login(request):
                 if (user.profile.pr=='S'):
                     auth.login(request, user)
                     return redirect('/')
+                elif user.profile.pr=='A':
+                    auth.login(request, user)
+                    return redirect('/')
                 else:
                     messages.info(request, "Incorrect Credentials. Please enter the correct ones!")
                     return render(request, 'supplier_login.html')
@@ -180,8 +183,8 @@ def delete_existing(request):
 
     if(request.method=="POST"):
         print(request.POST)
-
-        requestobj=delete_product_list.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'],reason_for_removal=request.POST['reason_for_removal'])
+        reason_for_removal = request.POST.get('reason_for_removal', False)
+        requestobj=delete_product_list.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'],reason_for_removal=reason_for_removal)
         #messages.info(request, "Your request has been sent!")
 #         messages.info(request, "Your Request has Sent!!")
     return render(request, 'dashboard/messagedisplay.html')
@@ -260,3 +263,35 @@ def refunds_summary(request, pk):
         print(z.refund_amount)
 
         return render(request, 'dashboard/refunds_summary.html', {'z':z})
+
+def approved(request):
+    if request.method=='POST' and 'upload' in request.POST:
+        data=addproductlist.objects.get(id=int(request.POST['upload']))
+        x=User.objects.get(username=data.supplier_username)
+        y=Supplier.objects.get(supplier_details=x)
+        addproductlist.objects.get(id=request.POST['upload']).delete()
+        productdata=Product.objects.create(product_name=data.product_name,description=data.product_description,product_sku=data.product_sku,product_price=data.product_price,
+                                            category="Not Added!",supplier=y)
+
+        addproductdata=addproductlist.objects.filter(is_approved=True,supplier_username=request.user.username)
+        deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
+
+        return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
+
+    elif request.method=='POST' and 'delete' in request.POST:
+        x=User.objects.get(username=data.supplier_username)
+        y=Supplier.objects.get(supplier_details=x)
+
+        data=delete_product_list.objects.get(id=int(request.POST['delete']))
+        Product.objects.get(product_name=data.product_name,description=data.product_description,
+                            product_sku=data.product_sku,product_price=data.product_price,supplier=y).delete()
+        delete_product_list.objects.get(id=int(request.POST['delete'])).delete()
+        addproductdata=addproductlist.objects.filter(is_approved=True,supplier_username=request.user.username)
+        deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
+
+        return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
+
+    else:
+        addproductdata=addproductlist.objects.filter(is_approved=True,supplier_username=request.user.username)
+        deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
+        return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})

@@ -4,7 +4,13 @@
 <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript">
+  $(document).on('scroll', function() {
+      $("#slide").css("top", Math.max(180 - 0.2*window.scrollY, 0) + "px");
+      $("#static").css("opacity", Math.max(1 - 0.004*window.scrollY, 0));
+  })
 
+</script>
 <head>
 
   <meta charset="utf-8">
@@ -45,7 +51,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'homepage' %}">
+        <a class="nav-link" href="{% url 'office' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Admin Dashboard</span></a>
       </li>
@@ -375,7 +381,37 @@
                 <button type="submit" name='deletevoucher' onclick=location.href='{% url "updatevoucher" %}' class="save btn btn-default">Update Voucher</button>
                 <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
               </div>
+              <!-- {% if messages %}
+            	<!-- <ul class='messages'> -->
+            		<!-- {%for message in messages %} -->
+            		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+            		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+            		<!-- {% if message.tags %} -->
+                <div class="alert-success alert-link">
+                    {{message}}
+                    </div>
+            			<!-- <strong>successfully created voucher</strong>
+            		  </div>{%endif%}
+            		{%endfor%} -->
+            	<!-- </ul> -->
+            	<!-- {%endif%} -->
+
+
+<form method='post' enctype="multipart/form-data">
+{% csrf_token %}
 <br> <br>
+{{voucherform.voucher_code.label}}
+{{voucherform.voucher_code}}
+<br><br>
+{{voucherform.voucher_value.label}}
+{{voucherform.voucher_value}}
+<br><br>
+{{voucherform.society.label}}<br>
+    {{voucherform.society}}
+    <br><br>
+    <!-- <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button> -->
+    <button type="submit" name="createvoucher"class="save btn btn-default"> Create </button>
+</form>
               <!-- <table style="width:100%" border="1">
             <tr>
                 <th> Voucher Code </th>

@@ -141,18 +141,7 @@
 	  </nav>
    
     <!-- END nav -->
-	{% if messages %}
-	<!-- <ul class='messages'> -->
-		{%for message in messages %}
-		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
-		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
-		{% if message.tags %}<div class="alert alert-danger alert-dismissible fade show">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<strong>Coupon Code Invalid!</strong>
-		  </div>{%endif%}
-		{%endfor%}
-	<!-- </ul> -->
-	{%endif%}
+
     <div class="hero-wrap hero-bread" style="background-image: url({{BaseUrl}}/bg_1.jpg);">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
@@ -164,7 +153,7 @@
       </div>
     </div>
 	<!--  -->
-		<form id="checkout" action = "{% url 'checkout' %}">
+		<form action = "{% url 'checkout'%}">
     <section class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
@@ -197,13 +186,13 @@
 
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
-					             	<input id="{{x.product.id}}" type="text" form="checkout" name="{{x.product.product_name}}quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
+					             	<input id="{{x.product.id}}" type="text" name="{{x.product.product_name}}quantity" oninput="handler()" class="quantity form-control input-number" value="{{x.quantity}}" min="1" max="100">
 					          	</div>
 					          </td>
 
 						        <td class="total ">
                                     <!-- Rs.{{x.total_price}} -->
-                                    <input type ="text"name="{{x.product.product_name}}price" form="checkout" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.product_price}}" class="{{x.product.id}}">
+                                    <input type ="text"name="{{x.product.product_name}}price" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.product_price}}"class="{{x.product.id}}">
                                 </td>
 						      </tr><!-- END TR-->
 							  {%endfor%}
@@ -237,22 +226,15 @@
     				<div class="cart-total mb-3">
     					<h3>Coupon Code</h3>
     					<p>Enter your coupon code if you have one</p>
-  						<!-- <form id="voucher" action="{% url 'voucher' %}" method="post" class="info"> -->
-							  <!-- {% csrf_token %}  -->
-				  
-					<div>		  
-				    <div class="form-group">
+  						<form action="#" class="info">
+	              <div class="form-group">
 	              	<label for="">Coupon code</label>
-	                <input type="text" form="voucher" name="coupon" class="form-control text-left px-3" placeholder="">
+	                <input type="text" class="form-control text-left px-3" placeholder="">
 	              </div>
-				  <p>  
-					<input type='submit' form="voucher" class="btn btn-primary py-3 px-4" value="Apply Coupon" ></p>
-				<!-- </form> -->
-				</div>
+	            </form>
     				</div>
-					
-				</div>
-				
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
+    			</div>
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
     					<h3>Estimate shipping and tax</h3>
@@ -260,15 +242,15 @@
   						<form action="#" class="info">
 	              <div class="form-group">
 	              	<label for="">Country</label>
-	                <input type="text" form="checkout"class="form-control text-left px-3" placeholder="">
+	                <input type="text" class="form-control text-left px-3" placeholder="">
 	              </div>
 	              <div class="form-group">
 	              	<label for="country">State/Province</label>
-	                <input type="text" form="checkout"class="form-control text-left px-3" placeholder="">
+	                <input type="text" class="form-control text-left px-3" placeholder="">
 	              </div>
 	              <div class="form-group">
 	              	<label for="country">Zip/Postal Code</label>
-	                <input type="text" form="checkout"class="form-control text-left px-3" placeholder="">
+	                <input type="text" class="form-control text-left px-3" placeholder="">
 	              </div>
 	            </form>
     				</div>
@@ -280,7 +262,7 @@
     					<p class="d-flex">
     						<span>Subtotal</span>
                 <!-- <span id="Subtotal">{{stbill}} </span> -->
-                <input type ="text" name="totalbill" form="checkout" style="border:none; margin-left: 92px" value="Rs {{stbill}}" id="Subtotal">
+                <input type ="text"name="totalbill" style="border:none; margin-left: 92px" value="Rs {{stbill}}" id="Subtotal">
     						<!-- <span>Rs.{{tbill}}</span> -->
     					</p>
     					<p class="d-flex">
@@ -289,15 +271,15 @@
     					</p>
     					<p class="d-flex">
     						<span>Discount</span>
-    						<span id="Discount">Rs 0.00</span>
+    						<span>Rs 0.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
     						<span style="text-transform: uppercase">Total</span>
-    						<span id="TotalPrice"></span>
+    						<span id="TotalPrice">Rs {{stbill}} </span>
     					</p>
 					</div>
-					<p><input type='submit'class="btn btn-primary py-3 px-4" form="checkout" value="Proceed to Checkout" name='checkout'>
+					<p><input type='submit'class="btn btn-primary py-3 px-4" value="Proceed to Checkout" >
 					<!--  -->
 					</p>
 				</form>
@@ -305,8 +287,6 @@
     		</div>
 			</div>
 		</section>
-
-		<form id="voucher" action="{% url 'voucher' %}"  class="info"></form>
 
 		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
       <div class="container py-4">
@@ -318,8 +298,8 @@
           <div class="col-md-6 d-flex align-items-center">
             <form action="#" class="subscribe-form">
               <div class="form-group d-flex">
-                <input form="checkout" type="text" class="form-control" placeholder="Enter email address">
-                <input form="checkout" type="submit" value="Subscribe" class="submit px-3">
+                <input type="text" class="form-control" placeholder="Enter email address">
+                <input type="submit" value="Subscribe" class="submit px-3">
               </div>
             </form>
           </div>
@@ -491,20 +471,8 @@
 		var abc = document.getElementById("Subtotal").value;
 		abc.value = "Rs "+subtotal;
 		$('#Subtotal').val("Rs " + subtotal);
-
-		var dis = document.getElementById("Discount") ;
-		var perc=0 ;
-		
-		{% for i in vdata %}
-		perc = parseInt({{i.voucher_value}});
-		{% endfor %}
-
-		var discount = ((subtotal*perc)/100);
-		dis.textContent = "Rs "+ discount ;
-
-		var total = subtotal - discount;
 		var abc = document.getElementById("TotalPrice") ;
-		abc.textContent = "Rs "+(total);
+		abc.textContent = "Rs "+subtotal;
 
 		} // end handler function
 
@@ -536,19 +504,6 @@
         
         {% endfor %}
 
-		var dis = document.getElementById("Discount") ;
-		var perc=0 ;
-		
-		{% for i in vdata %}
-		perc = parseInt({{i.voucher_value}});
-		{% endfor %}
-
-		var discount = ((subtotal*perc)/100);
-		dis.textContent = "Rs "+ discount ;
-
-		var total = subtotal - discount;
-		var abc = document.getElementById("TotalPrice") ;
-		abc.textContent = "Rs "+(total);
 		})
   
 	</script>
