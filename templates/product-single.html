@@ -154,7 +154,16 @@
 								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
 							</p>
 						</div>
-    				<p class="price"><span>Rs.{{pdata.product_price}}</span></p>
+						{% if pdata.discount_applied == False %}
+					<p class="price"><span>Rs.{{pdata.product_price}}</span></p>
+						{% else %}
+						
+						<p class="price">
+							<span class=" price-disc" style="color: #b3b3b3 ; margin-right: 10px;">Rs.{{pdata.product_price}}</span>
+							<span>Rs.{{pdata.discount_price}}</span>
+						</p>	
+
+						{% endif %}
     				<!-- <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until.
 						</p> -->
 						<p>{{pdata.description}}</p>

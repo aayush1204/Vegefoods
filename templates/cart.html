@@ -181,8 +181,11 @@
 						        	<h3>{{x.product.product_name}}</h3>
 						        	<p>Far far away, behind the word mountains, far from the countries</p>
 						        </td>
-
-						        <td class="price ">Rs.{{x.product.product_price}}</td>
+								{% if x.product.discount_applied == False%}
+								<td class="price ">Rs.{{x.product.product_price}}</td>
+								{% else %}
+								<td class="price ">Rs.{{x.product.discount_price}}</td>
+								{% endif %}
 
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
@@ -191,9 +194,13 @@
 					          </td>
 
 						        <td class="total ">
-                                    <!-- Rs.{{x.total_price}} -->
+									<!-- Rs.{{x.total_price}} -->
+									{% if x.product.discount_applied == False%}
                                     <input type ="text"name="{{x.product.product_name}}price" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.product_price}}"class="{{x.product.id}}">
-                                </td>
+									{% elif x.product.discount_applied == True %}
+									<input type ="text"name="{{x.product.product_name}}price" style="border:none ; margin-left:135px" value="Rs {{x.quantity}}*{{x.product.discount_price}}"class="{{x.product.id}}">
+									{% endif %}
+								</td>
 						      </tr><!-- END TR-->
 							  {%endfor%}
 						      <!-- <tr class="text-center">
@@ -454,8 +461,14 @@
 			console.log(mangoquantity)
             {% for i in cdata %}
 
-            {% if i.product.id == x.product.id %}
-            mangototal=parseInt(mangoquantity)*parseInt({{i.product.product_price}});
+			{% if i.product.id == x.product.id %}
+			
+			{% if i.product.discount_applied == False %}
+			mangototal=parseInt(mangoquantity)*parseInt({{i.product.product_price}});
+
+			{% else %}
+			mangototal=parseInt(mangoquantity)*parseInt({{i.product.discount_price}});
+			{% endif %}
             subtotal=subtotal+mangototal;
 			console.log(mangototal)
             var m = document.getElementsByClassName("{{x.product.id}}")[0];
@@ -492,7 +505,13 @@
             {% for i in cdata %}
 
             {% if i.product.id == x.product.id %}
-			mangototal=parseInt(mangoquantity)*parseInt({{ i.product.product_price}});
+			
+			{% if i.product.discount_applied == False %}
+			mangototal=parseInt(mangoquantity)*parseInt({{i.product.product_price}});
+			console.log({{i.discount_applied}})
+			{% elif i.product.discount_applied == True %}
+			mangototal=parseInt(mangoquantity)*parseInt({{i.product.discount_price}});
+			{% endif %}
 			console.log({{mangototal}})
             subtotal=subtotal+mangototal;
 

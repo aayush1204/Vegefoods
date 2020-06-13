@@ -509,13 +509,20 @@
 				<div class="col-md-6 col-lg-3 ftco-animate">
     				<div class="product">
     					<a href="{% url 'product_single' q=i.id %}" class="img-prod"><img class="img-fluid" src="{{BaseUrl}}/{{i.product_image}}" alt="Colorlib Template">
-    						<div class="overlay"></div>
+							{% if i.discount_applied == True %}
+							<span class="status">{{i.discount_percent}}%</span>
+							{% endif %}
+							<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3 text-center">
     						<h3><a href="#">{{i.product_name}}</a></h3>
     						<div class="d-flex">
     							<div class="pricing">
-		    						<p class="price"><span>Rs.{{i.product_price}}</span></p>
+									{% if i.discount_applied == False %}
+									<p class="price"><span>Rs.{{i.product_price}}</span></p>
+									{% else %}
+									<p class="price"><span class="mr-2 price-dc">Rs.{{i.product_price}}</span><span>Rs.{{i.discount_price}}</span></p>
+									{% endif %}
 		    					</div>
 	    					</div>
     						<div class="bottom-area d-flex px-3">

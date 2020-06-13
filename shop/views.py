@@ -32,7 +32,10 @@ def add_cart(request, q):
 
         quantity = request.POST['quantity']
         pddata = Product.objects.get(id=q)
-        price = int(pddata.product_price)
+        if pddata.discount_applied ==False:
+            price = int(pddata.product_price)
+        else:
+            price = int(pddata.discount_price)                
         tp=int(quantity)*price
         print(request.user)
 
@@ -58,7 +61,10 @@ def add_cart(request, q):
             cart_data = Cart.objects.filter(is_ordered=False).filter(user=request.user)
             total_bill = int(0)
             for j in cart_data:
-                total_bill += j.quantity*int(j.product.product_price)
+                if j.product.discount_applied==False:
+                    total_bill += j.quantity*int(j.product.product_price)
+                else:
+                    total_bill += j.quantity*int(j.product.discount_price)    
         # return render(request, 'index.html',{'pdata':product_data})
             return render(request, 'cart.html',{'cdata':cart_data,'stbill':total_bill})
 
@@ -68,8 +74,11 @@ def delete_cart(request,p):
 
     total_bill = int(0)
     for j in cart_data:
-
-        total_bill += j.quantity*int(j.product.product_price)
+        if j.product.discount_applied == False:
+            total_bill += j.quantity*int(j.product.product_price)
+        else:
+            total_bill += j.quantity*int(j.product.discount_price)
+        
 
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 def cart_view(request):
@@ -78,9 +87,10 @@ def cart_view(request):
 
     total_bill = int(0)
     for j in cart_data:
-
-        total_bill += j.quantity*int(j.product.product_price)
-
+        if j.product.discount_applied == False:
+            total_bill += j.quantity*int(j.product.product_price)
+        else:
+            total_bill += j.quantity*int(j.product.discount_price)
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 
 def shop_view(request):
@@ -309,15 +319,21 @@ def refund(request, x):
                         print(a)
                         if a:
                             print("yes")
-                            x = int(j.product.product_price)*int(j.quantity)
+                            if j.product.discount_applied == False:
+                                x = int(j.product.product_price)*int(j.quantity)
+                            else:
+                                x = int(j.product.discount_price)*int(j.quantity)    
                             y=int(a[0].refund_amount)
                             a.update(refund_amount=x+y)
                             a[0].items.add(j)
                             a[0].save()
                         else:
 
+                            if j.product.discount_applied == False:
+                                money=int(j.product.product_price)*int(j.quantity)
+                            else:
+                                money=int(j.product.discount_price)*int(j.quantity)
 
-                            money=int(j.product.product_price)*int(j.quantity)
                             r = Refunds.objects.create(order=o, refund_amount=money , supplier=j.product.supplier)
                             print("no")
                             # messages.info(request, 'Alre!')

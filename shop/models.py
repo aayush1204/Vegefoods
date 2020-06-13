@@ -50,6 +50,7 @@ class Society(models.Model):
     society_address=models.CharField(max_length=30)
     def __str__(self):
         return self.society_name+self.society_address+self.society_locality
+
 class Voucher(models.Model):
     voucher_code=models.CharField(max_length=10)
     voucher_value=models.IntegerField(default=1)
@@ -63,7 +64,8 @@ class Profile(models.Model):
         ('A','Admin'),
     )
     pr= models.CharField(max_length=1,choices=PR)
-    society=models.OneToOneField(Society,on_delete=models.CASCADE,null=True,blank=True)
+    society=models.ForeignKey(Society,on_delete=models.CASCADE,null=True,blank=True)
+    orders_placed = models.IntegerField(default=0)
 
 
 
@@ -77,7 +79,9 @@ class Product(models.Model):
     category = models.CharField(max_length=100,null=True)
     product_image = models.CharField(max_length=100,null=True)
     product_sku=models.IntegerField(default=1)
-
+    discount_applied = models.BooleanField(default=False)
+    discount_price = models.IntegerField(default=0)
+    discount_percent = models.IntegerField(default=0)
 
     def __str__(self):
         return self.product_name
