@@ -66,7 +66,10 @@ def add_cart(request, q):
                 else:
                     total_bill += j.quantity*int(j.product.discount_price)    
         # return render(request, 'index.html',{'pdata':product_data})
-            return render(request, 'cart.html',{'cdata':cart_data,'stbill':total_bill})
+            z = User.objects.filter(username=request.user.username)
+
+            profile = Profile.objects.get(user=z[0])
+            return render(request, 'cart.html',{'cdata':cart_data,'stbill':total_bill, 'profiledata':profile})
 
 def delete_cart(request,p):
     Cart.objects.get(id=p).delete()
@@ -91,7 +94,12 @@ def cart_view(request):
             total_bill += j.quantity*int(j.product.product_price)
         else:
             total_bill += j.quantity*int(j.product.discount_price)
-    return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
+    
+    z = User.objects.filter(username=request.user.username)
+
+    profile = Profile.objects.get(user=z[0])
+            
+    return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill, 'profiledata':profile})
 
 def shop_view(request):
 
@@ -177,7 +185,18 @@ def checkout_view(request):
     print(prices)
 
     address_data = Address.objects.filter(user=request.user).last()
-    return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data})
+
+    z = User.objects.filter(username=request.user.username)
+
+    profile = Profile.objects.get(user=z[0])
+
+    discount = 0
+    if profile.orders_placed<5:
+        discount = profile.society.corporate_discount
+        discount = int(discount*int(subtotal)/100)
+    total = int(subtotal) - int(discount) 
+    return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data, 'profiledata':profile,
+                                            "total": total, "discount":discount })
 
 def order_place(request):
 
@@ -202,6 +221,13 @@ def order_place(request):
                                      total_amount = total)
 
         order.save()
+        x = User.objects.get(username=request.user.username)
+        us = Profile.objects.filter(user=x)
+        print(us)
+        print(us[0].orders_placed)
+        a = int(us[0].orders_placed)
+        a=a+1
+        Profile.objects.filter(user=x).update(orders_placed=a)
 
         DEFAULT_FROM_EMAIL='raoashish1008@gmail.com'
 
