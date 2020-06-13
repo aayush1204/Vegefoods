@@ -269,7 +269,7 @@
     					<p class="d-flex">
     						<span>Subtotal</span>
                 <!-- <span id="Subtotal">{{stbill}} </span> -->
-                <input type ="text"name="totalbill" style="border:none; margin-left: 92px" value="Rs {{stbill}}" id="Subtotal">
+                <input type ="text"name="totalbill" style="border:none; margin-left: 89px" value="Rs {{stbill}}" id="Subtotal">
     						<!-- <span>Rs.{{tbill}}</span> -->
     					</p>
     					<p class="d-flex">
@@ -277,8 +277,8 @@
     						<span>Rs 0.00</span>
     					</p>
     					<p class="d-flex">
-    						<span>Discount</span>
-    						<span>Rs 0.00</span>
+    						<span>Corporate Discount</span>
+    						<span id="Discount">Rs 0.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
@@ -484,8 +484,21 @@
 		var abc = document.getElementById("Subtotal").value;
 		abc.value = "Rs "+subtotal;
 		$('#Subtotal').val("Rs " + subtotal);
+
+		var dis = document.getElementById("Discount") ;
+		var perc=0 ;
+		
+		{% if profiledata.orders_placed < 5 %}
+		console.log({{profiledata.orders_placed}} )
+		perc = parseInt({{profiledata.society.corporate_discount}});
+		{% endif %}
+
+		var discount = ((subtotal*perc)/100);
+		dis.textContent = "Rs "+ discount ;
+
+		var total = subtotal - discount;
 		var abc = document.getElementById("TotalPrice") ;
-		abc.textContent = "Rs "+subtotal;
+		abc.textContent = "Rs "+ total;
 
 		} // end handler function
 
@@ -523,6 +536,24 @@
         
         {% endfor %}
 
+		var abc = document.getElementById("Subtotal").value;
+		abc.value = "Rs "+subtotal;
+		$('#Subtotal').val("Rs " + subtotal);
+
+		var dis = document.getElementById("Discount") ;
+		var perc=0 ;
+		
+		{% if profiledata.orders_placed < 5 %}
+		console.log({{profiledata.orders_placed}} )
+		perc = parseInt({{profiledata.society.corporate_discount}});
+		{% endif %}
+
+		var discount = ((subtotal*perc)/100);
+		dis.textContent = "Rs "+ discount ;
+
+		var total = subtotal - discount;
+		var abc = document.getElementById("TotalPrice") ;
+		abc.textContent = "Rs "+ total;
 		})
   
 	</script>

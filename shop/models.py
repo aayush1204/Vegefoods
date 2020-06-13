@@ -48,6 +48,7 @@ class Society(models.Model):
     society_name=models.CharField(max_length=30)
     society_locality=models.CharField(max_length=30)
     society_address=models.CharField(max_length=30)
+    corporate_discount = models.IntegerField(default=0)
     def __str__(self):
         return self.society_name+self.society_address+self.society_locality
 
@@ -147,3 +148,4 @@ class Refunds(models.Model):
     items = models.ManyToManyField(Cart)
     refund_amount = models.IntegerField(default=0)
     supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE)
+
