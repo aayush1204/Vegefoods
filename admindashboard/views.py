@@ -16,7 +16,7 @@ from django.conf import settings
 def homepage(request):
     # currentuser = request.COOKIES['username']
 
-    return render(request,'admin/dash.html',)
+    return render(request,'admin/dash2.html',)
 
 
 # def login(request):
@@ -66,7 +66,7 @@ def homepage(request):
 def societieslist(request):
     print('societieslist')
     societiesdata=Society.objects.all()
-    return render(request,'admin/societieslist.html',{'societiesdata':societiesdata})
+    return render(request,'admin/societieslist2.html',{'societiesdata':societiesdata})
 def vouchers(request):
     print('vouchers')
     return render(request,'admin/vouchers.html')
@@ -78,7 +78,7 @@ def viewsocieties(request):
     socdata=Society.objects.all()
     # for i in voucherdata:
     #     print(i.voucher_code)
-    return render(request,'admin/viewsocieties.html',{'socdata':socdata})
+    return render(request,'admin/viewsocieties2.html',{'socdata':socdata})
 
 def createsocieties(request):
     print('createsocieties')
@@ -86,19 +86,21 @@ def createsocieties(request):
 
         societyform=SocietyCreation()
 
-        return render(request,'admin/createsocieties.html',{'societyform':societyform})
+        return render(request,'admin/createsocieties2.html',{'societyform':societyform})
     else:
         societyform=SocietyCreation(request.POST)
         if societyform.is_valid():
             society_name=societyform.cleaned_data['society_name']
             society_address=societyform.cleaned_data['society_address']
             society_locality=societyform.cleaned_data['society_locality']
+            corporate_discount=societyform.cleaned_data['corporate_discount']
+
             socdata=Society()
 
             socdata.society_name=society_name
             socdata.society_address=society_address
             socdata.society_locality=society_locality
-
+            socdata.corporate_discount=corporate_discount
             socdata.save()
 
             messages.info(request,'Society created successfully!')
@@ -107,35 +109,35 @@ def createsocieties(request):
 
 
         societyform=SocietyCreation()
-        return render(request,'admin/createsocieties.html',{'societyform':societyform})
+        return render(request,'admin/createsocieties2.html',{'societyform':societyform})
 
 def deletesocieties(request):
     if request.method=='GET':
         print('deletesocieties')
         socdata=Society.objects.all()
-        return render(request,'admin/deletesocieties.html',{'socdata':socdata})
+        return render(request,'admin/deletesocieties2.html',{'socdata':socdata})
     else:
         socdata=Society.objects.get(id=int(request.POST['clicked'])).delete()
         socdata=Society.objects.all()
-        return render(request,'admin/deletesocieties.html',{'socdata':socdata})
+        return render(request,'admin/deletesocieties2.html',{'socdata':socdata})
 
 
 def updatesocieties(request):
     if request.method=='GET':
         print('updatesocieties')
         socdata=Society.objects.all()
-        return render(request,'admin/updatesocieties.html',{'socdata':socdata})
+        return render(request,'admin/updatesocieties21.html',{'socdata':socdata})
 
     elif request.method=='POST' and 'clicked' in request.POST:
         orgdata=Society.objects.get(id=int(request.POST['clicked']))
 
-        societyform=SocietyCreation(initial={'society_name': orgdata.society_name,'society_locality':orgdata.society_locality,'society_address':orgdata.society_address})
+        societyform=SocietyCreation(initial={'corporate_discount':orgdata.corporate_discount,'society_name': orgdata.society_name,'society_locality':orgdata.society_locality,'society_address':orgdata.society_address})
         # x=User.objects.get(username=data.username)
         # y=Supplier.objects.get(supplier_details=x)
         # addproductlist.objects.get(id=request.POST['clicked']).delete()
         # for i in orgdata.society.all():
         #     print(i.society_name)
-        return render(request,'admin/updatesocieties2.html',{'orgdata':orgdata,'societyform':societyform})
+        return render(request,'admin/updatesocieties22.html',{'orgdata':orgdata,'societyform':societyform})
 
     elif request.method=='POST' and 'update' in request.POST:
         societyform=SocietyCreation(request.POST)
@@ -145,17 +147,18 @@ def updatesocieties(request):
             society_name=societyform.cleaned_data['society_name']
             society_address=societyform.cleaned_data['society_address']
             society_locality=societyform.cleaned_data['society_locality']
+            corporate_discount=societyform.cleaned_data['corporate_discount']
             socdata=Society()
 
             socdata.society_name=society_name
             socdata.society_address=society_address
             socdata.society_locality=society_locality
-
+            socdata.corporate_discount=corporate_discount
             socdata.save()
 
         socdata=Society.objects.all()
         message='Voucher Updated Successfully'
-        return render(request,'admin/updatesocieties.html',{'socdata':socdata,'message':message})
+        return render(request,'admin/updatesocieties21.html',{'socdata':socdata,'message':message})
 
 def viewvoucher(request):
     print('viewvoucher')
@@ -248,14 +251,14 @@ def updatevoucher(request):
 def supplierslist(request):
     print('supplierslist')
     # currentuser = request.COOKIES['username']
-    suppdata=Supplier.objects.all()
+    suppdata=Supplier.objects.filter(is_approved=True)
     # print(type(suppdata))
-    return render(request,'admin/supplierslist.html',{'suppdata':suppdata})
+    return render(request,'admin/supplierslist2.html',{'suppdata':suppdata})
 
 def requestslist(request):
 
     print('requestslist')
-    return render(request,'admin/requestslist.html',{})
+    return render(request,'admin/requestslist2.html',{})
 
 
 def complaintslist(request):
@@ -264,11 +267,11 @@ def complaintslist(request):
         complaintdata=ContactUs.objects.filter(is_addressed=False)
 
         print('complaintslist')
-        return render(request,'admin/complaintslist.html',{'complaintdata':complaintdata})
+        return render(request,'admin/complaintslist2.html',{'complaintdata':complaintdata})
     elif request.method=='POST' and 'clicked' in request.POST:
         orgdata=ContactUs.objects.get(id=int(request.POST['clicked']))
         mailform=mailback()
-        return render(request,'admin/sendmail.html',{'mailform':mailform,'orgdata':orgdata})
+        return render(request,'admin/sendmail2.html',{'mailform':mailform,'orgdata':orgdata})
 
     elif request.method=='POST' and 'send' in request.POST:
         orgdata=ContactUs.objects.get(id=int(request.POST['send']))
@@ -281,7 +284,7 @@ def complaintslist(request):
             password='vegefoods1234'
 
             subject='Re: '+str(orgdata.subject)
-            body=orgdata.message
+            body=msg
             msg= f'Subject: {subject}\n\n{body}'
             server = smtplib.SMTP('smtp.gmail.com:587')
             server.starttls()
@@ -292,13 +295,13 @@ def complaintslist(request):
         complaintdata=ContactUs.objects.filter(is_addressed=False)
         orgdata.is_addressed=True
         orgdata.save()
-        return render(request,'admin/complaintslist.html',{'complaintdata':complaintdata})
+        return render(request,'admin/complaintslist2.html',{'complaintdata':complaintdata})
 
 def refundslist(request):
     # currentuser = request.COOKIES['username']
 
     print('refundslist')
-    return render(request,'admin/refundslist.html',)
+    return render(request,'admin/refundslist2.html',)
 
 def orderslist(request):
     print('orderslist')
@@ -306,7 +309,7 @@ def orderslist(request):
 
     orderdata=Order.objects.filter(is_completed=False)
     print(type(orderdata))
-    return render(request,'admin/orderslist.html',{'orderdata':orderdata})
+    return render(request,'admin/orderslist2.html',{'orderdata':orderdata})
 
 def approvallist(request):
     if request.method=='GET':
@@ -315,35 +318,35 @@ def approvallist(request):
 
         approvaldata=Supplier.objects.filter(is_approved=False)
         print(approvaldata)
-        return render(request,'admin/approvallist.html',{'approvaldata':approvaldata})
+        return render(request,'admin/approvallist2.html',{'approvaldata':approvaldata})
     else:
         orgdata=Supplier.objects.get(id=int(request.POST['clicked']))
         orgdata.is_approved=True
         orgdata.save()
         approvaldata=Supplier.objects.filter(is_approved=False)
         message='Supplier Approved Successfully'
-        return render(request,'admin/approvallist.html',{'approvaldata':approvaldata,'message':message})
+        return render(request,'admin/approvallist2.html',{'approvaldata':approvaldata,'message':message})
 
 def deleteproduct(request):
     if request.method=='GET':
         print('deleteproduct')
         # currentuser = request.COOKIES['username']
         deleteproddata=delete_product_list.objects.filter(is_approved=False)
-        return render(request,'admin/deleteproduct.html',{'deleteproddata':deleteproddata})
+        return render(request,'admin/deleteproduct2.html',{'deleteproddata':deleteproddata})
     else:
         orgdata=delete_product_list.objects.get(id=int(request.POST['clicked']))
         orgdata.is_approved=True
         orgdata.save()
         approvaldata=Supplier.objects.filter(is_approved=False)
         message='Delete Product request Approved Successfully'
-        return render(request,'admin/deleteproduct.html',{'approvaldata':approvaldata,'message':message})
+        return render(request,'admin/deleteproduct2.html',{'approvaldata':approvaldata,'message':message})
 
 def newproduct(request):
     if request.method=='GET':
         print('newproduct')
         # currentuser = request.COOKIES['username']
         addproddata=addproductlist.objects.filter(is_approved=False)
-        return render(request,'admin/newproduct.html',{'addproddata':addproddata})
+        return render(request,'admin/newproduct2.html',{'addproddata':addproddata})
     elif request.method=='POST':
 
         data=addproductlist.objects.get(id=int(request.POST['clicked']))
@@ -355,7 +358,7 @@ def newproduct(request):
         data.is_approved=True
         data.save()
         addproddata=addproductlist.objects.filter(is_approved=False)
-        return render(request,'admin/newproduct.html',{'addproddata':addproddata})
+        return render(request,'admin/newproduct2.html',{'addproddata':addproddata})
 def logout(request):
 
     response= redirect('/office',{'message':'You have successfully logged out'})

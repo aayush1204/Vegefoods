@@ -13,7 +13,7 @@ class VoucherCreation(forms.ModelForm):
 class SocietyCreation(forms.ModelForm):
     class Meta:
         model=Society
-        fields=['society_name','society_address','society_locality']
+        fields=['society_name','society_address','society_locality','corporate_discount']
 
 class mailback(forms.Form):
     message=forms.CharField(max_length=250)
