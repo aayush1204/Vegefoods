@@ -137,8 +137,8 @@
       </li>
 
 
-      <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link" href="{% url 'vouchers' %}"> -->
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="{% url 'vouchers' %}"> -->
           <!-- <i class="fas fa-fw fa-chart-area"></i> -->
           <!-- <span>Vouchers</span></a>
       </li> -->
@@ -353,7 +353,7 @@
 
           <!-- Page Heading -->
 
-          <h1 class="h3 mb-4 text-gray-800">Approved Requests List</h1>
+          <h1 class="h3 mb-4 text-gray-800">Create Societies </h1>
           <div class="container-fluid">
             <div class="col-xl-3 col-md-6 mb-4">
               {% for message in messages %}
@@ -376,55 +376,38 @@
           <!-- <div class="card shadow mb-4"> -->
 <div class='codercontent'>
             <div class="card-header py-3">
+
               <!-- <h6 class="m-0 font-weight-bold text-primary">Pending Approvals Requests</h6> -->
             </div>
+            <button type="submit" name='viewsocieties' onclick=location.href='{% url "viewsocieties" %}'  class="save btn btn-default">View Societies</button>
+            <button type="submit" name='createsocieties' onclick=location.href='{% url "createsocieties" %}' class="save btn btn-default">Create Societies</button>
+            <button type="submit" name='updatesocieties' onclick=location.href='{% url "updatesocieties" %}' class="save btn btn-default">Update Societies</button>
+            <button type="submit" name='deletesocieties' onclick=location.href='{% url "deletesocieties" %}' class="save btn btn-default">Delete Societies</button>
 
           <!-- <div class="card-body"> -->
-            <div class="table-responsive">
-              <table border="1">
-              <!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
-                <thead>
-                  <tr>
-                    <th> Username </th>
-                    <th> First Name </th>
-                    <th> Last Name </th>
-                    <th> Email ID </th>
-                    <th> Phone Number </th>
-                    <th> Pincode </th>
-                    <th> GST Number </th>
-                    <th> Bank Account Details </th>
-                    <th> Store Name </th>
-                    <th> Store Description </th>
-                    <th> Store Address </th>
-                      <th>  </th>
-                  </tr>
-                </thead>
+          <form method='post' enctype="multipart/form-data">
+          {% csrf_token %}
+          <br> <br>
+          {{societyform.society_name.label}}
+          {{societyform.society_name}}
+          <br><br>
+          {{societyform.society_address.label}}
+          {{societyform.society_address}}
+          <br><br>
+          {{societyform.society_locality.label}}
+          {{societyform.society_locality}}
+              <br><br>
+          {{societyform.corporate_discount.label}}
+          {{societyform.corporate_discount}}
+                  <br><br>
 
-                {% for i in approvaldata %}
+              <!-- <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button> -->
+              <button type="submit" name="createsocieties" class="save btn btn-default"> Create </button>
+          </form>
+</div><br><br>
 
-                <tr>
-                  <td> {{i.supplier_details.username}} </td>
-                  <td> {{i.supplier_details.first_name}}</td>
-                  <td> {{i.supplier_details.last_name}}</td>
-                  <td> {{i.supplier_details.email}}</td>
-                  <td> {{i.phone}}</td>
-                  <td> {{i.pincode}}</td>
-                  <td> {{i.GST_number}}</td>
-                  <td> {{i.Bank_Account_Details}}</td>
-                  <td> {{i.store_name}}</td>
-                  <td> {{i.store_description}}</td>
-                  <td> {{i.store_address}}</td>
-                  <td>
-                  <form action="" method="post">
-                    {% csrf_token %}
 
-                    <button type="submit" name="clicked" value="{{i.id}}">Approve</button></form>
-                  </td>
-              </tr>
-                  {% endfor %}
-
-              </table>
-            </div><br><br>
+          <!-- <div class="card-body"> -->
           <!-- </div> -->
           <!-- </div> -->
         <!-- <div class="row">

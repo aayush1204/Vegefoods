@@ -183,8 +183,8 @@ def delete_existing(request):
 
     if(request.method=="POST"):
         print(request.POST)
-        reason_for_removal = request.POST.get('reason_for_removal', False)
-        requestobj=delete_product_list.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'],reason_for_removal=reason_for_removal)
+        # reason_for_removal = request.POST.get('reason_for_removal', False)
+        requestobj=delete_product_list.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'],reason_for_removal=request.POST['reason_for_removal'])
         #messages.info(request, "Your request has been sent!")
 #         messages.info(request, "Your Request has Sent!!")
     return render(request, 'dashboard/messagedisplay.html')
@@ -269,7 +269,7 @@ def approved(request):
         data=addproductlist.objects.get(id=int(request.POST['upload']))
         x=User.objects.get(username=data.supplier_username)
         y=Supplier.objects.get(supplier_details=x)
-        addproductlist.objects.get(id=request.POST['upload']).delete()
+        addproductlist.objects.get(id=int(request.POST['upload'])).delete()
         productdata=Product.objects.create(product_name=data.product_name,description=data.product_description,product_sku=data.product_sku,product_price=data.product_price,
                                             category="Not Added!",supplier=y)
 
@@ -279,11 +279,14 @@ def approved(request):
         return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
 
     elif request.method=='POST' and 'delete' in request.POST:
+        data=delete_product_list.objects.get(id=int(request.POST['delete']))
+
         x=User.objects.get(username=data.supplier_username)
         y=Supplier.objects.get(supplier_details=x)
 
         data=delete_product_list.objects.get(id=int(request.POST['delete']))
-        Product.objects.get(product_name=data.product_name,description=data.product_description,
+        Product.objects.get(product_name=data.product_name,
+                            # description=data.product_description,
                             product_sku=data.product_sku,product_price=data.product_price,supplier=y).delete()
         delete_product_list.objects.get(id=int(request.POST['delete'])).delete()
         addproductdata=addproductlist.objects.filter(is_approved=True,supplier_username=request.user.username)
