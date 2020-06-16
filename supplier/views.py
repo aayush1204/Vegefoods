@@ -105,6 +105,10 @@ def supplier_login(request):
         except User.DoesNotExist:
                 messages.info(request, "User doesnt exist!")
                 return render(request, 'supplier_login.html')
+        except:
+                messages.info(request, "Incorrect Credentials!")
+                return render(request, 'supplier_login.html')        
+
 
     return render(request, 'supplier_login.html')
 
