@@ -1,5 +1,6 @@
 {% load static %}
 {% static "images" as BaseUrl%}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css'%}">
     
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
@@ -52,7 +53,8 @@
 		    </div>
 		  </div>
     </div>
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+   
+	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
 		  <a class="navbar-brand" href="index.html">Vegefoods</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,8 +84,8 @@
                     <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
 					<a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
-					<a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
-					<a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
+          <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+          <a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -99,33 +101,53 @@
 				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
 				 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
 				 <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
-			  <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+			  <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
 			  <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 				 {% endif %}
 			</ul>
 		  </div>
 		</div>
 	  </nav>
+   
     <!-- END nav -->
-	{% if messages %}
+    {% if a == 2 %}
+    {% if messages %}
+	<!-- <ul class='messages'> -->
+		{%for message in messages %}
+		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+		{% if message.tags %}<div class="alert alert-success alert-dismissible fade show">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>Details Updated Successfully!</strong>
+      </div>{%endif%}
+      {{ '<!--' }}
+    
+    {%endfor%}
+    {{ '-->'}}
+	<!-- </ul> -->
+  {%endif%}
+  {% endif%}
+  
+  {% if a == 1%}
+  {% if messages %}
 	<!-- <ul class='messages'> -->
 		{%for message in messages %}
 		<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
 		<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
 		{% if message.tags %}<div class="alert alert-warning alert-dismissible fade show">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<strong>Already present in Cart! Please go to cart to make changes</strong>
+			<strong>You havent added the office address! Create now</strong>
 		  </div>{%endif%}
 		{%endfor%}
 	<!-- </ul> -->
 	{%endif%}
-	<div class="hero-wrap hero-bread" style="background-image: url({{BaseUrl}}/bg_1.jpg);">
-	
+  {%endif%}
+    <div class="hero-wrap hero-bread" style="background-image: url({{BaseUrl}}/bg_1.jpg);">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a href="index.html">Product</a></span> <span>Product Single</span></p>
-            <h1 class="mb-0 bread">Product Single</h1>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>MyAccount</span></p>
+            <h1 class="mb-0 bread">My Addresses</h1>
           </div>
         </div>
       </div>
@@ -133,228 +155,119 @@
 
     <section class="ftco-section">
     	<div class="container">
-    		<div class="row">
-    			<div class="col-lg-6 mb-5 ftco-animate">
-    				<a href="{{BaseUrl}}/{{pdata.product_image}}" class="image-popup"><img src="{{BaseUrl}}/{{pdata.product_image}}" class="img-fluid" alt="Colorlib Template"></a>
+    		<div class="row justify-content-center">
+    			<div class="col-md-10 mb-5 text-center">
+    				<ul class="product-category">
+    					<li><a href="{% url 'address' %}" class="nav-item active">My Address</a></li>
+    					<li><a href="{% url 'myrefunds'%}" class="nav-item {{vegetable}}">My Refunds</a></li>
+    					<li><a href="{% url 'myorders'  %}" class="nav-item {{fruit}}">My Orders</a></li>
+    					<!-- <li><a href="{% url 'filter' name='Juices' %}" class="nav-item {{juice}}">Juice</a></li> -->
+						<!-- <li><a href="{% url 'filter' name='Dairy' %}" class="nav-item {{dairy}}">Dairy</a></li> -->
+    				</ul>
     			</div>
-    			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-    				<h3>{{pdata.product_name}}</h3>
-    				<div class="rating d-flex">
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2">5.0</a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-							</p>
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
-							</p>
-							<p class="text-left">
-								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
-							</p>
-						</div>
-						{% if pdata.discount_applied == False %}
-					<p class="price"><span>Rs.{{pdata.product_price}}</span></p>
-						{% else %}
+            </div>
+
+            <form action="{% url 'address' %}" method='post'>
+                {% csrf_token %}
+    		<div class="row">
+                <div class="col-md-12">
+                    <div class="form-group mt-4">
+                                        <div class="radio">
+                                          <!-- <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label> -->
+                                          <!-- <label><input type="radio" value="" name="optradio" > Ship to different address</label> -->
+                                          <label><input type="radio" value="1" name="optradio" > Your House</label>
+                                          
+                                          <label><input type="radio" value="2" name="optradio" > Your Office</label>
+                                        </div>
+                                    </div>
+                </div>
+                <div class="col-xl-12 ftco-animate">
 						
-						<p class="price">
-							<span class=" price-disc" style="color: #b3b3b3 ; margin-right: 10px;">Rs.{{pdata.product_price}}</span>
-							<span>Rs.{{pdata.discount_price}}</span>
-						</p>	
-
-						{% endif %}
-    				<!-- <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until.
-						</p> -->
-						<p>{{pdata.description}}</p>
-
-						<div class="row mt-4">
-							<div class="col-md-6">
-								<div class="form-group d-flex">
-		              <div class="select-wrap">
-	                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-	                  <select name="" id="" class="form-control">
-	                  	<option value="">Small</option>
-	                    <option value="">Medium</option>
-	                    <option value="">Large</option>
-	                    <option value="">Extra Large</option>
-	                  </select>
-	                </div>
-		            </div>
-							</div>
-							<div class="w-100"></div>
-					<form  method="post" action="{% url 'add_to_cart' q=pdata.id %}">	
-					{% csrf_token %}
-					<div class="input-group col-md-6 d-flex mb-3">
-	             		<span class="input-group-btn mr-2">
-	                		<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-	                   	<i class="ion-ios-remove"></i>
-	                		</button>
-	            		</span>
-	             		<input type="text" id="quantity" name="quantity" style="padding:10px 10px"class="form-control input-number" value="1" min="1" max="100">
-	             		<span class="input-group-btn ml-2">
-	                		<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-	                     	<i class="ion-ios-add"></i>
-	                 		</button>
-	             		</span>
-	          		</div>
-	          		<div class="w-100"></div>
-	          		<div class="col-md-12">
-						  <p style="color: #000;">SKU - {{pdata.product_sku}}</p>
-						  <p style="color: #000;">Supplier Name - {{pdata.supplier.store_name}}</p>
-	          		</div>
-					  <p>
-						  <!-- <a href="#" class="btn btn-black py-3 px-5">Add to Cart</a> -->
-						  <input type="submit" value="Add to Cart" class="btn btn-black py-3 px-5">
-					</p>
-					{% if messages %}
-					<!-- <ul class='messages'> -->
-						{%for message in messages %}
-						<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
-						<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
-						{% if message.tags %}<div class="alert alert-warning alert-dismissible fade show">
-							<button type="button" class="close" data-dismiss="alert">&times;</button>
-							<strong>Already present in Cart!</strong>
-						  </div>{%endif%}
-						{%endfor%}
-					<!-- </ul> -->
-					{%endif%}
-					</form>	
-					
-				</div>
-			  
-    			</div>
-    		</div>
-    	</div>
-    </section>
-
-    <section class="ftco-section">
-    	<div class="container">
-				<div class="row justify-content-center mb-3 pb-3">
-          <div class="col-md-12 heading-section text-center ftco-animate">
-          	<span class="subheading">Products</span>
-            <h2 class="mb-4">Related Products</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-          </div>
-        </div>   		
-    	</div>
-    	<div class="container">
-    		<div class="row">
-    			<div class="col-md-6 col-lg-3 ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
-    						<span class="status">30%</span>
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3 text-center">
-    						<h3><a href="#">Bell Pepper</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
-		    					</div>
-	    					</div>
-	    					<div class="bottom-area d-flex px-3">
-	    						<div class="m-auto d-flex">
-	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-	    								<span><i class="ion-ios-menu"></i></span>
-	    							</a>
-	    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-	    								<span><i class="ion-ios-cart"></i></span>
-	    							</a>
-	    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
-	    								<span><i class="ion-ios-heart"></i></span>
-	    							</a>
-    							</div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-md-6 col-lg-3 ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template">
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3 text-center">
-    						<h3><a href="#">Strawberry</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-	    					</div>
-    						<div class="bottom-area d-flex px-3">
-	    						<div class="m-auto d-flex">
-	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-	    								<span><i class="ion-ios-menu"></i></span>
-	    							</a>
-	    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-	    								<span><i class="ion-ios-cart"></i></span>
-	    							</a>
-	    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
-	    								<span><i class="ion-ios-heart"></i></span>
-	    							</a>
-    							</div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-md-6 col-lg-3 ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg" alt="Colorlib Template">
-	    					<div class="overlay"></div>
-	    				</a>
-    					<div class="text py-3 pb-4 px-3 text-center">
-    						<h3><a href="#">Green Beans</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-	    					</div>
-    						<div class="bottom-area d-flex px-3">
-	    						<div class="m-auto d-flex">
-	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-	    								<span><i class="ion-ios-menu"></i></span>
-	    							</a>
-	    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-	    								<span><i class="ion-ios-cart"></i></span>
-	    							</a>
-	    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
-	    								<span><i class="ion-ios-heart"></i></span>
-	    							</a>
-    							</div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-md-6 col-lg-3 ftco-animate">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template">
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3 text-center">
-    						<h3><a href="#">Purple Cabbage</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span>$120.00</span></p>
-		    					</div>
-	    					</div>
-    						<div class="bottom-area d-flex px-3">
-	    						<div class="m-auto d-flex">
-	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-	    								<span><i class="ion-ios-menu"></i></span>
-	    							</a>
-	    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-	    								<span><i class="ion-ios-cart"></i></span>
-	    							</a>
-	    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
-	    								<span><i class="ion-ios-heart"></i></span>
-	    							</a>
-    							</div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    		</div>
+                    <h3 class="mb-4 billing-heading">Address Details</h3>
+                      <div class="row align-items-end">
+                          <div class="col-md-6">
+                        <div class="form-group">
+                            <label>First Name</label>
+                          <input type="text" name="firstname" value="{{user.first_name}}" class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="lastname">Last Name</label>
+                          <input type="text" name="lastname" value="{{user.last_name}}" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <div class="select-wrap">
+                              <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                              <select name="state" id="state" class="form-control">
+                                  <option value="Maharashtra">Maharahstra</option>
+                                <!-- <option value="Italy">Italy</option> -->
+                                <!-- <option value="">Philippines</option>
+                                <option value="">South Korea</option>
+                                <option value="">Hongkong</option>
+                                <option value="">Japan</option> -->
+                              </select>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            <label for="streetaddress">Street Address</label>
+                          <input type="text" name="streetaddress"class="form-control" value="{{adata.address}}"placeholder="House number and street name">
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="apartmentno">Apartment No.</label>
+                          <input type="text" name="apartmentno"  value="{{adata.apartmentno}}"class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+                        </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            <label for="towncity">City</label>
+                          <input type="text" name="towncity" value="{{adata.city}}"  class="form-control" placeholder="">
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="postcodezip">Postcode / ZIP *</label>
+                          <input type="text" name="postcodezip" value="{{adata.zipcode}}"class="form-control" placeholder="">
+                        </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <!-- <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                          <input type="text" name="phone" class="form-control" placeholder="">
+                        </div>
+                      </div> -->
+                      <div class="w-100"></div>
+                     
+                    
+                    <div class="w-100"></div>
+                     <div class='col-md-12' style="text-align: center">
+                       {% if a == 0 %}
+                      <input type="submit" name='submit' value="Update" class="btn btn-black py-3 px-5">
+                        {% else %}
+                        <input type="submit" name= 'submit' value="Update" class="btn btn-black py-3 px-5">
+                       {% endif %} 
+                      </div>
+                      <!-- <input type='submit'class="btn btn-primary py-3 px-4" value="Update" > -->
+                        <!--  -->
+                        
+                    </div>
+                  <!-- END -->
+                        </div>
+            </div>
+            
+        </form>
+	  
     	</div>
     </section>
 
@@ -472,43 +385,87 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{% static 'js/google-map.js'%}"></script>
   <script src="{% static 'js/main.js'%}"></script>
-
   <script>
-		$(document).ready(function(){
+	$(document).ready(function(){ 
 
-		var quantitiy=0;
-		   $('.quantity-right-plus').click(function(e){
-		        
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		            
-		            $('#quantity').val(quantity + 1);
-
-		          
-		            // Increment
-		        
-		    });
-
-		     $('.quantity-left-minus').click(function(e){
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		      
-		            // Increment
-		            if(quantity>0){
-		            $('#quantity').val(quantity - 1);
-		            }
-		    });
-		    
+		$('.nav-item').on("click", function(){
+		
+		$('.nav-item').removeClass('active');
+		
+		$(this).addClass('active');
 		});
-	</script>
+		});
+
+	function change(){	
+		$('.nav-item').on('click',function(){
+
+			//Remove any previous active classes
+			$('.nav-item').removeClass('active');
+		  
+			//Add active class to the clicked item
+			$(this).addClass('active');
+		  });	
+        }
+        
+
+        $('input[name="optradio"]').on('click', function() {
+            
+          
+            if ($(this).val() == '') {
+                console.log('2')
+                document.getElementsByName("towncity")[0].value = "";
+                document.getElementsByName("postcodezip")[0].value = "";
+                document.getElementsByName("streetaddress")[0].value = "";
+                document.getElementsByName("apartmentno")[0].value = "";
+                
+            }
+            else if ($(this).val() == '1') {
+                
+                {% for i in adata %}
+                console.log({{i.category}})  ;
+                {% if i.category == '1' %} 
+                 
+                document.getElementsByName("towncity")[0].value = "{{i.city}}";
+                document.getElementsByName("postcodezip")[0].value = "{{i.zipcode}}";
+                document.getElementsByName("streetaddress")[0].value = "{{i.address}}";
+                document.getElementsByName("apartmentno")[0].value = "{{i.apartmentno}}";
+                {% endif %}
+                {% endfor %}
+                document.getElementsByName("submit")[0].value = "Update";
+               
+            }
+            else if ($(this).val() == '2') {
+                
+                {% for i in adata %}
+                console.log({{i.category}}) ; 
+                {% if i.category == '2' %} 
+                
+                document.getElementsByName("towncity")[0].value = "{{i.city}}";
+                document.getElementsByName("postcodezip")[0].value = "{{i.zipcode}}";
+                document.getElementsByName("streetaddress")[0].value = "{{i.address}}";
+                document.getElementsByName("apartmentno")[0].value = "{{i.apartmentno}}";
+                {% endif %}
+                {% endfor %}
+                {% if a == 1 %}
+                document.getElementsByName("towncity")[0].value = "";
+                document.getElementsByName("postcodezip")[0].value = "";
+                document.getElementsByName("streetaddress")[0].value = "";
+                document.getElementsByName("apartmentno")[0].value = "";
+                document.getElementsByName("submit")[0].value = "Create";
+                {%else %}
+                document.getElementsByName("submit")[0].value = "Update";
+                {% endif %}
+
+            }
+              
+
+            
+        })
+    
+           
+    </script> 
+        
+
     
   </body>
 </html>

@@ -112,6 +112,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
 					<a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
 					<a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+					<a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -230,8 +231,11 @@
 										  <!-- <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label> -->
 										  <label><input type="radio" value="" name="optradio" > Ship to different address</label>
 										  <label><input type="radio" value="1" name="optradio" > Your House</label>
+										  <label><input  type="radio" value="2" name="optradio" > Your Office</label>
+										  
 										</div>
 									</div>
+						<div id = "alert_placeholder"></div>			
                 </div>
 	            </div>
 	          <!-- END -->
@@ -422,6 +426,12 @@
   <script>
 
 		$('input[name="optradio"]').on('click', function() {
+			var ab = 0;
+			
+			bootstrap_alert = function() {}
+			bootstrap_alert.warning = function(message) {
+            $('#alert_placeholder').html('<div class="alert alert-warning"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
+        }
 			if ($(this).val() == '') {
 				console.log('2')
 				document.getElementsByName("towncity")[0].value = "";
@@ -431,13 +441,39 @@
 				
 			}
 			if ($(this).val() == '1') {
-				console.log('2')
-				document.getElementsByName("towncity")[0].value = "{{adata.city}}";
-				document.getElementsByName("postcodezip")[0].value = "{{adata.zipcode}}";
-				document.getElementsByName("streetaddress")[0].value = "{{adata.address}}";
-				document.getElementsByName("apartmentno")[0].value = "{{adata.apartmentno}}";
-			
-			}
+                
+                {% for i in adata %}
+                console.log({{i.category}})  ;
+                {% if i.category == '1' %} 
+                document.getElementsByName("towncity")[0].value = "{{i.city}}";
+                document.getElementsByName("postcodezip")[0].value = "{{i.zipcode}}";
+                document.getElementsByName("streetaddress")[0].value = "{{i.address}}";
+                document.getElementsByName("apartmentno")[0].value = "{{i.apartmentno}}";
+                {% endif %}
+                {% endfor %}
+            }
+            if ($(this).val() == '2') {
+                
+                {% for i in adata %}
+                console.log({{i.category}}) ; 
+				{% if i.category == '2' %} 
+				ab = 1;
+                document.getElementsByName("towncity")[0].value = "{{i.city}}";
+                document.getElementsByName("postcodezip")[0].value = "{{i.zipcode}}";
+                document.getElementsByName("streetaddress")[0].value = "{{i.address}}";
+                document.getElementsByName("apartmentno")[0].value = "{{i.apartmentno}}";
+                {% endif %}
+				{% endfor %}
+				
+				if (ab == 0)
+				document.getElementsByName("towncity")[0].value = "";
+				document.getElementsByName("postcodezip")[0].value = "";
+				document.getElementsByName("streetaddress")[0].value = "";
+				document.getElementsByName("apartmentno")[0].value = "";
+				// alert("You havent saved office Address! Go to My Addresses to add.");
+				bootstrap_alert.warning('You havent saved office Address! Go to My Addresses to add.');
+				
+            }
 
 
 		})

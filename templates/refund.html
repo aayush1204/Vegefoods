@@ -83,6 +83,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                     <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
                     <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+                    <a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -204,7 +205,10 @@
                                   {% endfor %}
                                 </tbody> 
                                  </table>
-                                 <input type="submit" value="Submit" class="btn btn-black py-3 px-5">
+                                 <div style="text-align: center; margin-bottom: 10px">
+                                  <input type="submit" value="Submit" class="btn btn-black py-3 px-5">
+                                  </div>
+                              
                                 </form>
                                   {% endfor %}
 						      
