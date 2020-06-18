@@ -9,6 +9,7 @@ urlpatterns = [
     path('home/myorders', views.myorders,name='myorders'),
     path('home/myorders/refunds/<int:x>', views.refund,name='refund'),
     path('home/myorders/ordertrack/<int:x>', views.track,name='track'),
+    path('address',views.myaddress,name='address'),
 
     path('home/myrefunds', views.myrefunds,name='myrefunds'),
     path('home/contact', views.contact,name='contact'),
