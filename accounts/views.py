@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from shop.models import Profile ,Address,Society
+from shop.models import Profile
 from django.contrib import messages
 # Create your views here.
 
@@ -16,13 +16,6 @@ def register(request):
         username=request.POST['username']
         password=request.POST['password']
         confirm_password=request.POST['confirm_password']
-
-        society = request.POST['society']
-        state = request.POST['state']
-        address =  request.POST['streetaddress']
-        apartmentno =  request.POST['apartmentno']
-        city =  request.POST['towncity']
-        zipcode = request.POST['postcodezip']
 
         if(password==confirm_password):
 
@@ -38,10 +31,7 @@ def register(request):
                 user = User.objects.create_user(first_name=first_name, last_name=last_name,email=email,username=username,password=password)
 
                 user.save()
-                sdata = Society.objects.get(society_name=society)
-                Profile.objects.create(user=user,pr='C', society=sdata)
-                Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-                                category="1", user = user)
+                Profile.objects.create(user=user,pr='C')
                 print("user is hereeeeeeeeeeeeeeee")
                 return render(request, 'login.html')
         else:
@@ -50,8 +40,8 @@ def register(request):
 
 
     else:
-        sdata = Society.objects.all()
-        return render(request, 'register.html', {'sdata':sdata})#, {'form': form})
+
+        return render(request, 'register.html')#, {'form': form})
     #return render(request, 'SignUp.html')
 
 def login(request):

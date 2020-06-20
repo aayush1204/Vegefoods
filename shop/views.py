@@ -211,7 +211,7 @@ def order_place(request):
         zipcode = request.POST['postcodezip']
 
         # Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-        #                         category="1", user = request.user)
+                                # category="1", user = request.user)
         print(fname)
         print(state)
         total = request.POST['totalbill']
