@@ -55,60 +55,69 @@
 		  </div>
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-		<div class="container">
-		  <a class="navbar-brand" href="index.html">Vegefoods</a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="oi oi-menu"></span> Menu
-		  </button>
-	 
-		  <div class="collapse navbar-collapse" id="ftco-nav">
-			<ul class="navbar-nav ml-auto">
-			  <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
-			  <li class="nav-item dropdown">
-				   <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-				   <div class="dropdown-menu" aria-labelledby="dropdown04">
-				   <a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
-				   <a class="dropdown-item" href="wishlist.html">Wishlist</a>
-					 <a class="dropdown-item" href="product-single.html">Single Product</a>
-					 <a class="dropdown-item" href="{% url 'cart' %}">Cart</a>
-					 <a class="dropdown-item" href="checkout.html">Checkout</a>
-				   </div>
-				 </li>
-			  <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-		   <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
-				 {% if user.is_authenticated %}
-				 <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
-				 <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-                 
-                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown04">
-                    <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
-                    <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
-                    <a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
-                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
-                    </div>
-                  </li>
-				 {% else %}
-				 <li class="nav-item dropdown">
-				   <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Account</a>
-				   <div class="dropdown-menu" aria-labelledby="dropdown04">
-				   <a class="dropdown-item" href="{% url 'login' %}">Login</a>
-				   <a class="dropdown-item" href="{% url 'register' %}">Register</a>
-	 
-				   </div>
-				 </li>
-				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
-				 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
-				 <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
-			  <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-			  <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-				 {% endif %}
-			</ul>
-		  </div>
-		</div>
-	  </nav>
-    <!-- END nav -->
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Vegefoods</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+        </button>
+  
+        <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+          <li class="nav-item dropdown">
+             <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+             <div class="dropdown-menu" aria-labelledby="dropdown04">
+             <a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
+             <a class="dropdown-item" href="wishlist.html">Wishlist</a>
+             <a class="dropdown-item" href="product-single.html">Single Product</a>
+             <a class="dropdown-item" href="{% url 'cart' %}">Cart</a>
+             <a class="dropdown-item" href="checkout.html">Checkout</a>
+             </div>
+           </li>
+          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+         <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
+           {% if user.is_authenticated %}
+           <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
+           {% if user.profile.pr == 'C'%}
+           <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+            {% endif %}
+                   <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
+                      <div class="dropdown-menu" aria-labelledby="dropdown04">
+                      {% if user.profile.pr == 'C'%}
+            <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+            <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+            <a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
+                      {% endif %}
+                      {% if user.profile.pr == 'S'%}
+                      <a href="{% url 'supplier_index' %}" class="dropdown-item">Dashboard</a>
+                      {% endif %}
+  
+                      {% if user.profile.pr == 'A'%}
+                      <a href="{% url 'office' %}" class="dropdown-item">Dashboard</a>
+                      {% endif %}
+                      <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                      </div>
+                    </li>
+           {% else %}
+           <li class="nav-item dropdown">
+             <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Account</a>
+             <div class="dropdown-menu" aria-labelledby="dropdown04">
+             <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+             <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+  
+             </div>
+           </li>
+           <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
+           <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
+           <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
+          <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+          <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+           {% endif %}
+        </ul>
+        </div>
+      </div>
+      </nav>   <!-- END nav -->
 
     <div class="hero-wrap hero-bread" style="background-image: url('{{BaseUrl}}/bg_1.jpg');">
       <div class="container">
@@ -217,7 +226,7 @@
                               <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
                         
                       </td>
-                          <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{j.product_image}});"></div></td>
+                          <td class="image-prod"><div class="img" style="background-image:url({{j.product.videofile.url}});"></div></td>
                           
                           <td class="product-name">
                               <h3>{{j.product.product_name}}</h3>
