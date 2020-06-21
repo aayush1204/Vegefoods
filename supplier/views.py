@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, auth
 from shop.models import Product, Order
 from shop.models import Supplier, Profile ,Refunds
 from django.contrib import messages
+from .forms import AddProductForm
 #from .forms import ProductForm
 from admindashboard.models import addproductlist,delete_product_list
 
@@ -105,6 +106,9 @@ def supplier_login(request):
         except User.DoesNotExist:
                 messages.info(request, "User doesnt exist!")
                 return render(request, 'supplier_login.html')
+        except:
+            messages.info("Incorrect Credentials.")
+            return render(request, 'supplier_login.html')
 
     return render(request, 'supplier_login.html')
 
@@ -147,13 +151,22 @@ def add(request):
 
 
             p = Supplier.objects.get(supplier_details=request.user)
+           
+            form = AddProductForm(instance=p)
+        #    form.['supplier_username'] = request.user.username
+        #    context={'p':p, 'form':form}
 
-            return render(request, 'dashboard/add.html',{ 'p':p })
+
+            return render(request, 'dashboard/add.html',{'p':p, 'form':form})
 
 def addnew(request):
 
     if(request.method=="POST"):
-        print(request.POST)
+        #if request.method == "POST":
+        form = AddProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+
 
         #add_product = Product()
         #add_product.product_name=request.POST['product_name']
@@ -166,28 +179,57 @@ def addnew(request):
 
 
         #add_product.save()
-        requestobj=addproductlist.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'])
+    #    requestobj=addproductlist.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'])
         messages.info(request, "Your request has been sent!")
         return render(request, 'dashboard/messagedisplay.html')
 
 def delete(request):
+    prods=[]
+    colors=["success","warning","info","primary"]
+    x = User.objects.get(username=request.user.username)
+    y=Supplier.objects.get(supplier_details=x)
+    print(y.store_description)
+    prod = Product.objects.filter(supplier = y)
+
+
+    #prod = Product.objects.filter()
+    if prod.exists():
+            for m in prod:
+                prods.append(m)
+                print(prods)
+                print(prods)
+
+            args = { 'prods' : prods, 'y':y, 'colors':colors}
+
+            return render(request, "dashboard/delete1.html", args)
+    else:
+#        print("No products")
+        messages.info(request, "You have not added any products yet!! Please click on the 'Addition on New Products' tab to add a prodcut")
+        return render(request, "dashboard/delete.html" )
+
+
 
         #    y=Supplier.objects.get(id=pk)
         #    print(y)
         #    print(y.last_name)
         #    args = { 'y':y }
 
-            return render(request, 'dashboard/delete.html')#, args)
+            #return render(request, 'dashboard/delete1.html')#, args)
+def delete_form(request, pk):
+
+    z = Product.objects.get(product_name = pk)
+
+    return render(request, 'dashboard/delete.html', {'z':z})
 
 def delete_existing(request):
 
     if(request.method=="POST"):
         print(request.POST)
         # reason_for_removal = request.POST.get('reason_for_removal', False)
-        requestobj=delete_product_list.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],product_description=request.POST['product_description'],reason_for_removal=request.POST['reason_for_removal'])
-        #messages.info(request, "Your request has been sent!")
+        requestobj=delete_product_list.objects.create(supplier_username=request.user.username,product_sku=request.POST['product_sku'],product_name=request.POST['product_name'],product_price=request.POST['product_price'],reason_for_removal=request.POST['reason_for_removal'])
+        messages.info(request, "Your request has been sent!")
 #         messages.info(request, "Your Request has Sent!!")
-    return render(request, 'dashboard/messagedisplay.html')
+        return render(request, 'dashboard/messagedisplay.html')
 
 def pending_orders(request):
 
@@ -265,13 +307,33 @@ def refunds_summary(request, pk):
         return render(request, 'dashboard/refunds_summary.html', {'z':z})
 
 def approved(request):
-    if request.method=='POST' and 'upload' in request.POST:
-        data=addproductlist.objects.get(id=int(request.POST['upload']))
+    if request.method=='POST' and 'uploadno' in request.POST:
+        data=addproductlist.objects.get(id=int(request.POST['uploadno']))
+        x=User.objects.get(username=request.user.username)#data.supplier_username)
+        y=Supplier.objects.get(supplier_details=x)
+        addproductlist.objects.get(id=int(request.POST['uploadno'])).delete()
+        productdata=Product.objects.create(product_name=data.product_name,description=data.product_description,product_sku=data.product_sku,product_price=data.product_price,
+                                            category=data.category,videofile=data.videofile,supplier=y)
+
+        addproductdata=addproductlist.objects.filter(is_approved=True,supplier=y)
+        deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
+
+        return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
+    elif request.method=='POST' and 'uploadyes' in request.POST:
+        #prod = Product()
+        discount_percent = request.POST['discount_percent']
+        discount_price = request.POST['discount_price']
+        print(discount_price)
+
+        #prod.save()
+        data=addproductlist.objects.get(id=int(request.POST['uploadyes']))
         x=User.objects.get(username=data.supplier_username)
         y=Supplier.objects.get(supplier_details=x)
-        addproductlist.objects.get(id=int(request.POST['upload'])).delete()
+        addproductlist.objects.get(id=int(request.POST['uploadyes'])).delete()
         productdata=Product.objects.create(product_name=data.product_name,description=data.product_description,product_sku=data.product_sku,product_price=data.product_price,
-                                            category="Not Added!",supplier=y)
+                                            category="Not Added!",supplier=y, discount_percent=discount_percent,discount_price=discount_price)
+        productdata.discount_applied =True
+        productdata.save()
 
         addproductdata=addproductlist.objects.filter(is_approved=True,supplier_username=request.user.username)
         deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
@@ -295,6 +357,9 @@ def approved(request):
         return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
 
     else:
-        addproductdata=addproductlist.objects.filter(is_approved=True,supplier_username=request.user.username)
+
+        x=User.objects.get(username=request.user.username)
+        y=Supplier.objects.get(supplier_details=x)
+        addproductdata=addproductlist.objects.filter(is_approved=True,supplier=y)
         deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
         return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})

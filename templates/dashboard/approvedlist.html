@@ -139,6 +139,17 @@
           <span>Deletion of Existing Product</span></a>
       </li>
 
+      <div class="sidebar-heading">
+        Approved Requests
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'approved' %}" >
+
+          <span>Approved Requests</span>
+        </a>
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -385,8 +396,8 @@
                     <th>Product Description</th>
                     <th>Product SKU</th>
                     <th>Product Price </th>
-                    <th>Supplier username</th>
-                    <th>  </th>
+                    <th>Product Image</th>
+                    <th>Do you wanna add Discount? </th>
                   </tr>
                 </thead>
 
@@ -396,16 +407,84 @@
                     <td>{{i.product_description}}</td>
                     <td>{{i.product_sku}}</td>
                     <td>{{i.product_price}}</th>
-                    <td>{{i.supplier_username}}</td>
-                    <td><form action="" method="post">
-                      {% csrf_token %}
+                    <td><img src="{{ i.videofile.url }}" width="240" ></td>
+                    <td>
+                      <form>
+                      <input value="1" type="radio" name="formselector" onClick="displayForm(this)"></input>Yes
+                      <br>
+                      <input value="2" type="radio" name="formselector" onClick="displayForm(this)"></input>No
+                      </form>
+                      <div style="display:none" id="ccformContainer">
 
-                      <button type="submit" name="upload" value="{{i.id}}">Upload</button></form></td>
+                        <form  id ="uploadform" action="" method="post">{% csrf_token %}</form>
+                        <div class="main">
+                          <label>Enter the discount details :</label>
+                          <br>
+                          <br>
+                          <dd>
+
+                              {% csrf_token %}
+                              <p>Discount Percent :
+                              <input type="text"  id="discount_percent" name="discount_percent" value="" form="uploadform">
+                              </p>
+                              <p>Discount Value :
+                              <input type="text"  id="discount_price" name="discount_price" value="" form="uploadform">
+                              </p>
+
+                              <label>Click on 'Upload' to upload your product on the Website</label>
+                              <br
+                              <div class = "Sub">
+
+                              <dd>Click Here :
+                              <button type="submit" name="uploadyes" value="{{i.id}}" class="btn btn-primary py-3 px-5" form="uploadform">Upload</button></form>
+                              </dd>
+                            </div>
+
+
+
+
+                              </dd>
+                              </div>
+                            </div>
+                              </form>
+
+
+                                <br>
+
+                                <div style="display:none" id="paypalformContainer">
+                                  <form id="paypalform" ></form>
+                                  <form id="upload" action="" method="post">{% csrf_token %}</form>
+
+                                    {% csrf_token %}
+
+                                    <div class="main">
+
+                                    <label>Click on 'Upload' to upload your product on the Website</label>
+                                    <br>
+
+                                    <div class = "Sub">
+                                    <dd>Click Here :
+                                    <button type="submit" name="uploadno" value="{{i.id}}" class="btn btn-primary py-3 px-5" form="upload">Upload</button></form>
+                                    </dd>
+                                  </div>
+                                </div>
+                                  </form>
+                                </div>
+
+
+
+                            </td>
+
+
+
+
                   </tr>
                   {% endfor %}
 
               </table>
-            </div><br><br>
+            </div>
+            <br>
+            <br>
             <div class="table-responsive">
 
                 <h6 class="m-0 font-weight-bold text-primary">Delete Product Requests</h6>
@@ -693,6 +772,19 @@
   </div>
 
   <!-- Bootstrap core JavaScript-->
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+<script type='text/javascript'>
+function displayForm(c) {
+    if (c.value == "2") {
+        jQuery('#paypalformContainer').toggle('show');
+        jQuery('#ccformContainer').hide();
+    }
+        if (c.value == "1") {
+         jQuery('#ccformContainer').toggle('show');
+         jQuery('#paypalformContainer').hide();
+    }
+};
+</script>
 
   <script src="{% static 'dashboard/vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>

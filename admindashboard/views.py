@@ -10,7 +10,7 @@ from email.message import EmailMessage
 import smtplib
 from .models import adminmodel,addproductlist,delete_product_list
 from django.conf import settings
-
+from datetime import datetime as dt
 # Create your views here.
 
 def homepage(request):
@@ -286,6 +286,8 @@ def complaintslist(request):
             subject='Re: '+str(orgdata.subject)
             body=msg
             msg= f'Subject: {subject}\n\n{body}'
+
+            # server = smtplib.SMTP('smtp.gmail.com:587')
             server = smtplib.SMTP('smtp.gmail.com:587')
             server.starttls()
             server.login(DEFAULT_FROM_EMAIL,password)
@@ -304,12 +306,24 @@ def refundslist(request):
     return render(request,'admin/refundslist2.html',)
 
 def orderslist(request):
-    print('orderslist')
-    # currentuser = request.COOKIES['username']
+    if request.method=='POST' and 'clicked' in request.POST:
+        orgdata=Order.objects.get(referral_id=int(request.POST['clicked']))
+        address=orgdata.apartmentno+', '+orgdata.address+', '+orgdata.city+', '+orgdata.zipcode
+        print(orgdata)
+        return render(request,'admin/orderslist3.html',{'orgdata':orgdata,'address':address})
 
-    orderdata=Order.objects.filter(is_completed=False)
-    print(type(orderdata))
-    return render(request,'admin/orderslist2.html',{'orderdata':orderdata})
+    else:
+        print('orderslist')
+        # currentuser = request.COOKIES['username']
+
+        orderdata=Order.objects.filter(is_completed=False)
+        for order in orderdata:
+
+            diff=dt.now(tz=order.order_date.tzinfo)-(order.order_date)
+            print(diff.days)
+            if diff.days<4:
+                orderdata=orderdata.exclude(referral_id=order.referral_id)
+        return render(request,'admin/orderslist2.html',{'orderdata':orderdata})
 
 def approvallist(request):
     if request.method=='GET':

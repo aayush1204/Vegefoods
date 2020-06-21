@@ -353,7 +353,7 @@
 
           <!-- Page Heading -->
 
-          <h1 class="h3 mb-4 text-gray-800">New Product Requests List</h1>
+          <h1 class="h3 mb-4 text-gray-800">Pending Orders List</h1>
           <div class="container-fluid">
             <div class="col-xl-3 col-md-6 mb-4">
               {% for message in messages %}
@@ -386,9 +386,10 @@
                 <thead>
                   <tr>
                       <th> Referral ID </th>
-                      <th> Supplier Name </th>
                       <th> Order Date </th>
-
+                      <th> Customer username </th>
+                      <th> Supplier Name </th>
+                      <th> </th>
                   </tr>
 
                 </thead>
@@ -398,9 +399,14 @@
                 <tr>
 
                   <td> {{i.referral_id}}</td>
-                  <td>  {% for j in i.supplier.all %}{{j.supplier_name}}, {% endfor %}</td>
                   <td> {{i.order_date}}</td>
 
+                  <td> {{i.user}} </td>
+                  <td>  {% for j in i.supplier.all %}{{j.store_name}}, {% endfor %}</td>
+                  <td> <form action="" method="post">
+                    {% csrf_token %}
+
+                    <button type="submit" name="clicked" value="{{i.referral_id}}">View Details</button></form> </td>
               </tr>
                   {% endfor %}
 

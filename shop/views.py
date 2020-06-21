@@ -184,8 +184,8 @@ def checkout_view(request):
         count=count+1
     print(prices)
 
-    address_data = Address.objects.filter(user=request.user).last()
-
+    address_data = Address.objects.filter(user=request.user)
+   
     z = User.objects.filter(username=request.user.username)
 
     profile = Profile.objects.get(user=z[0])
@@ -196,7 +196,7 @@ def checkout_view(request):
         discount = int(discount*int(subtotal)/100)
     total = int(subtotal) - int(discount) 
     return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data, 'profiledata':profile,
-                                            "total": total, "discount":discount })
+                                            "total": total, "discount":discount, })
 
 def order_place(request):
 
@@ -210,8 +210,8 @@ def order_place(request):
         city =  request.POST['towncity']
         zipcode = request.POST['postcodezip']
 
-        Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-                                category="1", user = request.user)
+        # Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
+                                # category="1", user = request.user)
         print(fname)
         print(state)
         total = request.POST['totalbill']
@@ -369,11 +369,11 @@ def refund(request, x):
                             r.save()
 
 
-            print(Refunds.objects.all())
+        print(Refunds.objects.all())
 
-            if money:
-                messages.info(request, 'Alre!')
-                Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
+        if money:
+            messages.info(request, 'Alre!')
+            Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
 
 
         return render(request, 'refund.html',{'orders':orders})
@@ -384,31 +384,54 @@ def refund(request, x):
     return render(request, 'refund.html', {'orders':orders})
 
 def track(request, x):
-    orders = Order.objects.filter(referral_id=x)
+    orders = Order.objects.filter(items__id=x)
+    # approved='active'
+    # shipped=''
+    # delivered=''
+    # text="Placed"
+
+    # if (orders[0].is_approved == True):
+    #     approved='visited'
+    #     shipped='active'
+    #     delivered=''
+    #     text="Order Approved"
+    # if (orders[0].is_shipped):
+    #     approved='visited'
+    #     shipped='visited'
+    #     delivered='active'
+    #     text="Shipped"
+    # if (orders[0].is_completed):
+    #     approved='visited'
+    #     shipped='visited'
+    #     delivered='visited next'
+    #     text="Delivered"
+
+    orderitem = Cart.objects.filter(id=x)
     approved='active'
     shipped=''
     delivered=''
     text="Placed"
 
-    if (orders[0].is_approved == True):
+    if (orderitem[0].is_approved == True):
         approved='visited'
         shipped='active'
         delivered=''
         text="Order Approved"
-    if (orders[0].is_shipped):
+    if (orderitem[0].is_shipped):
         approved='visited'
         shipped='visited'
         delivered='active'
         text="Shipped"
-    if (orders[0].is_completed):
+    if (orderitem[0].is_completed):
         approved='visited'
         shipped='visited'
         delivered='visited next'
         text="Delivered"
-
-
-    return render(request, 'ordertrack.html', {'orders':orders,'approved':approved,'shipped':shipped,
-                                                               'delivered':delivered,'text':text })
+    itemprice = orderitem[0].product.product_price*orderitem[0].quantity
+    no_of_items = orders[0].items.all().count()
+    
+    return render(request, 'ordertrack.html', {'orders':orders,'orderitem':orderitem[0],'approved':approved,'shipped':shipped,
+                                                'itemprice':itemprice,'delivered':delivered,'text':text,'no':no_of_items })
 
 def contact(request):
 
@@ -440,3 +463,41 @@ def myrefunds(request):
     # print(ls)
 
     return render(request, 'myrefunds.html',{'rdata':w})
+
+def myaddress(request):
+
+    if request.method=='POST':
+        # first_name=request.POST['first_name']
+        # last_name=request.POST['last_name']
+        
+        category = request.POST['optradio']
+        print(category)
+        # society = request.POST['society']
+        state = request.POST['state']
+        address =  request.POST['streetaddress']
+        apartmentno =  request.POST['apartmentno']
+        city =  request.POST['towncity']
+        zipcode = request.POST['postcodezip']
+
+        try:
+            address_data = Address.objects.filter(user=request.user).get(category=category)
+            address_data = Address.objects.filter(user=request.user).filter(category=category).update(state=state,address=address,
+                                                                        apartmentno=apartmentno,city=city,zipcode=zipcode)
+            
+        except Address.DoesNotExist:
+            Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
+                                category="2", user = request.user)
+                            
+            print("no")
+        a=2
+        address = Address.objects.filter(user=request.user)
+        messages.info(request, "Updated successfully")
+        return render(request, 'myaddress.html', {'adata':address, 'a':a})
+    else:
+        address_data = Address.objects.filter(user=request.user)
+        print(address_data.count())
+        a=0
+        if address_data.count() == 1:
+            a = 1
+        messages.info(request, "Updated successfully")    
+        return render(request, 'myaddress.html', {'adata':address_data, 'a':a})

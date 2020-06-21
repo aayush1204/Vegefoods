@@ -83,6 +83,9 @@ class Product(models.Model):
     discount_applied = models.BooleanField(default=False)
     discount_price = models.IntegerField(default=0)
     discount_percent = models.IntegerField(default=0)
+    #name= models.CharField(max_length=500)
+    videofile= models.FileField(upload_to='images/', null=True, verbose_name="")
+
 
     def __str__(self):
         return self.product_name
@@ -95,6 +98,9 @@ class Cart(models.Model):
     product_image = models.CharField(max_length=100)
     is_ordered = models.BooleanField(default=False)
     refunded = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+    is_shipped = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
     # product_price = models.IntegerField(default=0)
 
     def __str__(self):
@@ -148,4 +154,3 @@ class Refunds(models.Model):
     items = models.ManyToManyField(Cart)
     refund_amount = models.IntegerField(default=0)
     supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE)
-

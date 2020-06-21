@@ -390,6 +390,7 @@
                     <th> Product Description </th>
                     <th> Product SKU </th>
                     <th> Product Price </th>
+                    <th> Product Image </th>
                     <th>              </th>
   </tr>
                 </thead>
@@ -402,6 +403,7 @@
                   <td> {{i.product_description}}</td>
                   <td> {{i.product_sku}}</td>
                   <td> {{i.product_price}}</td>
+                  <td> <img src="{{ i.videofile.url }}" width="240" height="200"> </td>
                   <td><form action="" method="post">
                     {% csrf_token %}
 

@@ -4,6 +4,13 @@
 <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript">
+  $(document).on('scroll', function() {
+      $("#slide").css("top", Math.max(180 - 0.2*window.scrollY, 0) + "px");
+      $("#static").css("opacity", Math.max(1 - 0.004*window.scrollY, 0));
+  })
+
+</script>
 
 <head>
 
@@ -131,6 +138,22 @@
           <!-- <i class="fas fa-fw fa-table"></i> -->
           <span>Orders</span></a>
       </li>
+      <div class="sidebar-heading">
+        Society
+      </div>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'societies' %}">
+          <!-- <i class="fas fa-fw fa-chart-area"></i> -->
+          <span>Societies List</span></a>
+      </li>
+
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'vouchers' %}">
+          <!-- <i class="fas fa-fw fa-chart-area"></i> -->
+          <span>Vouchers</span></a>
+      </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -158,6 +181,8 @@
           </button>
 
           <!-- Topbar Search -->
+          <!-- <h4>  Suppliers List</h4> <br> -->
+
           <!-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
               <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
@@ -171,7 +196,6 @@
 
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
-
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <!-- <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -334,27 +358,64 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-<div class="codercontent">
-  <h4>Admin Dashboard</h4>
-  Welcome {{user.username}}
-</div>
         <!-- <div class="container-fluid"> -->
 
           <!-- Page Heading -->
-          <!-- <div class="content">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <!-- <div class="content"> -->
+          <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">
               Admin Dashboard
             </h1> -->
              <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-          <!-- </div>
-        </div> -->
+           </div>
+        <!-- </div>  -->
 
           <!-- Content Row -->
           <!-- <div class="row"> -->
 
             <!-- Earnings (Monthly) Card Example -->
+
+            <div class="codercontent">
+              <h4>  Update Vouchers </h4> <br>
+              <div class="content">
+                <button type="submit" name='viewvoucher' onclick=location.href='{% url "viewvoucher" %}'  class="save btn btn-default">View Vouchers</button>
+                <button type="submit" name='createvoucher' onclick=location.href='{% url "createvoucher" %}' class="save btn btn-default">Create Voucher</button>
+                <button type="submit" name='deletevoucher' onclick=location.href='{% url "updatevoucher" %}' class="save btn btn-default">Update Voucher</button>
+                <button type="submit" name='deletevoucher' onclick=location.href='{% url "deletevoucher" %}' class="save btn btn-default">Delete Voucher</button>
+              </div>
+              <div class="alert-success alert-link">
+                  {{message}}
+                  </div>
+
+<br> <br>
+              <table style="width:100%" border="1">
+            <tr>
+                <th> Voucher Code </th>
+                <th> Voucher Value </th>
+                <th> Society Name </th>
+                <th>  </th>
+            </tr>
+              {% for i in voucherdata %}
+
+              <tr>
+                <td> {{i.voucher_code}} </td>
+                <td> {{i.voucher_value}}</td>
+                <td>{% for j in i.society.all %} {{j.society_name}},{% endfor %}</td>
+                <td><form action="" method="post">
+                  {% csrf_token %}
+
+                  <button type="submit" name="clicked" value="{{i.id}}">Change</button></form>
+           </td>
+            </tr>
+
+                {% endfor %}
+
+              </table>
+
+            </div>
+
             <!-- <div class="col-xl-3 col-md-6 mb-4">
+
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
