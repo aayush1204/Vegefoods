@@ -369,11 +369,11 @@ def refund(request, x):
                             r.save()
 
 
-            print(Refunds.objects.all())
+        print(Refunds.objects.all())
 
-            if money:
-                messages.info(request, 'Alre!')
-                Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
+        if money:
+            messages.info(request, 'Alre!')
+            Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
 
 
         return render(request, 'refund.html',{'orders':orders})
@@ -384,31 +384,54 @@ def refund(request, x):
     return render(request, 'refund.html', {'orders':orders})
 
 def track(request, x):
-    orders = Order.objects.filter(referral_id=x)
+    orders = Order.objects.filter(items__id=x)
+    # approved='active'
+    # shipped=''
+    # delivered=''
+    # text="Placed"
+
+    # if (orders[0].is_approved == True):
+    #     approved='visited'
+    #     shipped='active'
+    #     delivered=''
+    #     text="Order Approved"
+    # if (orders[0].is_shipped):
+    #     approved='visited'
+    #     shipped='visited'
+    #     delivered='active'
+    #     text="Shipped"
+    # if (orders[0].is_completed):
+    #     approved='visited'
+    #     shipped='visited'
+    #     delivered='visited next'
+    #     text="Delivered"
+
+    orderitem = Cart.objects.filter(id=x)
     approved='active'
     shipped=''
     delivered=''
     text="Placed"
 
-    if (orders[0].is_approved == True):
+    if (orderitem[0].is_approved == True):
         approved='visited'
         shipped='active'
         delivered=''
         text="Order Approved"
-    if (orders[0].is_shipped):
+    if (orderitem[0].is_shipped):
         approved='visited'
         shipped='visited'
         delivered='active'
         text="Shipped"
-    if (orders[0].is_completed):
+    if (orderitem[0].is_completed):
         approved='visited'
         shipped='visited'
         delivered='visited next'
         text="Delivered"
-
-
-    return render(request, 'ordertrack.html', {'orders':orders,'approved':approved,'shipped':shipped,
-                                                               'delivered':delivered,'text':text })
+    itemprice = orderitem[0].product.product_price*orderitem[0].quantity
+    no_of_items = orders[0].items.all().count()
+    
+    return render(request, 'ordertrack.html', {'orders':orders,'orderitem':orderitem[0],'approved':approved,'shipped':shipped,
+                                                'itemprice':itemprice,'delivered':delivered,'text':text,'no':no_of_items })
 
 def contact(request):
 

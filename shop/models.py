@@ -98,6 +98,9 @@ class Cart(models.Model):
     product_image = models.CharField(max_length=100)
     is_ordered = models.BooleanField(default=False)
     refunded = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+    is_shipped = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
     # product_price = models.IntegerField(default=0)
 
     def __str__(self):

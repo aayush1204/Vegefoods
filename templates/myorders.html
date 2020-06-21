@@ -173,7 +173,8 @@
                                             <p>Rs. {{i.total_amount}}</p>
                                         </th>
                                         <th><p>
-                                             <a href="{% url 'track' x=i.referral_id %}" class="btn btn-light py-2 px-3 ">Track my order</a>
+                                             <!-- <a href="{% url 'track' x=i.referral_id %}" class="btn btn-light py-2 px-3 ">Track my order</a> -->
+                                             <a href="{% url 'refund' x=i.referral_id %}" class="btn btn-light py-2 px-3">Return an item</a>
                                             </p></th>
                                         <!-- <th>Total</th> -->
                                       </tr>
@@ -201,8 +202,8 @@
                                     
                                     <td class="quantity ">
                                     
-                                        <a href="{% url 'refund' x=i.referral_id %}" class="btn btn-primary ">Return</a>
-                                        
+                                        <!-- <a href="{% url 'refund' x=i.referral_id %}" class="btn btn-primary ">Return</a> -->
+                                        <a href="{% url 'track' x=j.id %}" class="btn btn-primary ">Track this item</a>
                                         <!-- {{j.quantity}} -->
                                         <!-- <div class="input-group mb-3"> -->
                                          <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
