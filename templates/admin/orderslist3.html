@@ -353,7 +353,7 @@
 
           <!-- Page Heading -->
 
-          <h1 class="h3 mb-4 text-gray-800">Pending Orders List</h1>
+          <h1 class="h3 mb-4 text-gray-800">New Product Requests List</h1>
           <div class="container-fluid">
             <div class="col-xl-3 col-md-6 mb-4">
               {% for message in messages %}
@@ -378,39 +378,52 @@
             <div class="card-header py-3">
               <!-- <h6 class="m-0 font-weight-bold text-primary">Pending Approvals Requests</h6> -->
             </div>
+            Referral ID: {{orgdata.referral_id}}<br>
+            Customer Name: {{orgdata.user}}<br>
 
+            Supplier Name:{% for j in orgdata.supplier.all %}<br> {{j.store_name}} {% endfor %}
+            <br>Order Date: {{orgdata.order_date}}
+            <br>Address: {{address}}
+            <br>State: {{orgdata.state}}<br><br>
           <!-- <div class="card-body"> -->
             <div class="table-responsive">
               <table border="1">
               <!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
                 <thead>
                   <tr>
-                      <th> Referral ID </th>
-                      <th> Order Date </th>
-                      <th> Customer username </th>
-                      <th> Supplier Name </th>
-                      <th> </th>
+                      <th> Items List </th>
+                      <th> Supplier </th>
+                      <th> Product Quantity </th>
+                      <th> Product SKU </th>
+                      <th> Product Price (per SKU) </th>
+                      <th> Status </th>
+
                   </tr>
 
                 </thead>
-                {% for i in orderdata %}
 
 
-                <tr>
+{% for j in orgdata.items.all %}
 
-                  <td> {{i.referral_id}}</td>
-                  <td> {{i.order_date}}</td>
+    <tr>
+                  <td>  {{j.product.product_name}} </td>
+                  <td>{{j.product.supplier.store_name}} <br></td>
+                  <td> {{j.quantity}}</td>
+                  <td> {{j.product.product_sku}} </td>
+                  <td> {{j.product.product_price}} </td>
+                  <td> {% if j.is_completed == True %}
+                        Completed
+                        {% elif j.is_shipped == True %}
+                        Shipped
+                        {% elif j.is_approved == True %}
+                        Approved
+                        {% else %}
+                        Order Placed
+                        {% endif %}
 
-                  <td> {{i.user}} </td>
-                  <td>  {% for j in i.supplier.all %}{{j.store_name}}, {% endfor %}</td>
-                  <td> <form action="" method="post">
-                    {% csrf_token %}
-
-                    <button type="submit" name="clicked" value="{{i.referral_id}}">View Details</button></form> </td>
+                        </td>
               </tr>
-                  {% endfor %}
-
-
+{% endfor %}
               </table>
             </div><br><br>
           <!-- </div> -->
