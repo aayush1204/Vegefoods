@@ -10,12 +10,22 @@ from email.message import EmailMessage
 import smtplib
 from .models import adminmodel,addproductlist,delete_product_list
 from django.conf import settings
+
+from django.template.loader import get_template
+from django.template import Context
+import pdfkit
+
+from email.mime.application import MIMEApplication
+from email.mime.text import MIMEText
+# from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+
 from datetime import datetime as dt
 # Create your views here.
 
 def homepage(request):
     # currentuser = request.COOKIES['username']
-
+    # return render(request,'admin/ordertemplate.html',)
     return render(request,'admin/dash2.html',)
 
 
@@ -278,20 +288,30 @@ def complaintslist(request):
         mailform=mailback(request.POST)
         msg=""
         if mailform.is_valid():
-            msg=mailform.cleaned_data['message']
+            msgentered=mailform.cleaned_data['message']
 
             DEFAULT_FROM_EMAIL='raoashish1008@gmail.com'
             password='vegefoods1234'
 
-            subject='Re: '+str(orgdata.subject)
-            body=msg
-            msg= f'Subject: {subject}\n\n{body}'
+            msg = MIMEMultipart()
+            msg['Subject'] = 'Re: '+str(orgdata.subject)
+            body = MIMEText(msgentered)
+            msg.attach(body)
 
+            fp = open(r'C:\Users\raoas\Downloads\CanSat 2019-20 Achievements Report.docx', 'rb')
+
+            # img = MIMEImage(fp.read())
+            # msg.attach(fp.read())
+
+            attach = MIMEApplication(fp.read(),_subtype="pdf")
+            fp.close()
+            attach.add_header('Content-Disposition','attachment',filename=str(r'C:\Users\raoas\Downloads\CanSat 2019-20 Achievements Report.docx'))
+            msg.attach(attach)
             # server = smtplib.SMTP('smtp.gmail.com:587')
             server = smtplib.SMTP('smtp.gmail.com:587')
             server.starttls()
             server.login(DEFAULT_FROM_EMAIL,password)
-            server.sendmail(DEFAULT_FROM_EMAIL,orgdata.email,msg)
+            server.sendmail(DEFAULT_FROM_EMAIL,orgdata.email,msg.as_string())
             server.quit()
 
         complaintdata=ContactUs.objects.filter(is_addressed=False)
