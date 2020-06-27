@@ -379,8 +379,7 @@
 
                         <th>Date of Order</th>
                         <th>Product Details</th>
-                        <th>Item Price</th>
-                        <th>Confirm</th>
+                        <th>Total Price</th>
                       </tr>
                     </thead>
                     <tfoot>
@@ -389,75 +388,65 @@
 
                         <th>Date of Order</th>
                         <th>Product Details</th>
-                        <th>Item Price</th>
-                        <th>Confirm</th>
+                        <th>Total Price</th>
                       </tr>
                     </tfoot>
                     <tbody>
-                      {% for i in z.items.all %}
                       <tr>
                         <td>{{z.referral_id}}</td>
 
                         <td>{{z.order_date}}</td>
                         <td>
-
-                        {% if i.product.supplier == y %}
+                        {% for i in z.items.all %}
                         Product: {{i.product.product_name}}
                         Quantity: {{i.quantity}}
                         <br>
-                        {% endif %}
-
+                        {% endfor %}
                         </td>
-                        <td><input type ="text" style="border:none" value="Rs {{ i.quantity }}*{{ i.product.product_price}}"class="{{i.product.id}}"></td>
-
+                        <td>{{z.total_amount}}</td>
                       </tr>
-                      <td>
-                        {% if z.is_approved == False %}
-                        <div>
-                          <form action="{% url 'order_status' pk=z.referral_id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
-
-                                  {% csrf_token %}
-                              <h6> Click on the button below to confirm the order</h6>
-                            <input type="submit" value="Confirm Order" class="btn btn-primary py-3 px-5" width= 50px>
-
-                        </form>
-                          {% endif %}
-                        </div>
-
-
-                        {% if z.is_approved == True and z.is_shipped == False %}
-                        <div>
-                          <form action="{% url 'ship_status' pk=z.referral_id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
-
-                                  {% csrf_token %}
-                                <h4> Click on the button below after shipping the order</h4>
-                            <input type="submit" value="Order Has been shipped" class="btn btn-primary py-3 px-5">
-
-                        </form>
-                          {% endif %}
-                        </div>
-
-                        {% if z.is_shipped == True and z.is_approved == True %}
-                        <div>
-                          <form action="" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
-
-                                  {% csrf_token %}
-
-                            <input type="button" value="Order out for delivery" class="btn btn-primary py-3 px-5">
-
-                        </form>
-                          {% endif %}
-                        </div>
-                      </td>
-
-                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
 
+            {% if z.is_approved == False %}
+            <div>
+              <form action="{% url 'order_status' pk=z.referral_id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
 
+                      {% csrf_token %}
+                  <h4> Click on the button below to confirm the order</h4>
+                <input type="submit" value="Confirm Order" class="btn btn-primary py-3 px-5">
+
+            </form>
+              {% endif %}
+            </div>
+
+
+            {% if z.is_approved == True and z.is_shipped == False %}
+            <div>
+              <form action="{% url 'ship_status' pk=z.referral_id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
+
+                      {% csrf_token %}
+                    <h4> Click on the button below after shipping the order</h4>
+                <input type="submit" value="Order Has been shipped" class="btn btn-primary py-3 px-5">
+
+            </form>
+              {% endif %}
+            </div>
+
+            {% if z.is_shipped == True and z.is_approved == True %}
+            <div>
+              <form action="" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
+
+                      {% csrf_token %}
+
+                <input type="button" value="Order out for delivery" class="btn btn-primary py-3 px-5">
+
+            </form>
+              {% endif %}
+            </div>
 
 
 
