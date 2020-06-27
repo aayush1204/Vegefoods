@@ -1,10 +1,11 @@
 {% load static %}
 {% static "images" as BaseUrl%}
+
 <!DOCTYPE html>
 
 <html lang="en">
 
-
+  
 
   <head>
     <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
@@ -34,7 +35,7 @@
     <link rel="stylesheet" href="{% static 'css/icomoon.css'%}">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
   </head>
-
+  
   <body class="goto-here">
 		<div class="py-1 bg-primary">
     	<div class="container">
@@ -110,13 +111,24 @@
 		   <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 				 {% if user.is_authenticated %}
 				 <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
+         {% if user.profile.pr == 'C'%}
 				 <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
+          {% endif %}
                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    {% if user.profile.pr == 'C'%}
 					<a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
 					<a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+					<a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
+                    {% endif %}
+                    {% if user.profile.pr == 'S'%}
+          					<a href="{% url 'supplier_index' %}" class="dropdown-item">Dashboard</a>
+          					{% endif %}
+
+                    {% if user.profile.pr == 'A'%}
+          					<a href="{% url 'office' %}" class="dropdown-item">Dashboard</a>
+          					{% endif %}
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -132,14 +144,14 @@
 				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
 				 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
 				 <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
-			  <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+			  <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
 			  <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 				 {% endif %}
 			</ul>
 		  </div>
 		</div>
 	  </nav>
-
+   
     <!-- END nav -->
 
     <div class="hero-wrap hero-bread" style="background-image: url({{BaseUrl}}/bg_1.jpg);">
@@ -158,7 +170,7 @@
 			<div class="container">
 				<div class="row">
     			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
+    				<div class="cart-list">					
 	    				<table class="table">
 						    <thead class="thead-primary">
 						      <tr class="text-center">
@@ -175,8 +187,7 @@
 						      <tr class="text-center">
 						        <td class="product-remove"><a href="{%url 'delete_cart_item' p=x.id %}"><span class="ion-ios-close"></span></a></td>
 
-						        <td class="image-prod"><!--<div class="img" style="background-image:url({{ x.videofile }});"></div>-->
-                    <img class="img-fluid" src="{{ i.videofile.url }}" width="240" height="200">
+						        <td class="image-prod"><div class="img" style="background-image:url({{x.product.videofile.url}})"></div></td>
 
 						        <td class="product-name">
 						        	<h3>{{x.product.product_name}}</h3>
@@ -221,7 +232,7 @@
 					             	<input  type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
 					          	</div>
 					          </td>
-                  				<!-- </span>
+                  				<!-- </span> 
 						        <td class="total">$15.70</td>
 						      </tr>END TR -->
 						    </tbody>
@@ -417,7 +428,7 @@
         var subtotal=0;
         var mangototal=0;
         var eggtotal=0;
-
+        
 //        if (document.getElementById("Mango"))
 //        {
 //            mangoquantity=document.getElementById("Mango").value;
@@ -428,7 +439,7 @@
 //            {% endif %}
  //           {% endfor %}
  //       }
-
+        
    //     var eggquantity=0;
     //    if (document.getElementById("Egg"))
   //      {
@@ -436,7 +447,7 @@
  //           {% for i in cdata %}
 
  //           {% if i.product_name == "Egg" %}
-
+        
   //          eggtotal=eggquantity*{{i.product_price}};
   //      {% endif %}
    //     {% endfor %}
@@ -452,10 +463,10 @@
  //           e.value = "Rs " +eggtotal;
             //document.getElementById("Subtotal").innerHTML=subtotal;
  //           var abc = document.getElementById("Subtotal") ;
- //           abc.textContent= "Rs "+subtotal;
+ //           abc.textContent= "Rs "+subtotal; 
             //abc.value = "Rs "+subtotal
 		{% for x in cdata %}
-
+       
         if (document.getElementById("{{x.product.id}}"))
         {
 			mangoquantity=Number(document.getElementById("{{x.product.id}}").value);
@@ -463,7 +474,7 @@
             {% for i in cdata %}
 
 			{% if i.product.id == x.product.id %}
-
+			
 			{% if i.product.discount_applied == False %}
 			mangototal=parseInt(mangoquantity)*parseInt({{i.product.product_price}});
 
@@ -477,18 +488,18 @@
             {% endif %}
             {% endfor %}
         }
-
+		
 
 		{% endfor %}
 		console.log(eggtotal,mangototal)
-
+		
 		var abc = document.getElementById("Subtotal").value;
 		abc.value = "Rs "+subtotal;
 		$('#Subtotal').val("Rs " + subtotal);
 
 		var dis = document.getElementById("Discount") ;
 		var perc=0 ;
-
+		
 		{% if profiledata.orders_placed < 5 %}
 		console.log({{profiledata.orders_placed}} )
 		perc = parseInt({{profiledata.society.corporate_discount}});
@@ -509,17 +520,17 @@
         var subtotal=0;
         var mangototal=0;
         var eggtotal=0;
-
+        
 		{% for x in cdata %}
-
+		
         if (document.getElementById("{{x.product.id}}"))
-        {
+        {	
 			mangoquantity=document.getElementById("{{x.product.id}}").value;
 			console.log({{mangoquantity}})
             {% for i in cdata %}
 
             {% if i.product.id == x.product.id %}
-
+			
 			{% if i.product.discount_applied == False %}
 			mangototal=parseInt(mangoquantity)*parseInt({{i.product.product_price}});
 			console.log({{i.discount_applied}})
@@ -534,7 +545,7 @@
             {% endif %}
             {% endfor %}
         }
-
+        
         {% endfor %}
 
 		var abc = document.getElementById("Subtotal").value;
@@ -543,7 +554,7 @@
 
 		var dis = document.getElementById("Discount") ;
 		var perc=0 ;
-
+		
 		{% if profiledata.orders_placed < 5 %}
 		console.log({{profiledata.orders_placed}} )
 		perc = parseInt({{profiledata.society.corporate_discount}});
@@ -556,7 +567,7 @@
 		var abc = document.getElementById("TotalPrice") ;
 		abc.textContent = "Rs "+ total;
 		})
-
+  
 	</script>
   </body>
 </html>

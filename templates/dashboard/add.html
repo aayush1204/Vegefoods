@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -357,44 +358,52 @@
           <h1 class="h3 mb-1 text-gray-800">Addition Of A New Product</h1>
           <!--<p class="mb-4">Bootstrap's default utility classes can be found on the official <a href="https://getbootstrap.com/docs">Bootstrap Documentation</a> page. The custom utilities below were created to extend this theme past the default utility classes built into Bootstrap's framework.</p>
 -->
-<form action="addnew" class="bg-white p-5 contact-form" method="POST" novalidate="novalidate" enctype="multipart/form-data">
+<form action="addnew" class="p-4 bg-white" method="POST" novalidate="novalidate" enctype="multipart/form-data">
 
               {% csrf_token %}
-
+              <label>Image dimensions should be 1000px X 800px</label>
               {{form.as_p}}
 
 
-            <!--  <div class="form-group">
-                <input type="text" class="form-control" id="product_name" name="product_name" value=""
-                    placeholder="Product Name">
+              <!-- <div class="form-group">
+                <label>Product Name</label>
+                {{form.product_name}}
+
+              </div>
+              
+              <div class="form-group">
+                <label>Product Description</label>
+                {{form.product_description}}
 
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" id="product_description" name="product_description" value=""
-                    placeholder="Product Description">
-
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" id="product_sku" name="product_sku" value=""
-                    placeholder="SKU of Product">
+                <label>Product SKU</label>
+                {{form.product_sku}}
               </div>
 
 
 
 
               <div class="form-group">
-                <input type="text" class="form-control" id="product_price" name="product_price" value=""
-                    placeholder="Price Of Product">
+                <label>Product Price</label>
+                {{form.product_price}}
 
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" id="supplier" name="supplier" value="{{user.username}}"
-                    placeholder="Supplier Name">
+                <label>Supplier</label>
+                {{form.supplier}}
 
               </div>
               <div class="form-group">
-                <input type="file" name="myfile">
-                <button type="submit" lass="btn btn-primary py-3 px-5">Upload</button>
+                 <input type="file" name="myfile">
+                <button type="submit" lass="btn btn-primary py-3 px-5">Upload</button> 
+                <label>Upload Image (The image dimensions should be 1000 x 800px)</label><br>
+                {{form.videofile}}
+              </div>
+              <div class="form-group">
+                <label>Supplier Name</label>
+                {{form.supplier_username}}
+
               </div> -->
 
               <input type="submit" value="Add" class="btn btn-primary py-3 px-5">

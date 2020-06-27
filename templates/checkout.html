@@ -87,7 +87,7 @@
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="oi oi-menu"></span> Menu
 		  </button>
-	 
+
 		  <div class="collapse navbar-collapse" id="ftco-nav">
 			<ul class="navbar-nav ml-auto">
 			  <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
@@ -105,13 +105,24 @@
 		   <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 				 {% if user.is_authenticated %}
 				 <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
+         {% if user.profile.pr == 'C'%}
 				 <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-                 
+          {% endif %}
                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    {% if user.profile.pr == 'C'%}
 					<a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
 					<a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+					<a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
+                    {% endif %}
+                    {% if user.profile.pr == 'S'%}
+          					<a href="{% url 'supplier_index' %}" class="dropdown-item">Dashboard</a>
+          					{% endif %}
+
+                    {% if user.profile.pr == 'A'%}
+          					<a href="{% url 'office' %}" class="dropdown-item">Dashboard</a>
+          					{% endif %}
                     <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                     </div>
                   </li>
@@ -121,13 +132,13 @@
 				   <div class="dropdown-menu" aria-labelledby="dropdown04">
 				   <a class="dropdown-item" href="{% url 'login' %}">Login</a>
 				   <a class="dropdown-item" href="{% url 'register' %}">Register</a>
-	 
+
 				   </div>
 				 </li>
 				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
 				 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
 				 <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
-			  <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+			  <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
 			  <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 				 {% endif %}
 			</ul>
@@ -230,8 +241,11 @@
 										  <!-- <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label> -->
 										  <label><input type="radio" value="" name="optradio" > Ship to different address</label>
 										  <label><input type="radio" value="1" name="optradio" > Your House</label>
+										  <label><input  type="radio" value="2" name="optradio" > Your Office</label>
+										  
 										</div>
 									</div>
+						<div id = "alert_placeholder"></div>			
                 </div>
 	            </div>
 	          <!-- END -->
@@ -422,6 +436,12 @@
   <script>
 
 		$('input[name="optradio"]').on('click', function() {
+			var ab = 0;
+			
+			bootstrap_alert = function() {}
+			bootstrap_alert.warning = function(message) {
+            $('#alert_placeholder').html('<div class="alert alert-warning"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
+        }
 			if ($(this).val() == '') {
 				console.log('2')
 				document.getElementsByName("towncity")[0].value = "";
@@ -431,13 +451,41 @@
 				
 			}
 			if ($(this).val() == '1') {
-				console.log('2')
-				document.getElementsByName("towncity")[0].value = "{{adata.city}}";
-				document.getElementsByName("postcodezip")[0].value = "{{adata.zipcode}}";
-				document.getElementsByName("streetaddress")[0].value = "{{adata.address}}";
-				document.getElementsByName("apartmentno")[0].value = "{{adata.apartmentno}}";
-			
-			}
+                
+                {% for i in adata %}
+                console.log({{i.category}})  ;
+                {% if i.category == '1' %} 
+                document.getElementsByName("towncity")[0].value = "{{i.city}}";
+                document.getElementsByName("postcodezip")[0].value = "{{i.zipcode}}";
+                document.getElementsByName("streetaddress")[0].value = "{{i.address}}";
+                document.getElementsByName("apartmentno")[0].value = "{{i.apartmentno}}";
+                {% endif %}
+                {% endfor %}
+            }
+            if ($(this).val() == '2') {
+                
+                {% for i in adata %}
+                console.log({{i.category}}) ; 
+				{% if i.category == '2' %} 
+				ab = 1;
+				console.log(ab);
+                document.getElementsByName("towncity")[0].value = "{{i.city}}";
+                document.getElementsByName("postcodezip")[0].value = "{{i.zipcode}}";
+                document.getElementsByName("streetaddress")[0].value = "{{i.address}}";
+                document.getElementsByName("apartmentno")[0].value = "{{i.apartmentno}}";
+                {% endif %}
+				{% endfor %}
+				console.log(ab);
+				if (ab == 0)
+				{
+				document.getElementsByName("towncity")[0].value = "";
+				document.getElementsByName("postcodezip")[0].value = "";
+				document.getElementsByName("streetaddress")[0].value = "";
+				document.getElementsByName("apartmentno")[0].value = "";
+				// alert("You havent saved office Address! Go to My Addresses to add.");
+				bootstrap_alert.warning('You havent saved office Address! Go to My Addresses to add.');
+				}
+            }
 
 
 		})
