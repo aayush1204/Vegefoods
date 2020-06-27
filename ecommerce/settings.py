@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'vegefood',
+        'NAME': 'vegefoods',
         'USER': 'postgres',
-        'PASSWORD': '1234',
+        'PASSWORD': '2210',
         'HOST': 'localhost',
     }
 }
@@ -113,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

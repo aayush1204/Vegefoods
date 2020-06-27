@@ -55,69 +55,59 @@
 		  </div>
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">Vegefoods</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> Menu
-        </button>
-  
-        <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
-          <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-             <div class="dropdown-menu" aria-labelledby="dropdown04">
-             <a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
-             <a class="dropdown-item" href="wishlist.html">Wishlist</a>
-             <a class="dropdown-item" href="product-single.html">Single Product</a>
-             <a class="dropdown-item" href="{% url 'cart' %}">Cart</a>
-             <a class="dropdown-item" href="checkout.html">Checkout</a>
-             </div>
-           </li>
-          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-         <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
-           {% if user.is_authenticated %}
-           <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
-           {% if user.profile.pr == 'C'%}
-           <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-            {% endif %}
-                   <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
-                      <div class="dropdown-menu" aria-labelledby="dropdown04">
-                      {% if user.profile.pr == 'C'%}
-            <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
-            <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
-            <a class="dropdown-item" href="{% url 'address' %}">My Addresses</a>
-                      {% endif %}
-                      {% if user.profile.pr == 'S'%}
-                      <a href="{% url 'supplier_index' %}" class="dropdown-item">Dashboard</a>
-                      {% endif %}
-  
-                      {% if user.profile.pr == 'A'%}
-                      <a href="{% url 'office' %}" class="dropdown-item">Dashboard</a>
-                      {% endif %}
-                      <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
-                      </div>
-                    </li>
-           {% else %}
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Account</a>
-             <div class="dropdown-menu" aria-labelledby="dropdown04">
-             <a class="dropdown-item" href="{% url 'login' %}">Login</a>
-             <a class="dropdown-item" href="{% url 'register' %}">Register</a>
-  
-             </div>
-           </li>
-           <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
-           <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
-           <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
-          <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-          <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-           {% endif %}
-        </ul>
-        </div>
-      </div>
-      </nav>   <!-- END nav -->
+		<div class="container">
+		  <a class="navbar-brand" href="index.html">Vegefoods</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="oi oi-menu"></span> Menu
+		  </button>
+	 
+		  <div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav ml-auto">
+			  <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+			  <li class="nav-item dropdown">
+				   <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+				   <div class="dropdown-menu" aria-labelledby="dropdown04">
+				   <a class="dropdown-item" href="{% url 'shop' %}">Shop</a>
+				   <a class="dropdown-item" href="wishlist.html">Wishlist</a>
+					 <a class="dropdown-item" href="product-single.html">Single Product</a>
+					 <a class="dropdown-item" href="{% url 'cart' %}">Cart</a>
+					 <a class="dropdown-item" href="checkout.html">Checkout</a>
+				   </div>
+				 </li>
+			  <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+		   <!--   <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
+				 {% if user.is_authenticated %}
+				 <li class="nav-item"><a class="navbar-brand" >Welcome, {{user.first_name}}</a></li>
+				 <li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+                 
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown04">
+                    <a class="dropdown-item" href="{% url 'myorders' %}">My Orders</a>
+                    <a class="dropdown-item" href="{% url 'myrefunds' %}">My Refunds</a>
+                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                    </div>
+                  </li>
+				 {% else %}
+				 <li class="nav-item dropdown">
+				   <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Account</a>
+				   <div class="dropdown-menu" aria-labelledby="dropdown04">
+				   <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+				   <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+	 
+				   </div>
+				 </li>
+				 <!--<li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Signup</a></li>
+				 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">MyAccount</a></li> -->
+				 <li class="nav-item"><a href="{% url 'sell_with_us' %}" class="nav-link">Sell With Us!</a></li>
+			  <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+			  <li class="nav-item cta cta-colored"><a href="{% url 'login' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+				 {% endif %}
+			</ul>
+		  </div>
+		</div>
+	  </nav>
+    <!-- END nav -->
 
     <div class="hero-wrap hero-bread" style="background-image: url('{{BaseUrl}}/bg_1.jpg');">
       <div class="container">
@@ -141,107 +131,13 @@
 						{%endfor%}
 					<!-- </ul> -->
                     {%endif%}
-
-                    <section class="ftco-section ftco-cart">
-                      <div class="container">
-                        <div class="row">
-                          <div class="col-md-12 ftco-animate">
-                            <div class="cart-list">
-                              <!-- <table class="table">
-                                <thead class="thead-primary">
-                                  <tr class="text-center">
-                                    <th>&nbsp;</th>
-                                    <th>Product List</th>
-                                    <th>&nbsp;</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                  </tr>
-                                </thead>
-                                <tbody> -->
-                                      {% for i in orders %}
-                                      <form method="post" action =" {% url 'refund' x=i.referral_id %}">
-                                          {% csrf_token %}
-                                      <table class="table">
-                                          <thead class="thead-primary">
-                                            <tr class="text-center">
-                                              <!-- <th>&nbsp;</th> -->
-                                              <th>Order Date
-                                                  <p>{{i.order_date}}</p>
-                                              </th>
-                                              <th>Order Id
-                                                  <p>{{i.referral_id}}</p>
-                                              </th>
-                                              <th>Item Amount
-                                                  <p>Rs. {{itemprice}}</p>
-                                              </th>
-                                              <th><p>
-                                                    <!-- <a href="#" class="btn btn-light py-2 px-3 ">Track my order</a> -->
-                                                    Shipping Address- <span>{{i.apartmentno}}, {{i.address}}<br>{{i.city}}
-                                                        -{{i.zipcode}} ,{{i.state}}
-                                                    </span>
-                                                  </p></th>
-                                              <!-- <th>Total</th> -->
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                    
-                                    
-                                        <tr class="text-center">
-                                          <!-- <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td> -->
-                                          <td class="quantity ">
-                                          
-                                            <!-- <a href="#" class="btn btn-primary ">Return</a> -->
-                                            <!-- <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes"> -->
-                                            <!-- {{j.quantity}} -->
-                                            <!-- <div class="input-group mb-3"> -->
-                                              <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
-                                        
-                                      </td>
-                                          <td class="image-prod"><div class="img" style="background-image:url({{orderitem.product.videofile.url}});"></div></td>
-                                          
-                                          <td class="product-name">
-                                              <h3>{{orderitem.product.product_name}}</h3>
-                                              <p>Sold by-{{orderitem.product.supplier.store_name}}   
-                    
-                                              </p>
-                                              
-                                          </td>
-                                          
-                                          <td class="price"><p>Rs. {{orderitem.product.product_price}} per SKU
-                                              <br>Units -{{orderitem.quantity}}    
-                                          </p>
-                                          </td>
-                                          
-                                          
-                                          
-                                          <!-- <td class="total">{{j.quantity}}*{{j.product.product_price}}</td> -->
-                                        </tr>  
-                                      
-                                      </tbody> 
-                                        </table>
-                                        <!-- <div style="text-align: center"> -->
-                                        <!-- <input type="submit" value="Submit" class="btn btn-black py-3 px-5"> -->
-                                        <!-- </div> -->
-                                      </form>
-                                        {% endfor %}
-                                  
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    <!-- </section> -->
-
-
-
-
                     <link href='https://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700' rel='stylesheet' type='text/css'>
                           
-                    <!-- <section class="ftco-section"> -->
+                    <section class="ftco-section">
                         <div class="container">
                             
-                    <h1>Order Item Status- {{text}}</h1>
-                      <!-- To test add 'active' class and 'visited' class to different li elements -->
+                    <h1>Your Order Status- {{text}}</h1>
+                      <! -- To test add 'active' class and 'visited' class to different li elements -->
                       
                     <div class="checkout-wrap">
                       <ul class="checkout-bar">
@@ -263,13 +159,10 @@
                             
                     </div>
                 </section> 
-                <span>{{orders.items.all.count}}</span>
-    {% if no > 1 %}
+
     <section class="ftco-section ftco-cart">
 			<div class="container">
-        <h3>Other items in order</h3>
-        <div class="row">
-          
+				<div class="row">
     			<div class="col-md-12 ftco-animate">
     				<div class="cart-list">
 	    				<!-- <table class="table">
@@ -311,12 +204,11 @@
                           </thead>
                           <tbody>
                       {%for j in i.items.all %}
-                           
-                          {% if j.id != orderitem.id %}  
+                    
                         <tr class="text-center">
                           <!-- <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td> -->
                           <td class="quantity ">
-                            <!-- <span>{{j.id}}</span> <span>{{orderitem.id}}</span> -->
+                          
                             <!-- <a href="#" class="btn btn-primary ">Return</a> -->
                             <!-- <input type="checkbox" id="{{j.product.id}}" name="{{j.product.id}}" value="Yes"> -->
                             <!-- {{j.quantity}} -->
@@ -324,7 +216,7 @@
                               <!-- <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100"> -->
                         
                       </td>
-                          <td class="image-prod"><div class="img" style="background-image:url({{j.product.videofile.url}});"></div></td>
+                          <td class="image-prod"><div class="img" style="background-image:url({{BaseUrl}}/{{j.product_image}});"></div></td>
                           
                           <td class="product-name">
                               <h3>{{j.product.product_name}}</h3>
@@ -343,7 +235,6 @@
                           
                           <!-- <td class="total">{{j.quantity}}*{{j.product.product_price}}</td> -->
                         </tr>  
-                        {% endif %}
                         {% endfor %}
                       </tbody> 
                         </table>
@@ -358,7 +249,6 @@
     		</div>
 			</div>
 		</section>
-    {% endif %}
 
 		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
       <div class="container py-4">

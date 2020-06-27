@@ -6,19 +6,8 @@ import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.utils.datastructures import MultiValueDictKeyError
-
 from django.core.mail import send_mail
 import smtplib
-# from email.mime.image import MIMEImage
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-from email.mime.multipart import MIMEMultipart
-
-from django.template.loader import get_template
-from django.template import Context
-import pdfkit
-
-import os
 from django.conf import settings
 
 # Create your views here.
@@ -46,7 +35,7 @@ def add_cart(request, q):
         if pddata.discount_applied ==False:
             price = int(pddata.product_price)
         else:
-            price = int(pddata.discount_price)
+            price = int(pddata.discount_price)                
         tp=int(quantity)*price
         print(request.user)
 
@@ -75,7 +64,7 @@ def add_cart(request, q):
                 if j.product.discount_applied==False:
                     total_bill += j.quantity*int(j.product.product_price)
                 else:
-                    total_bill += j.quantity*int(j.product.discount_price)
+                    total_bill += j.quantity*int(j.product.discount_price)    
         # return render(request, 'index.html',{'pdata':product_data})
             z = User.objects.filter(username=request.user.username)
 
@@ -92,7 +81,7 @@ def delete_cart(request,p):
             total_bill += j.quantity*int(j.product.product_price)
         else:
             total_bill += j.quantity*int(j.product.discount_price)
-
+        
 
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill})
 def cart_view(request):
@@ -105,11 +94,11 @@ def cart_view(request):
             total_bill += j.quantity*int(j.product.product_price)
         else:
             total_bill += j.quantity*int(j.product.discount_price)
-
+    
     z = User.objects.filter(username=request.user.username)
 
     profile = Profile.objects.get(user=z[0])
-
+            
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill, 'profiledata':profile})
 
 def shop_view(request):
@@ -195,7 +184,7 @@ def checkout_view(request):
         count=count+1
     print(prices)
 
-    address_data = Address.objects.filter(user=request.user)
+    address_data = Address.objects.filter(user=request.user).last()
 
     z = User.objects.filter(username=request.user.username)
 
@@ -205,9 +194,9 @@ def checkout_view(request):
     if profile.orders_placed<5:
         discount = profile.society.corporate_discount
         discount = int(discount*int(subtotal)/100)
-    total = int(subtotal) - int(discount)
+    total = int(subtotal) - int(discount) 
     return render(request, 'checkout.html',{"stbill":subtotal, 'adata':address_data, 'profiledata':profile,
-                                            "total": total, "discount":discount, })
+                                            "total": total, "discount":discount })
 
 def order_place(request):
 
@@ -221,8 +210,8 @@ def order_place(request):
         city =  request.POST['towncity']
         zipcode = request.POST['postcodezip']
 
-        # Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-                                # category="1", user = request.user)
+        Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
+                                category="1", user = request.user)
         print(fname)
         print(state)
         total = request.POST['totalbill']
@@ -250,10 +239,15 @@ def order_place(request):
         #             fail_silently=False,
         #             # html_message=msg
         #             )
-        # subject='Order Number: '+str(order.referral_id)
-        # body='Order placed successfully\nOrder id: {}\nReciepient name: {} {}\nTotal: {}'.format(order.referral_id,fname,lname,total)
-        # msg= f'Subject: {subject}\n\n{body}'
-
+        subject='Order Number: '+str(order.referral_id)
+        body='Order placed successfully\nOrder id: {}\nReciepient name: {} {}\nTotal: {}'.format(order.referral_id,fname,lname,total)
+        msg= f'Subject: {subject}\n\n{body}'
+        
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        server.login(DEFAULT_FROM_EMAIL,password)
+        server.sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg)
+        server.quit()
         cdata =  Cart.objects.filter(is_ordered=False)
         for i in cdata:
 
@@ -262,41 +256,6 @@ def order_place(request):
 
         order.save()
         Cart.objects.filter(is_ordered=False).update(is_ordered=True)
-        address=apartmentno+', '+address+', '+city+' - '+zipcode
-        template = get_template("admin/ordertemplate.html")
-        # context = Context({"orgdata": order})
-        html = template.render({'orgdata':order,'address':address})
-
-        path_wkhtmltopdf = os.path.join(os.getcwd(),r'wkhtmltox\bin\wkhtmltopdf.exe')
-        config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-
-        pdfkit.from_string(html, 'out.pdf',configuration=config)
-            # response = HttpResponse(pdf.read(), content_type='application/pdf')  # Generates the response as pdf response.
-        # response['Content-Disposition'] = 'attachment; filename=output.pdf'
-
-        msg = MIMEMultipart()
-        msg['Subject'] = 'Order Number: '+str(order.referral_id)
-        body = MIMEText('Hello {}! Your order details have been attached with this mail. We request you to save this file and show it during the\
-                            the time of delivery. '.format(x.first_name))
-        msg.attach(body)
-
-        fp = open(r'out.pdf', 'rb')
-
-        # img = MIMEImage(fp.read())
-        # msg.attach(fp.read())
-
-        attach = MIMEApplication(fp.read(),_subtype="pdf")
-        fp.close()
-        attach.add_header('Content-Disposition','attachment',filename=str(r'{}.pdf'.format(order.referral_id)))
-        msg.attach(attach)
-
-        server = smtplib.SMTP('smtp.gmail.com:587')
-        server.starttls()
-        server.login(DEFAULT_FROM_EMAIL,password)
-        server.sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg.as_string())
-        server.quit()
-        os.remove("out.pdf")
-
     product_data=Product.objects.filter(out_of_stock=False)
     messages.info(request, 'Alre!')
     return render(request,'index.html',)
@@ -389,7 +348,7 @@ def refund(request, x):
                             if j.product.discount_applied == False:
                                 x = int(j.product.product_price)*int(j.quantity)
                             else:
-                                x = int(j.product.discount_price)*int(j.quantity)
+                                x = int(j.product.discount_price)*int(j.quantity)    
                             y=int(a[0].refund_amount)
                             a.update(refund_amount=x+y)
                             a[0].items.add(j)
@@ -410,11 +369,11 @@ def refund(request, x):
                             r.save()
 
 
-        print(Refunds.objects.all())
+            print(Refunds.objects.all())
 
-        if money:
-            messages.info(request, 'Alre!')
-            Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
+            if money:
+                messages.info(request, 'Alre!')
+                Order.objects.filter(user=request.user).filter(referral_id=x).update(is_refunded=True)
 
 
         return render(request, 'refund.html',{'orders':orders})
@@ -425,54 +384,31 @@ def refund(request, x):
     return render(request, 'refund.html', {'orders':orders})
 
 def track(request, x):
-    orders = Order.objects.filter(items__id=x)
-    # approved='active'
-    # shipped=''
-    # delivered=''
-    # text="Placed"
-
-    # if (orders[0].is_approved == True):
-    #     approved='visited'
-    #     shipped='active'
-    #     delivered=''
-    #     text="Order Approved"
-    # if (orders[0].is_shipped):
-    #     approved='visited'
-    #     shipped='visited'
-    #     delivered='active'
-    #     text="Shipped"
-    # if (orders[0].is_completed):
-    #     approved='visited'
-    #     shipped='visited'
-    #     delivered='visited next'
-    #     text="Delivered"
-
-    orderitem = Cart.objects.filter(id=x)
+    orders = Order.objects.filter(referral_id=x)
     approved='active'
     shipped=''
     delivered=''
     text="Placed"
 
-    if (orderitem[0].is_approved == True):
+    if (orders[0].is_approved == True):
         approved='visited'
         shipped='active'
         delivered=''
         text="Order Approved"
-    if (orderitem[0].is_shipped):
+    if (orders[0].is_shipped):
         approved='visited'
         shipped='visited'
         delivered='active'
         text="Shipped"
-    if (orderitem[0].is_completed):
+    if (orders[0].is_completed):
         approved='visited'
         shipped='visited'
         delivered='visited next'
         text="Delivered"
-    itemprice = orderitem[0].product.product_price*orderitem[0].quantity
-    no_of_items = orders[0].items.all().count()
 
-    return render(request, 'ordertrack.html', {'orders':orders,'orderitem':orderitem[0],'approved':approved,'shipped':shipped,
-                                                'itemprice':itemprice,'delivered':delivered,'text':text,'no':no_of_items })
+
+    return render(request, 'ordertrack.html', {'orders':orders,'approved':approved,'shipped':shipped,
+                                                               'delivered':delivered,'text':text })
 
 def contact(request):
 
@@ -504,41 +440,3 @@ def myrefunds(request):
     # print(ls)
 
     return render(request, 'myrefunds.html',{'rdata':w})
-
-def myaddress(request):
-
-    if request.method=='POST':
-        # first_name=request.POST['first_name']
-        # last_name=request.POST['last_name']
-
-        category = request.POST['optradio']
-        print(category)
-        # society = request.POST['society']
-        state = request.POST['state']
-        address =  request.POST['streetaddress']
-        apartmentno =  request.POST['apartmentno']
-        city =  request.POST['towncity']
-        zipcode = request.POST['postcodezip']
-
-        try:
-            address_data = Address.objects.filter(user=request.user).get(category=category)
-            address_data = Address.objects.filter(user=request.user).filter(category=category).update(state=state,address=address,
-                                                                        apartmentno=apartmentno,city=city,zipcode=zipcode)
-
-        except Address.DoesNotExist:
-            Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
-                                category="2", user = request.user)
-
-            print("no")
-        a=2
-        address = Address.objects.filter(user=request.user)
-        messages.info(request, "Updated successfully")
-        return render(request, 'myaddress.html', {'adata':address, 'a':a})
-    else:
-        address_data = Address.objects.filter(user=request.user)
-        print(address_data.count())
-        a=0
-        if address_data.count() == 1:
-            a = 1
-        messages.info(request, "Updated successfully")
-        return render(request, 'myaddress.html', {'adata':address_data, 'a':a})
