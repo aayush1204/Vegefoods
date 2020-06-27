@@ -10,7 +10,6 @@ urlpatterns = [
     path('home/myorders/refunds/<int:x>', views.refund,name='refund'),
     path('home/myorders/ordertrack/<int:x>', views.track,name='track'),
 
-    path('home/myaddress',views.myaddress,name='address'),
     path('home/myrefunds', views.myrefunds,name='myrefunds'),
     path('home/contact', views.contact,name='contact'),
     path('cart/', views.cart_view,name='cart'),

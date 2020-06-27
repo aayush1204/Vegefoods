@@ -419,9 +419,15 @@
                     <td>{{i.referral_id}}</td>
                     <td>{{i.order_date}}</td>
 
-
-                    <td>NOt coded yetx </td>
-
+                    <td>
+                    {% for j in i.items.all %}
+                    {% if j.product.supplier == y %}
+                    Product: {{j.product.product_name}}
+                    Quantity: {{j.quantity}}
+                    <br>
+                    {% endif %}
+                    {% endfor %}
+                    </td>
                     <td>{{i.total_amount}}</td>
                     {% if i.is_approved == False %}
                     <td>Order Has been placed<br>Order Has not been confirmed by you<br>Order has not been shipped</td>

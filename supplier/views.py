@@ -151,7 +151,6 @@ def add(request):
 
 
             p = Supplier.objects.get(supplier_details=request.user)
-           
             form = AddProductForm(instance=p)
         #    form.['supplier_username'] = request.user.username
         #    context={'p':p, 'form':form}
@@ -242,7 +241,7 @@ def pending_orders(request):
 
     if z.exists():
 
-        return render(request, 'dashboard/pending_orders.html', {'z':z})
+        return render(request, 'dashboard/pending_orders.html', {'z':z, 'y':y})
     else:
             messages.info(request, "You have not recieved any orders as of now!")
             return render(request, 'dashboard/pending_orders.html')
@@ -251,14 +250,18 @@ def pending_orders(request):
 
 
 def order_summary(request, pk):
-    #    x = User.objects.get(username=request.user.username)
-    #    y=Supplier.objects.get(supplier_details=x)
+        x = User.objects.get(username=request.user.username)
+        y=Supplier.objects.get(supplier_details=x)
     #    print(y.store_description)
+        ls=[]
         z = Order.objects.get(referral_id = pk)
+        for i in z.items.all():
+            if(i.product.supplier == y):
+                ls.append(i)
     #    y = Supplier.objects.get( supplier_details.username=z.user.username)
     #    print(y)
         print(z.referral_id)
-        args={ 'z':z}
+        args={ 'z':z, 'ls':ls, 'y':y}
 
 
 
@@ -270,6 +273,7 @@ def order_status(request, pk):
     supplier_info = Supplier.objects.get(supplier_details=request.user)
     if(request.method == "POST"):
         z= Order.objects.get(referral_id = pk)
+        
         z.is_approved = True
         z.save()
     return render(request, 'dashboard/supplier_index.html', {'supplier_info':supplier_info})
