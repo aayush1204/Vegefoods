@@ -534,7 +534,51 @@
             </div>
           </div>
 
+          <h4> Notifications:</h4>
+          {% for i in deleteproddisapproval %}
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <!-- <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Phone Number</div> -->
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">Your request for deleting product {{i.product_name}} was rejected.<br> Reason for disapproval: {{i.reason_for_disapproval}} </div>
+                    <form action="" method="post">
+                      {% csrf_token %}
 
+                      <button type="submit" class="btn btn-primary py-3 px-5" name="deleteprod" value="{{i.id}}">Okay</button></form>
+
+                  </div>
+                  <!--<div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          {% for i in addproddisapproval %}
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <!-- <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Phone Number</div> -->
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">Your request for adding product {{i.product_name}} was rejected.<br> Reason for disapproval: {{i.reason_for_disapproval}} </div>
+                    <form action="" method="post">
+                      {% csrf_token %}
+
+                      <button type="submit" class="btn btn-primary py-3 px-5" name="addprod" value="{{i.id}}">Okay</button></form>
+                  </div>
+                  <!--<div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
 
           <!-- Content Row -->
 

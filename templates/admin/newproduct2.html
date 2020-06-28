@@ -392,6 +392,7 @@
                     <th> Product Price </th>
                     <th> Product Image </th>
                     <th>              </th>
+                    <th>              </th>
   </tr>
                 </thead>
 
@@ -407,8 +408,13 @@
                   <td><form action="" method="post">
                     {% csrf_token %}
 
-                    <button type="submit" name="clicked" value="{{i.id}}">Approve</button></form>
+                    <button type="submit" class="btn btn-primary py-3 px-5" name="clicked" value="{{i.id}}">Approve</button></form>
              </td>
+             <td><form action="" method="post">
+               {% csrf_token %}
+
+               <button type="submit" class="btn btn-primary py-3 px-5" name="disapprove" value="{{i.id}}">Disapprove</button></form>
+        </td>
               </tr>
                   {% endfor %}
 

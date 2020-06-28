@@ -137,8 +137,8 @@
       </li>
 
 
-      <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link" href="{% url 'vouchers' %}"> -->
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="{% url 'vouchers' %}"> -->
           <!-- <i class="fas fa-fw fa-chart-area"></i> -->
           <!-- <span>Vouchers</span></a>
       </li> -->
@@ -356,7 +356,7 @@
           <h1 class="h3 mb-4 text-gray-800">Delete Product Requests List</h1>
           <div class="container-fluid">
             <div class="col-xl-3 col-md-6 mb-4">
-              {% for message in messages %}
+              <!-- {% for message in messages %} -->
 
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -378,49 +378,23 @@
             <div class="card-header py-3">
               <!-- <h6 class="m-0 font-weight-bold text-primary">Pending Approvals Requests</h6> -->
             </div>
+             <br>Supplier Name: {{i.supplier_username}}
+             <br>Product Name: {{i.product_name}}
+             <br>Product Description: {{i.product_description}}
+             <br>Product SKU: {{i.product_sku}}
+             <br>Product Price: {{i.product_price}}
+             <br>Reason for Removal: {{i.reason_for_removal}}
+             <br>Photo: <img src="{{ i.videofile.url }}" width="240" height="200">
+
+
+            <br><br>
+            <form action="" method="post">
+              {% csrf_token %}
+              {{inputform.as_p}}
+
+              <button type="submit" class="btn btn-primary py-3 px-5" name="send" value="{{i.id}}">Send</button></form>
 
           <!-- <div class="card-body"> -->
-            <div class="table-responsive">
-              <table border="1">
-              <!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
-                <thead>
-                  <tr>
-                    <th> Supplier Username </th>
-                    <th> Product Name </th>
-                    <th> Product Description </th>
-                    <th> Product SKU </th>
-                    <th> Product Price </th>
-                    <th> Reason for removal </th>
-                    <th>              </th>
-                    <th>              </th>
-  </tr>
-                </thead>
-
-                {% for i in deleteproddata %}
-                <tr>
-
-                  <td> {{i.supplier_username}}</td>
-                  <td> {{i.product_name}}</td>
-                  <td> {{i.product_description}}</td>
-                  <td> {{i.product_sku}}</td>
-                  <td> {{i.product_price}}</td>
-                  <td> {{i.reason_for_removal}}</td>
-                  <td><form action="" method="post">
-                    {% csrf_token %}
-
-                    <button type="submit" name="clicked" class="btn btn-primary py-3 px-5" value="{{i.id}}">Approve</button></form>
-             </td>
-             <td><form action="" method="post">
-               {% csrf_token %}
-
-               <button type="submit" class="btn btn-primary py-3 px-5" name="disapprove" value="{{i.id}}">Dispprove</button></form>
-             </td>
-              </tr>
-                  {% endfor %}
-
-
-              </table>
-            </div><br><br>
           <!-- </div> -->
           <!-- </div> -->
         <!-- <div class="row">

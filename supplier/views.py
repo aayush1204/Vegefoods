@@ -4,6 +4,7 @@ from shop.models import Product, Order, Cart
 from shop.models import Supplier, Profile ,Refunds, OrderSupplier
 from django.contrib import messages
 from .forms import AddProductForm
+from django.http import HttpResponse
 #from .forms import ProductForm
 from admindashboard.models import addproductlist,delete_product_list
 
@@ -17,11 +18,24 @@ def home(request):
 
 
 def supplier_index(request):
-
-
-    supplier_info = Supplier.objects.get(supplier_details=request.user)
-    #print(user.supplier.store_name)
-    return render(request, "dashboard/supplier_index.html", {'supplier_info' : supplier_info} )
+    if 'addprod' in request.POST:
+        orgdata=addproductlist.objects.get(id=int(request.POST['addprod'])).delete()
+        supplier_info = Supplier.objects.get(supplier_details=request.user)
+        addproddisapproval=addproductlist.objects.filter(supplier=supplier_info).exclude(reason_for_disapproval='None')
+        deleteproddisapproval=delete_product_list.objects.filter(supplier=supplier_info).exclude(reason_for_disapproval='None').exclude(reason_for_disapproval='None')
+        return render(request, "dashboard/supplier_index.html", {'supplier_info' : supplier_info,'addproddisapproval':addproddisapproval,'deleteproddisapproval':deleteproddisapproval} )
+    elif 'deleteprod' in request.POST:
+        orgdata=delete_product_list.objects.get(id=int(request.POST['deleteprod'])).delete()
+        supplier_info = Supplier.objects.get(supplier_details=request.user)
+        addproddisapproval=addproductlist.objects.filter(supplier=supplier_info).exclude(reason_for_disapproval='None')
+        deleteproddisapproval=delete_product_list.objects.filter(supplier=supplier_info).exclude(reason_for_disapproval='None').exclude(reason_for_disapproval='None')
+        return render(request, "dashboard/supplier_index.html", {'supplier_info' : supplier_info,'addproddisapproval':addproddisapproval,'deleteproddisapproval':deleteproddisapproval} )
+    else:
+        supplier_info = Supplier.objects.get(supplier_details=request.user)
+        addproddisapproval=addproductlist.objects.filter(supplier=supplier_info).exclude(reason_for_disapproval='None')
+        deleteproddisapproval=delete_product_list.objects.filter(supplier=supplier_info).exclude(reason_for_disapproval='None').exclude(reason_for_disapproval='None')
+        #print(user.supplier.store_name)
+        return render(request, "dashboard/supplier_index.html", {'supplier_info' : supplier_info,'addproddisapproval':addproddisapproval,'deleteproddisapproval':deleteproddisapproval} )
 
 
 def sellwithus(request):

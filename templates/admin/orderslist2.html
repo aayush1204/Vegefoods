@@ -406,7 +406,7 @@
                   <td> <form action="" method="post">
                     {% csrf_token %}
 
-                    <button type="submit" name="clicked" value="{{i.referral_id}}">View Details</button></form> </td>
+                    <button type="submit" class="btn btn-primary py-3 px-5" name="clicked" value="{{i.referral_id}}">View Details</button></form> </td>
               </tr>
                   {% endfor %}
 
