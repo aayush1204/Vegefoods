@@ -378,7 +378,7 @@
             <div class="card-header py-3">
               <!-- <h6 class="m-0 font-weight-bold text-primary">Pending Approvals Requests</h6> -->
             </div>
-            <form action="" method="post">
+            <form action="" class="btn btn-primary py-3 px-5" method="post">
               {% csrf_token %}
               {{mailform.as_p}}
 

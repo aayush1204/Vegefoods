@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from shop.models import Profile
 from django.contrib import messages
+from shop.models import Society
 # Create your views here.
 
 def register(request):

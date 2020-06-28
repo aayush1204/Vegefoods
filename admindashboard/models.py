@@ -24,7 +24,7 @@ class addproductlist(models.Model):
     #name= models.CharField(max_length=500)
     videofile= models.FileField(upload_to='images/', null=True, verbose_name="")
 
-
+    reason_for_disapproval=models.CharField(max_length=100,default='None')
     supplier_username=models.CharField(max_length=100)
     is_approved=models.BooleanField(default=False)
     out_of_stock = models.BooleanField(default=False)
@@ -37,3 +37,6 @@ class delete_product_list(models.Model):
     reason_for_removal=models.TextField(default="")
     supplier_username=models.CharField(max_length=100)
     is_approved=models.BooleanField(default=False)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
+
+    reason_for_disapproval=models.CharField(max_length=100,default='None')

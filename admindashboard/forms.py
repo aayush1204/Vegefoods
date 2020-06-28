@@ -17,3 +17,6 @@ class SocietyCreation(forms.ModelForm):
 
 class mailback(forms.Form):
     message=forms.CharField(max_length=250)
+
+class disapprovalform(forms.Form):
+    reason=forms.CharField(max_length=100,label='Reason for disapproval')

@@ -222,7 +222,7 @@ def order_place(request):
         apartmentno =  request.POST['apartmentno']
         city =  request.POST['towncity']
         zipcode = request.POST['postcodezip']
-
+        phone=request.POST['phone']
         # Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
                                 # category="1", user = request.user)
         print(fname)
@@ -245,16 +245,6 @@ def order_place(request):
         DEFAULT_FROM_EMAIL='raoashish1008@gmail.com'
 
         password='vegefoods1234'
-
-        # send_mail('Order Number: '+str(order.referral_id),'Order placed successfully\nOrder id: {}\nReciepient name: {} {}\nTotal: {}'.format(order.referral_id,fname,lname,total),
-        #             settings.DEFAULT_FROM_EMAIL,
-        #             recipient_list= [request.user.email],
-        #             fail_silently=False,
-        #             # html_message=msg
-        #             )
-        # subject='Order Number: '+str(order.referral_id)
-        # body='Order placed successfully\nOrder id: {}\nReciepient name: {} {}\nTotal: {}'.format(order.referral_id,fname,lname,total)
-        # msg= f'Subject: {subject}\n\n{body}'
 
         cdata =  Cart.objects.filter(is_ordered=False)
         for i in cdata:
@@ -285,6 +275,8 @@ def order_place(request):
 
         Cart.objects.filter(is_ordered=False).update(is_ordered=True)
         address=apartmentno+', '+address+', '+city+' - '+zipcode
+
+        #### Customer Invoice ####
         template = get_template("admin/ordertemplate.html")
         # context = Context({"orgdata": order})
         html = template.render({'orgdata':order,'address':address})
@@ -298,8 +290,7 @@ def order_place(request):
 
         msg = MIMEMultipart()
         msg['Subject'] = 'Order Number: '+str(order.referral_id)
-        body = MIMEText('Hello {}! Your order details have been attached with this mail. We request you to save this file and show it during the\
-                            the time of delivery. '.format(x.first_name))
+        body = MIMEText('Hello {}! Your order details have been attached with this mail. We request you to save this file and show it during the time of delivery. '.format(x.first_name))
         msg.attach(body)
 
         fp = open(r'out.pdf', 'rb')
@@ -318,6 +309,41 @@ def order_place(request):
         server.sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg.as_string())
         server.quit()
         os.remove("out.pdf")
+
+        #### Supplier Report ####
+
+        # phone=request.user.phone
+        template = get_template("admin/suppliertemplate.html")
+        for i in order.supplier.all():
+            html = template.render({'orgdata':order,'address':address,'phone':phone,'suppdata':i})
+            path_wkhtmltopdf = os.path.join(os.getcwd(),r'wkhtmltox\bin\wkhtmltopdf.exe')
+            config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
+            pdfkit.from_string(html, 'out.pdf',configuration=config)
+            msg = MIMEMultipart()
+            msg['Subject'] = 'Order Number: '+str(order.referral_id)
+            body = MIMEText('Hello {}! Here is the report for order number {}'.format(i.supplier_details.first_name,order.referral_id))
+            msg.attach(body)
+
+            fp = open(r'out.pdf', 'rb')
+
+            # img = MIMEImage(fp.read())
+            # msg.attach(fp.read())
+
+            attach = MIMEApplication(fp.read(),_subtype="pdf")
+            fp.close()
+            attach.add_header('Content-Disposition','attachment',filename=str(r'{}.pdf'.format(order.referral_id)))
+            msg.attach(attach)
+
+            server = smtplib.SMTP('smtp.gmail.com:587')
+            server.starttls()
+            server.login(DEFAULT_FROM_EMAIL,password)
+            print(i.supplier_details.email)
+            server.sendmail(DEFAULT_FROM_EMAIL,i.supplier_details.email,msg.as_string())
+            server.quit()
+            os.remove("out.pdf")
+
+
 
     product_data=Product.objects.filter(out_of_stock=False)
     messages.info(request, 'Alre!')

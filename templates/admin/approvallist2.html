@@ -418,7 +418,7 @@
                   <form action="" method="post">
                     {% csrf_token %}
 
-                    <button type="submit" name="clicked" value="{{i.id}}">Approve</button></form>
+                    <button type="submit" class="btn btn-primary py-3 px-5" name="clicked" value="{{i.id}}">Approve</button></form>
                   </td>
               </tr>
                   {% endfor %}

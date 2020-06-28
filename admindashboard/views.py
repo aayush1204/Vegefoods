@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.shortcuts import render,redirect
 import requests
-from .forms import VoucherCreation,SocietyCreation,mailback
+from .forms import VoucherCreation,SocietyCreation,mailback,disapprovalform
 from shop.models import ContactUs,Supplier,Voucher,Society,Product,Order
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -353,7 +353,7 @@ def approvallist(request):
         approvaldata=Supplier.objects.filter(is_approved=False)
         print(approvaldata)
         return render(request,'admin/approvallist2.html',{'approvaldata':approvaldata})
-    else:
+    elif 'clicked' in request.POST:
         orgdata=Supplier.objects.get(id=int(request.POST['clicked']))
         orgdata.is_approved=True
         orgdata.save()
@@ -365,23 +365,40 @@ def deleteproduct(request):
     if request.method=='GET':
         print('deleteproduct')
         # currentuser = request.COOKIES['username']
-        deleteproddata=delete_product_list.objects.filter(is_approved=False)
+        deleteproddata=delete_product_list.objects.filter(is_approved=False,reason_for_disapproval='None')
         return render(request,'admin/deleteproduct2.html',{'deleteproddata':deleteproddata})
-    else:
+    elif 'clicked' in request.POST:
         orgdata=delete_product_list.objects.get(id=int(request.POST['clicked']))
         orgdata.is_approved=True
         orgdata.save()
-        approvaldata=Supplier.objects.filter(is_approved=False)
+        approvaldata=delete_product_list.objects.filter(is_approved=False,reason_for_disapproval='None')
         message='Delete Product request Approved Successfully'
+        return render(request,'admin/deleteproduct2.html',{'approvaldata':approvaldata,'message':message})
+
+    elif 'disapprove' in request.POST:
+        orgdata=delete_product_list.objects.get(id=int(request.POST['disapprove']))
+        inputform=disapprovalform()
+        return render(request,'admin/deletedisapproval.html',{'inputform':inputform,'i':orgdata})
+
+    elif 'send' in request.POST:
+        orgdata=delete_product_list.objects.get(id=int(request.POST['send']))
+        inputform=disapprovalform(request.POST)
+        if inputform.is_valid():
+            reason=inputform.cleaned_data['reason']
+            orgdata.reason_for_disapproval=reason
+            orgdata.save()
+
+        approvaldata=delete_product_list.objects.filter(is_approved=False,reason_for_disapproval='None')
+        message='Delete Product request has been disapproved by you'
         return render(request,'admin/deleteproduct2.html',{'approvaldata':approvaldata,'message':message})
 
 def newproduct(request):
     if request.method=='GET':
         print('newproduct')
         # currentuser = request.COOKIES['username']
-        addproddata=addproductlist.objects.filter(is_approved=False)
+        addproddata=addproductlist.objects.filter(is_approved=False,reason_for_disapproval='None')
         return render(request,'admin/newproduct2.html',{'addproddata':addproddata})
-    elif request.method=='POST':
+    elif request.method=='POST' and 'clicked' in request.POST:
 
         data=addproductlist.objects.get(id=int(request.POST['clicked']))
         # x=User.objects.get(username=data.username)
@@ -391,8 +408,25 @@ def newproduct(request):
         #                                         category="Not Added!",supplier=x)
         data.is_approved=True
         data.save()
-        addproddata=addproductlist.objects.filter(is_approved=False)
+        addproddata=addproductlist.objects.filter(is_approved=False,reason_for_disapproval='None')
         return render(request,'admin/newproduct2.html',{'addproddata':addproddata})
+    elif request.method=='POST' and 'disapprove' in request.POST:
+        orgdata=addproductlist.objects.get(id=int(request.POST['disapprove']))
+        inputform=disapprovalform()
+        return render(request,'admin/productdisapproval.html',{'inputform':inputform,'i':orgdata})
+
+    elif request.method=='POST' and 'send' in request.POST:
+        orgdata=addproductlist.objects.get(id=int(request.POST['send']))
+        inputform=disapprovalform(request.POST)
+        if inputform.is_valid():
+            reason=inputform.cleaned_data['reason']
+            orgdata.reason_for_disapproval=reason
+            orgdata.save()
+
+        approvaldata=addproductlist.objects.filter(is_approved=False,reason_for_disapproval='None')
+        message='Add Product request has been disapproved by you'
+        return render(request,'admin/newproduct2.html',{'approvaldata':approvaldata,'message':message})
+
 def logout(request):
 
     response= redirect('/office',{'message':'You have successfully logged out'})
