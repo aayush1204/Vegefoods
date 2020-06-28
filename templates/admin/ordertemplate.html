@@ -1,0 +1,96 @@
+<head>
+<canvas id="DemoCanvas" width="1525" height="175" align>
+</canvas>
+</head>
+<body style='margin: 0px'>
+  <script>
+  var canvas = document.getElementById("DemoCanvas");
+  if (canvas.getContext)
+  {
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillStyle='#82ae46';    // color of fill
+    ctx.fillRect(0, 0, 5000, 150); // create rectangle
+    ctx.fillStyle='#ffffff';    // color of fill
+
+    ctx.font = "80px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Vegefoods", 750, 100);
+
+
+  }
+  </script><br>
+
+  <div style='margin-left: 40px;font-family:Arial;font-size: 30px'>
+    <center><h1> Order Invoice </h1> </center>
+<b><br><br>Your Details:</b>
+<br><br>Referral ID: {{orgdata.referral_id}}
+<br><br>Customer Name: {{orgdata.user}}
+
+<br><br>Order Date: {{orgdata.order_date}}
+<br><br>Address: {{address}}
+<br><br>State: {{orgdata.state}}<br><br>
+<!-- <div class="card-body"> -->
+<b>Supplier Details:</b><br><br>
+<!-- Supplier Names:{% for j in orgdata.supplier.all %}<br> {{j.store_name}} {% endfor %}<br><br> -->
+<table border="1" cellspacing="2" style='font-size: 25px'>
+<!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
+  <thead>
+    <tr>
+        <th> Suppliers </th>
+        <th> Store Address </th>
+        <th> GST Number </th>
+
+
+    </tr>
+
+  </thead>
+
+
+{% for j in orgdata.supplier.all %}
+
+<tr>
+    <td>  {{j.store_name}} </td>
+    <td>{{j.store_address}} <br></td>
+    <td> {{j.GST_number}}</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+<br><br> <b> Order Details:</b><br><br>
+  <table border="1" cellspacing="2" style='font-size: 25px'>
+  <!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
+    <thead>
+      <tr>
+          <th> Items List </th>
+          <th> Supplier </th>
+          <th> Product Quantity </th>
+          <th> Product SKU </th>
+          <th> Product Price (per SKU) </th>
+          <!-- <th> Status </th> -->
+
+      </tr>
+
+    </thead>
+
+
+{% for j in orgdata.items.all %}
+
+<tr>
+      <td>  {{j.product.product_name}} </td>
+      <td>{{j.product.supplier.store_name}} <br></td>
+      <td> {{j.quantity}}</td>
+      <td> {{j.product.product_sku}} </td>
+      <td> {{j.product.product_price}} </td>
+
+  </tr>
+{% endfor %}
+
+  </table>
+
+<br><br>
+<h3><b style='margin-left:700px'>Total Amount: {{orgdata.total_amount}}</b></h3>
+</div>
+</body>
