@@ -396,6 +396,7 @@
                     <th> Store Name </th>
                     <th> Store Description </th>
                     <th> Store Address </th>
+                    <th> </th>
                         <th>  </th>
                   </tr>
                 </thead>
@@ -413,6 +414,11 @@
                   <td> {{i.store_name}}</td>
                   <td> {{i.store_description}}</td>
                   <td> {{i.store_address}}</td>
+                  <td><form action="" method="post">
+
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-primary py-3 px-5" name="clicked" value="{{i.id}}">Delete</button></form></td>
               </tr>
                   {% endfor %}
 
