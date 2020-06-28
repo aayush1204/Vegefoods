@@ -259,11 +259,19 @@ def updatevoucher(request):
 
 
 def supplierslist(request):
-    print('supplierslist')
-    # currentuser = request.COOKIES['username']
-    suppdata=Supplier.objects.filter(is_approved=True)
-    # print(type(suppdata))
-    return render(request,'admin/supplierslist2.html',{'suppdata':suppdata})
+    if 'clicked' in request.POST:
+        suppdata=Supplier.objects.get(id=int(request.POST['clicked'])).delete()
+        suppdata=Supplier.objects.filter(is_approved=True)
+        return render(request,'admin/supplierslist2.html',{'suppdata':suppdata})
+
+    else:
+        print('supplierslist')
+        # currentuser = request.COOKIES['username']
+        # print(type(suppdata))
+        suppdata=Supplier.objects.filter(is_approved=True)
+
+        return render(request,'admin/supplierslist2.html',{'suppdata':suppdata})
+
 
 def requestslist(request):
 
