@@ -54,6 +54,7 @@ def register(request):
         return render(request, 'register.html', {'sdata':sdata})#, {'form': form})
 
 
+
 def login(request):
         if(request.method=="POST"):
 
