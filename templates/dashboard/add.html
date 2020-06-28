@@ -361,8 +361,10 @@
 <form action="addnew" class="p-4 bg-white" method="POST" novalidate="novalidate" enctype="multipart/form-data">
 
               {% csrf_token %}
-              <label>Image dimensions should be 1000px X 800px</label>
+
               {{form.as_p}}
+              <h4>Note:</h4>
+              <label>Image dimensions should be 1000px X 800px</label><br><br><br>
 
 
               <!-- <div class="form-group">
@@ -370,7 +372,7 @@
                 {{form.product_name}}
 
               </div>
-              
+
               <div class="form-group">
                 <label>Product Description</label>
                 {{form.product_description}}
@@ -396,7 +398,7 @@
               </div>
               <div class="form-group">
                  <input type="file" name="myfile">
-                <button type="submit" lass="btn btn-primary py-3 px-5">Upload</button> 
+                <button type="submit" lass="btn btn-primary py-3 px-5">Upload</button>
                 <label>Upload Image (The image dimensions should be 1000 x 800px)</label><br>
                 {{form.videofile}}
               </div>

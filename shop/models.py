@@ -101,7 +101,7 @@ class Cart(models.Model):
     is_approved = models.BooleanField(default=False)
     is_shipped = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
-    # product_price = models.IntegerField(default=0)
+    product_price = models.IntegerField(default=0)
 
     def __str__(self):
         return self.product.product_name
@@ -138,6 +138,24 @@ class Order(models.Model):
 
     #def __str__(self):
      #  return self.referral_id
+
+class OrderSupplier(models.Model):
+         user = models.ForeignKey(User, on_delete = models.CASCADE, null=True)
+         referral_id = models.IntegerField()
+         supplier = models.ForeignKey(Supplier, on_delete = models.CASCADE, null=True)
+         order_date = models.DateTimeField(auto_now=True)
+         state = models.CharField(max_length=30)
+         address = models.CharField(max_length=50)
+         apartmentno = models.CharField(max_length=10)
+         city = models.CharField(max_length=20)
+         zipcode = models.CharField(max_length=6)
+         is_completed = models.BooleanField(default=False)
+         total_amount = models.IntegerField(default=0)
+         items = models.ManyToManyField(Cart)
+         #is_refunded = models.BooleanField(default=False)
+         #is_approved = models.BooleanField(default=False)
+         #is_shipped = models.BooleanField(default=False)
+
 
 class ContactUs(models.Model):
     name = models.CharField(max_length=30)

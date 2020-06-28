@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from shop.models import Product, Order
-from shop.models import Supplier, Profile ,Refunds
+from shop.models import Product, Order, Cart
+from shop.models import Supplier, Profile ,Refunds, OrderSupplier
 from django.contrib import messages
 from .forms import AddProductForm
 #from .forms import ProductForm
@@ -34,6 +34,7 @@ def sellwithus(request):
         email=request.POST['email']
         supplier.address=request.POST['address']
         supplier.pincode=request.POST['pincode']
+        supplier.phone=request.POST['phone']
         supplier.GST_number=request.POST['GST_number']
         supplier.store_name=request.POST['store_name']
         supplier.store_description=request.POST['store_description']
@@ -151,7 +152,7 @@ def add(request):
 
 
             p = Supplier.objects.get(supplier_details=request.user)
-           
+
             form = AddProductForm(instance=p)
         #    form.['supplier_username'] = request.user.username
         #    context={'p':p, 'form':form}
@@ -203,9 +204,9 @@ def delete(request):
 
             return render(request, "dashboard/delete1.html", args)
     else:
-#        print("No products")
+        print("No products")
         messages.info(request, "You have not added any products yet!! Please click on the 'Addition on New Products' tab to add a prodcut")
-        return render(request, "dashboard/delete.html" )
+        return render(request, "dashboard/messagedisplay.html" )
 
 
 
@@ -238,47 +239,52 @@ def pending_orders(request):
     y=Supplier.objects.get(supplier_details=x)
     print(y.store_description)
     z = Order.objects.filter(supplier = y).filter(is_completed=False).filter(is_refunded=False)
-    print(z)
+    z1 = OrderSupplier.objects.filter(supplier = y).filter(is_completed=False)
+    print(z1)
+
 
     if z.exists():
 
-        return render(request, 'dashboard/pending_orders.html', {'z':z})
+        return render(request, 'dashboard/pending_orders.html', {'z':z, 'y':y, 'z1':z1})
     else:
             messages.info(request, "You have not recieved any orders as of now!")
-            return render(request, 'dashboard/pending_orders.html')
+            return render(request, 'dashboard/messagedisplay.html')
 
 
 
 
 def order_summary(request, pk):
-    #    x = User.objects.get(username=request.user.username)
-    #    y=Supplier.objects.get(supplier_details=x)
+        print(pk)
+        x = User.objects.get(username=request.user.username)
+        y=Supplier.objects.get(supplier_details=x)
     #    print(y.store_description)
-        z = Order.objects.get(referral_id = pk)
-    #    y = Supplier.objects.get( supplier_details.username=z.user.username)
-    #    print(y)
-        print(z.referral_id)
-        args={ 'z':z}
+        ls=[]
+        z = OrderSupplier.objects.filter(supplier = y).filter(referral_id = pk)
+
+        args={ 'z':z, 'y':y}
 
 
 
         return render(request, 'dashboard/order_summary.html', args )
 
 
+
+
 def order_status(request, pk):
 
     supplier_info = Supplier.objects.get(supplier_details=request.user)
     if(request.method == "POST"):
-        z= Order.objects.get(referral_id = pk)
+        z= Cart.objects.get(id = pk)
+        print(z)
         z.is_approved = True
         z.save()
-    return render(request, 'dashboard/supplier_index.html', {'supplier_info':supplier_info})
+        return render(request, 'dashboard/supplier_index.html', {'supplier_info':supplier_info})
 
 def ship_status(request, pk):
 
     supplier_info = Supplier.objects.get(supplier_details=request.user)
     if(request.method == "POST"):
-        z= Order.objects.get(referral_id = pk)
+        z= Cart.objects.get(id = pk)
         z.is_shipped = True
         z.save()
     return render(request, 'dashboard/supplier_index.html', {'supplier_info':supplier_info})
@@ -289,14 +295,20 @@ def refunds(request):
     y=Supplier.objects.get(supplier_details=x)
     z=Refunds.objects.filter(supplier = y)
     print(z)
-    for m in z:
-        ref.append(m)
-        print(ref)
-    #    print(prods)
+    if z.exists():
 
-    #print(z)
+        for m in z:
+            ref.append(m)
+            print(ref)
+        #    print(prods)
 
-    return render(request, 'dashboard/refunds.html', {'ref':ref})
+        #print(z)
+
+        return render(request, 'dashboard/refunds.html', {'ref':ref})
+    else:
+            messages.info(request, "You have not recieved any refunds as of now!")
+            return render(request, 'dashboard/messagedisplay.html')
+
 
 def refunds_summary(request, pk):
 
@@ -362,4 +374,8 @@ def approved(request):
         y=Supplier.objects.get(supplier_details=x)
         addproductdata=addproductlist.objects.filter(is_approved=True,supplier=y)
         deleteproductdata=delete_product_list.objects.filter(is_approved=True,supplier_username=request.user.username)
-        return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
+        if addproductdata.exists() and deleteproductdata.exists():
+            return render(request,'dashboard/approvedlist.html',{'addproductdata':addproductdata,'deleteproductdata':deleteproductdata})
+        else:
+            messages.info(request, "You have no approvals as of now!")
+            return render(request, 'dashboard/messagedisplay.html')

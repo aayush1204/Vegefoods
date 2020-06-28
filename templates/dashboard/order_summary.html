@@ -372,81 +372,95 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" white-space="nowrap" border="1">
                     <thead>
                       <tr>
-                        <th>Referral ID</th>
+                            <th>Referral ID</th>
+                            <th>Date of Order</th>
+                            <th>Product Details</th>
+                            <th>Item Price</th>
+                            <th>Confirm</th>
+                          </tr>
+                        </thead>
+                        <tfoot>
+                          <tr>
+                            <th>Referral ID</th>
 
-                        <th>Date of Order</th>
-                        <th>Product Details</th>
-                        <th>Total Price</th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>Referral ID</th>
+                            <th>Date of Order</th>
+                            <th>Product Details</th>
+                            <th>Item Price</th>
+                            <th>Confirm</th>
+                          </tr>
+                        </tfoot>
+                        <tbody>
+                          {% for j in z %}
+                          {% for i in j.items.all %}
+                          <tr>
+                            <td>{{j.referral_id}}</td>
 
-                        <th>Date of Order</th>
-                        <th>Product Details</th>
-                        <th>Total Price</th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <tr>
-                        <td>{{z.referral_id}}</td>
+                            <td>{{j.order_date}}</td>
+                            <td>
 
-                        <td>{{z.order_date}}</td>
-                        <td>
-                        {% for i in z.items.all %}
-                        Product: {{i.product.product_name}}
-                        Quantity: {{i.quantity}}
-                        <br>
-                        {% endfor %}
-                        </td>
-                        <td>{{z.total_amount}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+
+                            Product: {{i.product.product_name}}
+                            Quantity: {{i.quantity}}
+                            <br>
+
+
+                            </td>
+                            <td>{{i.product.product_price}}</td>
+
+                          </tr>
+                          <td>
+                            {% if i.is_approved == False %}
+                            <div>
+                              <form action="{% url 'order_status' pk=i.id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
+
+                                      {% csrf_token %}
+                                  <h6> Click on the button below to confirm this item</h6>
+                                <input type="submit" value="Confirm Order" class="btn btn-primary py-3 px-5" width= 50px>
+
+                            </form>
+                              {% endif %}
+                            </div>
+
+
+                            {% if i.is_approved == True and i.is_shipped == False %}
+                            <div>
+                              <form action="{% url 'ship_status' pk=i.id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
+
+                                      {% csrf_token %}
+                                    <h6> Click on the button below after shipping this item</h6>
+                                <input type="submit" value="Order Has been shipped" class="btn btn-primary py-3 px-5">
+
+                            </form>
+                              {% endif %}
+                            </div>
+
+                            {% if i.is_shipped == True and i.is_approved == True %}
+                            <div>
+                              <form action="" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
+
+                                      {% csrf_token %}
+
+                                <input type="button" value="Order Shipped" class="btn btn-primary py-3 px-5">
+
+                            </form>
+                              {% endif %}
+                            </div>
+                          </td>
+
+                          {% endfor %}
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {% if z.is_approved == False %}
-            <div>
-              <form action="{% url 'order_status' pk=z.referral_id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
-
-                      {% csrf_token %}
-                  <h4> Click on the button below to confirm the order</h4>
-                <input type="submit" value="Confirm Order" class="btn btn-primary py-3 px-5">
-
-            </form>
-              {% endif %}
-            </div>
 
 
-            {% if z.is_approved == True and z.is_shipped == False %}
-            <div>
-              <form action="{% url 'ship_status' pk=z.referral_id %}" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
 
-                      {% csrf_token %}
-                    <h4> Click on the button below after shipping the order</h4>
-                <input type="submit" value="Order Has been shipped" class="btn btn-primary py-3 px-5">
 
-            </form>
-              {% endif %}
-            </div>
-
-            {% if z.is_shipped == True and z.is_approved == True %}
-            <div>
-              <form action="" class="bg-white p-5 contact-form" method="post" novalidate="novalidate">
-
-                      {% csrf_token %}
-
-                <input type="button" value="Order out for delivery" class="btn btn-primary py-3 px-5">
-
-            </form>
-              {% endif %}
-            </div>
 
 
 
@@ -475,8 +489,8 @@
                     </tfoot>
                     <tbody>
                       <tr>
-                        <td>{{z.user.first_name}} {{z.user.last_name}}</td>
-                        <td>{{z.apartmentno}},{{z.address}},{{z.city}},{{z.zipcode}}</td>
+                        <td>{{j.user.first_name}} {{j.user.last_name}}</td>
+                        <td>{{j.apartmentno}},{{j.address}},{{j.city}},{{j.zipcode}}</td>
 
                       </tr>
                     </tbody>

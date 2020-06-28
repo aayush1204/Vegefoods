@@ -17,6 +17,13 @@ def register(request):
         password=request.POST['password']
         confirm_password=request.POST['confirm_password']
 
+        society = request.POST['society']
+        state = request.POST['state']
+        address =  request.POST['streetaddress']
+        apartmentno =  request.POST['apartmentno']
+        city =  request.POST['towncity']
+        zipcode = request.POST['postcodezip']
+
         if(password==confirm_password):
 
             if User.objects.filter(username=username).exists():
@@ -31,7 +38,10 @@ def register(request):
                 user = User.objects.create_user(first_name=first_name, last_name=last_name,email=email,username=username,password=password)
 
                 user.save()
-                Profile.objects.create(user=user,pr='C')
+                sdata = Society.objects.get(society_name=society)
+                Profile.objects.create(user=user,pr='C', society=sdata)
+                Address.objects.create(state=state,address=address,apartmentno=apartmentno,city=city,zipcode=zipcode,
+                                category="1", user = user)
                 print("user is hereeeeeeeeeeeeeeee")
                 return render(request, 'login.html')
         else:
@@ -40,9 +50,10 @@ def register(request):
 
 
     else:
+        sdata = Society.objects.all()
+        return render(request, 'register.html', {'sdata':sdata})#, {'form': form})
 
-        return render(request, 'register.html')#, {'form': form})
-    #return render(request, 'SignUp.html')
+
 
 def login(request):
         if(request.method=="POST"):

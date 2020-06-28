@@ -149,16 +149,7 @@
           <span>Approved Requests</span>
         </a>
 
-      <div class="sidebar-heading">
-        Approved Requests
-      </div>
 
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'approved' %}" >
-
-          <span>Approved Requests</span>
-        </a>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -365,12 +356,67 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">{{user.first_name}}'s Information</h1>
+            <h1 class="h3 mb-0 text-gray-800">{{user.first_name}} {{user.last_name}}'s Information</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
           </div>
 
           <!-- Content Row -->
           <div class="row">
+            <h4> Personal Info:</h4>
+
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">UserName</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.username}}</div>
+                  </div>
+                  <!--<div class="col-auto">
+                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Phone Number</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{supplier_info.phone}}</div>
+                  </div>
+                  <!--<div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Address</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{supplier_info.address}}, {{supplier_info.pincode}}</div>
+                  </div>
+                  <!--<div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+          <div class="row">
+            <h4> Store Details: </h4><br>
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
@@ -405,6 +451,7 @@
                 </div>
               </div>
             </div>
+
 
           <!--   Earnings (Monthly) Card Example
             <div class="col-xl-3 col-md-6 mb-4">
@@ -448,7 +495,46 @@
                 </div>
               </div>
             </div>
+            </div>
+
+            <div class="row">
+              <h4> Bank Details: </h4>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Bank Account Details</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{supplier_info.Bank_Account_Details}}</div>
+                    </div>
+                    <!--<div class="col-auto">
+                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">GST Number</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{supplier_info.GST_number}}</div>
+                    </div>
+                    <!--<div class="col-auto">
+                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+
 
           <!-- Content Row -->
 

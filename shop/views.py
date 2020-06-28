@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Product ,Cart, Supplier, Signup, User, Address , Order, Supplier, ContactUs, Profile ,Refunds
 from django.contrib import messages
+from shop.models import OrderSupplier
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
 from django.shortcuts import render, redirect
@@ -42,6 +43,7 @@ def add_cart(request, q):
     if request.method == "POST":
 
         quantity = request.POST['quantity']
+
         pddata = Product.objects.get(id=q)
         if pddata.discount_applied ==False:
             price = int(pddata.product_price)
@@ -65,7 +67,7 @@ def add_cart(request, q):
         except Cart.DoesNotExist:
 
             cdata = Cart.objects.create(product=pddata, quantity=quantity,
-                                    product_image=pddata.product_image,user=request.user)
+                                    product_image=pddata.product_image,user=request.user,product_price=tp)
             cdata.save()
 
             product_data = Product.objects.all()
@@ -261,6 +263,26 @@ def order_place(request):
             order.items.add(i)
 
         order.save()
+        refid = int(order.referral_id)
+        for j in order.supplier.all():
+            ordersupplier = OrderSupplier.objects.create(referral_id=refid, user=request.user,
+                                                            state=state,address=address, apartmentno=apartmentno, city=city,zipcode=zipcode,supplier=j)
+            amount=0
+            for i in order.items.all():
+                if i.product.supplier == j:
+                    ordersupplier.items.add(i)
+                    ordersupplier.save()
+                    if i.product.discount_applied == True:
+                        amount = amount + int(i.quantity)*int(i.product.discount_price)
+                    else:
+                        amount = amount + int(i.quantity)*int(i.product.product_price)
+
+            ordersupplier.total_amount = amount
+            ordersupplier.save()
+
+
+
+
         Cart.objects.filter(is_ordered=False).update(is_ordered=True)
         address=apartmentno+', '+address+', '+city+' - '+zipcode
         template = get_template("admin/ordertemplate.html")

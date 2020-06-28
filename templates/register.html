@@ -41,7 +41,7 @@
     }
 
   </style>
-}
+
   </head>
   <body class="goto-here">
 <div class="py-1 bg-primary">
@@ -162,7 +162,7 @@
                      <a href="{% url 'login' %}" class="btn btn-primary py-3 px-5">Login</a>
                  </div>
                   <div class="column" style="background-color:#FFFFFF;"><div>
-                       
+
                    <div>
                         {% for message in messages %}
                         <h3> {{message}}</h3>
@@ -205,10 +205,63 @@
                                           placeholder="Confirm Password">
                                     </div>
 
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                       <textarea name="address" id="" cols="30" rows="7" class="form-control" placeholder="Address"></textarea>
                                     </div>
                                     <div class="form-group">
+                                     -->
+
+                                        <div class="form-group">
+                                          <!-- <label for="streetaddress">Street Address</label> -->
+                                          <input type="text" name="streetaddress"class="form-control" placeholder="House number and street name">
+                                        </div>
+
+
+                                        <div class="form-group">
+                                    <!-- <label for="apartmentno">Apartment No.</label> -->
+                                          <input type="text" name="apartmentno"  class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+                                        </div>
+
+                                        <div class="form-group">
+                                          <!-- <label for="state">State</label> -->
+                                          <div class="select-wrap">
+                                            <!-- <div class="icon"><span class="ion-ios-arrow-down"></span></div> -->
+                                            <select name="society" id="society" class="form-control">
+                                              <option value="" disabled selected>Society</option>
+                                              {% for i in sdata %}
+                                              <option value="{{i.society_name}}">{{i.society_name}}</option>
+                                              {% endfor %}
+                                            </select>
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <!-- <label for="towncity">City</label> -->
+                                          <input type="text" name="towncity"   class="form-control" placeholder="City">
+                                        </div>
+
+                                        <div class="form-group">
+                                          <!-- <label for="postcodezip">Postcode / ZIP *</label> -->
+                                          <input type="text" name="postcodezip"class="form-control" placeholder="Postcode / ZIP">
+                                        </div>
+
+                                        <div class="form-group">
+                                          <!-- <label for="state">State</label> -->
+                                          <div class="select-wrap">
+                                            <!-- <div class="icon"><span class="ion-ios-arrow-down"></span></div> -->
+                                            <select name="state" id="state" class="form-control">
+                                              <option value="" disabled selected>State</option>
+                                              <option value="Maharashtra">Maharahstra</option>
+
+                                            </select>
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <!-- <label for="phone">Phone</label> -->
+                                          <input type="text" name="phone" class="form-control" placeholder="Phone">
+                                        </div>
+
 
                                       <input type="submit" value="Register" class="btn btn-primary py-3 px-5">
                                     </div>
