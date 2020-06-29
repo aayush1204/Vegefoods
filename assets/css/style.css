@@ -2998,7 +2998,9 @@ input[type="button"].btn-block {
 .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
 .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
   border-top-left-radius: 0;
-  border-bottom-left-radius: 0; }
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0; }
 
 .custom-control {
   position: relative;
