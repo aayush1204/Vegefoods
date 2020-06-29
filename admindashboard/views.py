@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render,redirect
 import requests
 from .forms import VoucherCreation,SocietyCreation,mailback,disapprovalform
-from shop.models import ContactUs,Supplier,Voucher,Society,Product,Order
+from shop.models import ContactUs,Supplier,Voucher,Society,Product,Order,Refunds,Cart
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
@@ -15,6 +15,7 @@ from django.template.loader import get_template
 from django.template import Context
 import pdfkit
 
+import os
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 # from email.mime.image import MIMEImage
@@ -306,15 +307,15 @@ def complaintslist(request):
             body = MIMEText(msgentered)
             msg.attach(body)
 
-            fp = open(r'C:\Users\raoas\Downloads\CanSat 2019-20 Achievements Report.docx', 'rb')
-
-            # img = MIMEImage(fp.read())
-            # msg.attach(fp.read())
-
-            attach = MIMEApplication(fp.read(),_subtype="pdf")
-            fp.close()
-            attach.add_header('Content-Disposition','attachment',filename=str(r'C:\Users\raoas\Downloads\CanSat 2019-20 Achievements Report.docx'))
-            msg.attach(attach)
+            # fp = open(r'C:\Users\raoas\Downloads\CanSat 2019-20 Achievements Report.docx', 'rb')
+            #
+            # # img = MIMEImage(fp.read())
+            # # msg.attach(fp.read())
+            #
+            # attach = MIMEApplication(fp.read(),_subtype="pdf")
+            # fp.close()
+            # attach.add_header('Content-Disposition','attachment',filename=str(r'C:\Users\raoas\Downloads\CanSat 2019-20 Achievements Report.docx'))
+            # msg.attach(attach)
             # server = smtplib.SMTP('smtp.gmail.com:587')
             server = smtplib.SMTP('smtp.gmail.com:587')
             server.starttls()
@@ -328,10 +329,60 @@ def complaintslist(request):
         return render(request,'admin/complaintslist2.html',{'complaintdata':complaintdata})
 
 def refundslist(request):
-    # currentuser = request.COOKIES['username']
-
     print('refundslist')
-    return render(request,'admin/refundslist2.html',)
+    # currentuser = request.COOKIES['username']
+    if 'send' in request.POST:
+        refunddata =Refunds.objects.get(id=request.COOKIES['refundid'])
+
+        orgdata=Cart.objects.get(id=int(request.POST['send']))
+        suppemail=orgdata.product.supplier.supplier_details.email
+        refund_amount=orgdata.quantity*orgdata.product_price
+
+        template = get_template("admin/suppliernotification.html")
+
+        DEFAULT_FROM_EMAIL='raoashish1008@gmail.com'
+        password='vegefoods1234'
+
+        html = template.render({'orgdata':orgdata,'refunddata':refunddata,'refund_amount':refund_amount})
+        path_wkhtmltopdf = os.path.join(os.getcwd(),r'wkhtmltox\bin\wkhtmltopdf.exe')
+        config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
+        pdfkit.from_string(html, 'out.pdf',configuration=config)
+        msg = MIMEMultipart()
+        msg['Subject'] = "Refund for Order Number: {} hasn't been completed ".format(str(refunddata.order.referral_id))
+        body = MIMEText('Hello {}! The refund for order number {} has not yet been completed. The details of the items for which the refund is requested have been mentioned. Please initiate the full refund amount soon. '.format(orgdata.product.supplier.supplier_details.first_name,refunddata.order.referral_id))
+        msg.attach(body)
+
+        fp = open(r'out.pdf', 'rb')
+
+            # img = MIMEImage(fp.read())
+            # msg.attach(fp.read())
+
+        attach = MIMEApplication(fp.read(),_subtype="pdf")
+        fp.close()
+        attach.add_header('Content-Disposition','attachment',filename=str(r'{}.pdf'.format(refunddata.order.referral_id)))
+        msg.attach(attach)
+
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        server.login(DEFAULT_FROM_EMAIL,password)
+        # print(i.supplier_details.email)
+        server.sendmail(DEFAULT_FROM_EMAIL,orgdata.product.supplier.supplier_details.email,msg.as_string())
+        server.quit()
+        os.remove("out.pdf")
+        refunddata=Refunds.objects.filter(refund_completed=False)
+
+        return render(request,'admin/refundslist2.html',{'refunddata':refunddata,'message':'Notification Sent'})
+
+    if 'clicked' in request.POST:
+        orgdata=Refunds.objects.get(id=int(request.POST['clicked']))
+        response=render(request,'admin/refundslist3.html',{'orgdata':orgdata})
+        response.set_cookie('refundid',int(request.POST['clicked']))
+        return response
+        # return render(request,'admin/refundslist3.html',{'orgdata':orgdata})
+    else:
+        refunddata=Refunds.objects.filter(refund_completed=False)
+        return render(request,'admin/refundslist2.html',{'refunddata':refunddata})
 
 def orderslist(request):
     if request.method=='POST' and 'clicked' in request.POST:
