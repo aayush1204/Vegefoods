@@ -171,4 +171,5 @@ class Refunds(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     items = models.ManyToManyField(Cart)
     refund_amount = models.IntegerField(default=0)
+    refund_completed=models.BooleanField(default=False)
     supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE)

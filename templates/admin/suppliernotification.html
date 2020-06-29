@@ -1,0 +1,91 @@
+<head>
+<canvas id="DemoCanvas" width="1525" height="175" align>
+</canvas>
+</head>
+<body style='margin: 0px'>
+  <script>
+  var canvas = document.getElementById("DemoCanvas");
+  if (canvas.getContext)
+  {
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillStyle='#82ae46';    // color of fill
+    ctx.fillRect(0, 0, 5000, 150); // create rectangle
+    ctx.fillStyle='#ffffff';    // color of fill
+
+    ctx.font = "80px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Vegefoods", 750, 100);
+
+
+  }
+  </script><br>
+
+  <div style='margin-left: 40px;font-family:Arial;font-size: 30px'>
+    <center><h1> Refund Initiation Notice </h1> </center>
+<b><br><br>Customer Details:</b>
+
+<br><br>Customer Name: {{orgdata.user}}
+
+<!-- <div class="card-body"> -->
+<b><br><br>Order Details:</b>
+<br><br>Referral ID: {{refunddata.order.referral_id}}<br><br><br><br>
+<!-- Supplier Names:{% for j in orgdata.supplier.all %}<br> {{j.store_name}} {% endfor %}<br><br> -->
+<table border="1" style='font-size: 30px'>
+<!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
+  <thead>
+    <tr>
+      <th> Item Name </th>
+      <th> Supplier </th>
+      <th> Item Quantity </th>
+      <th> Price </th>
+
+
+    </tr>
+  </thead>
+
+  <tr>
+    <td> {{orgdata.product.product_name}} </td>
+    <!-- <td> <img src="{{ orgdata.product.videofile.url }}" width="240" height="200"></td> -->
+    <td> {{orgdata.product.supplier.store_name}}</td>
+    <td> {{orgdata.quantity}}</td>
+    <td> {{refund_amount}}</td>
+
+
+</tr>
+</table>
+  <!-- <table border="1" cellspacing="2" style='font-size: 25px'> -->
+  <!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
+    <!-- <thead>
+      <tr>
+          <th> Items List </th>
+          <th> Supplier </th>
+          <th> Product Quantity </th>
+          <th> Product SKU </th>
+          <th> Product Price (per SKU) </th>
+          <!-- <th> Status </th> -->
+
+      <!-- </tr>
+
+    </thead>
+
+<br><br>
+{% for j in orgdata.items.all %}
+{% if j.product.supplier.store_name == suppdata.store_name %}
+<tr>
+      <td>  {{j.product.product_name}} </td>
+      <td>{{j.product.supplier.store_name}} <br></td>
+      <td> {{j.quantity}}</td>
+      <td> {{j.product.product_sku}} </td>
+      <td> {{j.product.product_price}} </td>
+
+  </tr>
+  {% endif %}
+{% endfor %}
+
+  </table> -->
+
+<br>
+<!-- <h3><b style='margin-left:700px'>Total Amount: {{orgdata.total_amount}}</b></h3> -->
+</div>
+</body>

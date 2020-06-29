@@ -378,35 +378,40 @@
             <div class="card-header py-3">
               <!-- <h6 class="m-0 font-weight-bold text-primary">Pending Approvals Requests</h6> -->
             </div>
+            Order ID : {{orgdata.order.referral_id}}
+            <br><br>Order Date : {{orgdata.order.order_date}}
+            <br><br>Customer Username : {{orgdata.order.user.username}}
+            <br><br>Status : Not completed
+            <br><br>Refund Amount: Rs. {{orgdata.refund_amount}}
+            <br><br>Refund items details:
             <table border="1">
             <!-- <table class="table table-bordered" id="dataTable" width="200%" cellspacing="0"> -->
               <thead>
                 <tr>
-                  <th> Order ID </th>
-                  <th> Order Date </th>
-                  <th> Customer Username </th>
-                  <th> Suppliers </th>
+                  <th> Item Name </th>
+                  <th> Item Photo </th>
+                  <th> Supplier </th>
+                  <th> Item Quantity </th>
+
                   <th> </th>
 
                 </tr>
               </thead>
 
-              {% for i in refunddata %}
+{% for i in orgdata.items.all %}
               <tr>
-                <td> {{i.order.referral_id}} </td>
-                <td> {{i.order.order_date}}</td>
-                <td> {{i.order.user.username}}</td>
-
-                <td>{{i.supplier}}</td>
+                <td> {{i.product.product_name}} </td>
+                <td> <img src="{{ i.product.videofile.url }}" width="240" height="200"></td>
+                <td> {{orgdata.supplier}}</td>
+                <td> {{i.quantity}}</td>
 
                 <td><form action="" method="post">
 
                   {% csrf_token %}
 
-                  <button type="submit" class="btn btn-primary py-3 px-5" name="clicked" value="{{i.id}}">View Details</button></form></td>
+                  <button type="submit" class="btn btn-primary py-3 px-5" name="send" value="{{i.id}}">Send Notification</button></form></td>
             </tr>
-                {% endfor %}
-
+{% endfor %}
             </table>
 
           <!-- <div class="card-body"> -->
