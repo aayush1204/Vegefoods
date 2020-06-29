@@ -157,12 +157,44 @@
           </div>
         </div>
       </div>
-    </div>
-
+	</div>
+	
     <section class="ftco-section">
     	<div class="container">
     		<div class="row justify-content-center">
     			<div class="col-md-10 mb-5 text-center">
+					<div class="sidebar-box">
+						<!-- <form action="{% url 'search' %}" method='get' class="search-form">
+						  <div class="form-group">
+							<span class="icon ion-ios-search"></span>
+							
+
+							<input type="text" class="form-control" id="search" name="search_query" placeholder="Search...">
+							
+							
+						  </div>
+						 
+						</form> -->
+						<form action="{% url 'search' %}" method='get' class="search-form">
+							<div class="form-group">
+							  <!-- <span class="icon ion-ios-search"></span> -->
+							  
+							  <div class="input-group">
+							  <input type="text" class="form-control" id="search" name="search_query" placeholder="Search...">
+							  <div class="input-group-append">
+								<button class="btn1 btn1-primary" type="submit">
+								  <!-- <i class="fas fa-search fa-sm"></i> -->
+								  <span class="icon ion-ios-search" style="color: white;"></span>
+								</button>
+							  </div>
+							  </div>
+							</div>
+						   
+						  </form>
+
+						
+					  </div>
+
     				<ul class="product-category">
     					<li><a href="{% url 'shop' %}" class="nav-item {{all}}">All</a></li>
     					<li><a href="{% url 'filter' name='Vegetables' %}" class="nav-item {{vegetable}}">Vegetables</a></li>
@@ -171,8 +203,22 @@
 						<li><a href="{% url 'filter' name='Dairy' %}" class="nav-item {{dairy}}">Dairy</a></li>
     				</ul>
     			</div>
-    		</div>
+			</div>
+			{% if messages %}
+				<!-- <ul class='messages'> -->
+					{%for message in messages %}
+					<!-- <li {% if message.tags %} class="{{message.tags }}" {%endif%}>{{message}}</li> -->
+					<!-- {% if message.tags %} <script>alert("{{ message }}")</script>{%endif%} -->
+					{% if message.tags %}<div class="alert alert-success alert-dismissible fade show">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<strong>Please make sure to enter relevant search query!</strong>
+					</div>{%endif%}
+					{%endfor%}
+				<!-- </ul> -->
+				{%endif%}
     		<div class="row">
+
+				
     			<!-- <div class="col-md-6 col-lg-3 ftco-animate">
     				<div class="product">
     					<a href="#" class="img-prod"><img class="img-fluid" src="{% static 'images/product-1.jpg'%}" alt="Colorlib Template">

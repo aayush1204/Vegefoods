@@ -7,6 +7,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.utils.datastructures import MultiValueDictKeyError
+from django.db.models import Q
 
 from django.core.mail import send_mail
 import smtplib
@@ -115,7 +116,7 @@ def cart_view(request):
     return render(request,'cart.html',{'cdata':cart_data,'stbill':total_bill, 'profiledata':profile})
 
 def shop_view(request):
-
+    print("shopview")
     product_list = Product.objects.filter(out_of_stock=False)
     # for i in product_data:
 
@@ -142,7 +143,55 @@ def shop_view(request):
     return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,
                                         'dairy':dairy,'vegetable':vegetables,'juice':juices})
 
+def searchMatch(query, item):
+    
+    if query in item.description.lower() or query in item.category.lower() or query in item.product_name.lower():
+        return True 
+    elif query in item.description or query in item.category or query in item.product_name:
+        return True     
+    return False
+
+def search(request):
+    if request.method== 'GET':
+        query = request.GET['search_query']
+
+        product_temp = Product.objects.filter(out_of_stock=False)
+        # product_list = [item for item in product_temp if searchMatch(query, item)]
+        product_list = Product.objects.filter( Q(product_name__icontains=query)| Q(description__icontains=query)
+                                                | Q(category__icontains=query) )
+        print(product_list)
+        print('yes')
+        print(query)
+        
+        if len(product_list) == 0:
+            messages.info(request, 'Alre!')
+        # for i in product_data:
+
+            # print(i.product_image)
+
+        # company_list= Companies.objects.all()
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(product_list, 8)
+
+        try:
+            product_data = paginator.page(page)
+        except PageNotAnInteger:
+            product_data = paginator.page(1)
+        except EmptyPage:
+            product_data = paginator.page(paginator.num_pages)
+
+        # return render(request, 'job-listings.html', {'company_data': company_data})
+        all1='active'
+        fruit=""
+        dairy=""
+        vegetables=""
+        juices=""
+        return render(request,'shop.html',{'pdata':product_data,'all':all1,'fruit':fruit,
+                                            'dairy':dairy,'vegetable':vegetables,'juice':juices})
+
 def filter(request, name):
+    print('filter')
     product_list = Product.objects.filter(category__icontains=name).filter(out_of_stock=False)
     # for i in product_data:
 
