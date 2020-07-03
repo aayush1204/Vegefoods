@@ -23,7 +23,30 @@ import pdfkit
 import os
 from django.conf import settings
 
+import threading
+
 # Create your views here.
+
+class EmailThread(threading.Thread):
+    def __init__(self, DEFAULT_FROM_EMAIL,msg, password, user):
+        threading.Thread.__init__(self)
+        self.msg = msg
+        self.DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
+        self.password = password
+        self.user = user
+        
+    
+    def run(self):
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        print(self.DEFAULT_FROM_EMAIL)
+        print(self.password)
+        
+        server.login(self.DEFAULT_FROM_EMAIL,self.password)
+        server.sendmail(self.DEFAULT_FROM_EMAIL,self.user.email,self.msg.as_string())
+        server.quit() 
+        # sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg.as_string())    
+
 
 def home(request):
 
@@ -352,11 +375,15 @@ def order_place(request):
         attach.add_header('Content-Disposition','attachment',filename=str(r'{}.pdf'.format(order.referral_id)))
         msg.attach(attach)
 
-        server = smtplib.SMTP('smtp.gmail.com:587')
-        server.starttls()
-        server.login(DEFAULT_FROM_EMAIL,password)
-        server.sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg.as_string())
-        server.quit()
+        # server = smtplib.SMTP('smtp.gmail.com:587')
+        # server.starttls()
+        # server.login(DEFAULT_FROM_EMAIL,password)
+        # server.sendmail(DEFAULT_FROM_EMAIL,request.user.email,msg.as_string())
+        # EmailThread(DEFAULT_FROM_EMAIL,msg,password).start()
+        user = request.user
+        p = EmailThread(DEFAULT_FROM_EMAIL,msg,password, user)
+        p.start()
+        # server.quit()
         os.remove("out.pdf")
 
         #### Supplier Report ####
@@ -384,12 +411,15 @@ def order_place(request):
             attach.add_header('Content-Disposition','attachment',filename=str(r'{}.pdf'.format(order.referral_id)))
             msg.attach(attach)
 
-            server = smtplib.SMTP('smtp.gmail.com:587')
-            server.starttls()
-            server.login(DEFAULT_FROM_EMAIL,password)
-            print(i.supplier_details.email)
-            server.sendmail(DEFAULT_FROM_EMAIL,i.supplier_details.email,msg.as_string())
-            server.quit()
+            # server = smtplib.SMTP('smtp.gmail.com:587')
+            # server.starttls()
+            # server.login(DEFAULT_FROM_EMAIL,password)
+            # print(i.supplier_details.email)
+            # server.sendmail(DEFAULT_FROM_EMAIL,i.supplier_details.email,msg.as_string())
+            # server.quit()
+            user = i.supplier_details
+            p = EmailThread(DEFAULT_FROM_EMAIL,msg,password, user)
+            p.start()
             os.remove("out.pdf")
 
 
