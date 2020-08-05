@@ -37,6 +37,7 @@ class Supplier(models.Model):
     store_address=models.TextField(default="")
 #   product = ForeignKey
     is_approved = models.BooleanField(default=False)
+    package = models.IntegerField(default=0)
     #signature-will be an image
 
     def __str__(self):
@@ -85,6 +86,7 @@ class Product(models.Model):
     discount_percent = models.IntegerField(default=0)
     #name= models.CharField(max_length=500)
     videofile= models.FileField(upload_to='images/', null=True, verbose_name="")
+    rank = models.IntegerField(default=10)
 
 
     def __str__(self):

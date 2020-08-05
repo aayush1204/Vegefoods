@@ -53,6 +53,14 @@ def sellwithus(request):
         supplier.store_name=request.POST['store_name']
         supplier.store_description=request.POST['store_description']
         supplier.store_address=request.POST['store_address']
+        package = request.POST['package']
+        
+        if (package =="Gold"):
+            supplier.package = 1
+        if (package =="Silver"):
+            supplier.package = 2 
+        if (package =="Bronze"):
+            supplier.package = 3    
 
         username=request.POST['username']
         password=request.POST['password']
