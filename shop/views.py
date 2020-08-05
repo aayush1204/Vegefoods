@@ -25,6 +25,7 @@ from django.conf import settings
 
 import threading
 
+from random import shuffle
 # Create your views here.
 
 class EmailThread(threading.Thread):
@@ -140,9 +141,11 @@ def cart_view(request):
 
 def shop_view(request):
     print("shopview")
-    product_list = Product.objects.filter(out_of_stock=False)
+    
+    product_list = Product.objects.filter(out_of_stock=False).order_by('rank','supplier__package','product_name')
     # for i in product_data:
-
+    
+    
         # print(i.product_image)
 
     # company_list= Companies.objects.all()
@@ -181,7 +184,7 @@ def search(request):
         product_temp = Product.objects.filter(out_of_stock=False)
         # product_list = [item for item in product_temp if searchMatch(query, item)]
         product_list = Product.objects.filter( Q(product_name__icontains=query)| Q(description__icontains=query)
-                                                | Q(category__icontains=query) )
+                                            | Q(category__icontains=query) ).order_by('rank','supplier__package','product_name')
         print(product_list)
         print('yes')
         print(query)
@@ -215,7 +218,7 @@ def search(request):
 
 def filter(request, name):
     print('filter')
-    product_list = Product.objects.filter(category__icontains=name).filter(out_of_stock=False)
+    product_list = Product.objects.filter(category__icontains=name).filter(out_of_stock=False).order_by('rank','supplier__package','product_name')
     # for i in product_data:
 
         # print(i.product_image)
