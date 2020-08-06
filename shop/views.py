@@ -176,7 +176,7 @@ def searchMatch(query, item):
     elif query in item.description or query in item.category or query in item.product_name:
         return True     
     return False
-
+ 
 def search(request):
     if request.method== 'GET':
         query = request.GET['search_query']
