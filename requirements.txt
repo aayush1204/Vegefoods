@@ -4,7 +4,7 @@ cycler==0.10.0
 Django==2.2.4
 django-crispy-forms==1.8.1
 django-rest-framework==0.1.0
-djangorestframework==3.10.2
+djangorestframework==3.11.2
 html5==0.0.9
 idna==2.8
 joblib==0.14.1
